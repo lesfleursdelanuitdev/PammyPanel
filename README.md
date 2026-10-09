@@ -2,11 +2,26 @@
 
 A self-hosted web control panel. It lets a non-technical site owner run her own website, forms, media and databases from a phone. It runs two live sites today: **pammy.org**, for one site owner, and **lesfleursdelanuit.com**, a five-person setup that also hosts other apps.
 
-I designed and directed PammyPanel and built it with [Claude Code](https://claude.com/claude-code). About 100,000 lines of TypeScript, with 110+ unit test files and Playwright end-to-end suites. Every release runs a verify script on the live server before it counts as installed.
+I designed and directed PammyPanel and built it with [Claude Code](https://claude.com/claude-code). It is about 100,000 lines of TypeScript, with 71 unit test files and 65 Playwright end-to-end specs. Every release runs a verify script on the live server before it counts as installed.
 
 ## Why it exists
 
 Pamela built websites in the FTP days. She knows HTML and CSS, some JavaScript and very little SQL. She wanted interactive sites, like a blog, a guest book, an RSVP list or a recipe book, without handing a stranger root on her server or learning a hosting dashboard. PammyPanel gives her those features in plain words, with guides written for her.
+
+## Screenshots
+
+These come from the end-to-end test server, so the people and recipes are made-up test data.
+
+| | |
+|---|---|
+| ![Dashboard with unread responses, waiting requests and form counts](docs/screenshots/dashboard.png) | ![Studio canvas showing four connected tables of a recipe database](docs/screenshots/studio-canvas.png) |
+| **Dashboard**: what needs attention today | **Studio**: tables and their connections, drawn |
+| ![The recipes table as an app, with cooks, servings and tags](docs/screenshots/studio-app.png) | ![A public recipe book page reading the database, previewed inside the panel](docs/screenshots/recipe-book-example.png) |
+| **App view**: a database table as a friendly list | **Example site**: a public page reading the same database |
+| ![Form settings with approval and publishing switches](docs/screenshots/forms.png) | ![WordPress status, location and backups](docs/screenshots/wordpress.png) |
+| **Forms**: switches in plain words | **Installed software**: WordPress health, moves and backups |
+| ![File Explorer with a folder tree and grid view](docs/screenshots/file-explorer.png) | <img src="docs/screenshots/phone-dashboard.png" alt="The dashboard on a phone" width="270"> |
+| **File Explorer** | **On a phone** |
 
 ## What it does
 
@@ -42,7 +57,11 @@ Pamela built websites in the FTP days. She knows HTML and CSS, some JavaScript a
 | `docs/` | Design plans with the decisions behind each feature |
 | `tutorials/` | Example sites used in the guides (journal, to-do, in JS and PHP) |
 
-## Running the tests
+## Tests
+
+The tests run on the server, not in GitHub Actions. Each release goes through `build.sh`, which runs the type checks, the unit tests and the Playwright suites. After install, a verify script (`deploy/verify-panel.sh`, `deploy/lfdln/verify-lfdln.sh`) checks the live site: services, nginx, permissions and pages. Most tests need Postgres, so they start a throwaway Postgres container and remove it afterwards.
+
+### Running them yourself
 
 Needs Node.js 22.18 or newer.
 
@@ -54,6 +73,10 @@ npm run e2e
 ```
 
 `npm run e2e` runs the Playwright suite. The full panel expects Postgres and the helper services from `deploy/`, so a complete local run takes some setup. `docs/development-notes.md` has the internal notes.
+
+## History
+
+[CHANGELOG.md](CHANGELOG.md) lists the milestones by date. The design plans in `docs/` record each decision and when it was made.
 
 ## How I work
 
