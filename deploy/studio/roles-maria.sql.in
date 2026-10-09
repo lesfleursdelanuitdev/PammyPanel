@@ -1,0 +1,47 @@
+-- The studio's login on PAMELA's MariaDB (127.0.0.1:3307, svc-pammydb). Run as
+-- root by ~/pamela-setup/no-sudo/install-studio-db.sh, and by
+-- test/pammydb-harness.ts against a throwaway container, so the tests prove
+-- these exact rights. __PASSWORD__ is replaced before this runs.
+--
+-- '%' and not 'localhost': the containers are rootless, so connections arrive
+-- from the podman gateway, exactly as 'pamela'@'%' already does.
+
+CREATE USER IF NOT EXISTS 'pammy_studio'@'%' IDENTIFIED BY '__PASSWORD__';
+ALTER USER 'pammy_studio'@'%' IDENTIFIED BY '__PASSWORD__';
+
+-- Everything it needs to design a database, fill it, and say who may reach it,
+-- and nothing that touches the server: no SUPER, no FILE, no PROCESS, no
+-- RELOAD, no SHUTDOWN. DROP on *.* means it could drop her `pamela` database
+-- too: the helper's refuse-list is what stops that (docs/studio-plan.md S8).
+--
+-- The routine and trigger privileges are here so that Administrator -- "full
+-- access to this database" on her page -- is true rather than nearly true. A
+-- privilege can only be granted by someone who holds it, so anything missing
+-- from this list is missing from the role she picks.
+GRANT SELECT, INSERT, UPDATE, DELETE,
+      CREATE, DROP, ALTER, INDEX, REFERENCES,
+      CREATE VIEW, SHOW VIEW, CREATE TEMPORARY TABLES, LOCK TABLES,
+      TRIGGER, EVENT, CREATE ROUTINE, ALTER ROUTINE, EXECUTE
+  ON *.* TO 'pammy_studio'@'%';
+
+-- Slice 3: making logins, and handing them the privileges above one database at
+-- a time. Two things follow, and the second one is the sharp one.
+--
+-- GRANT OPTION lets it grant only what it already holds, so the list above is
+-- still the ceiling: a login it makes can never be given SUPER, because the
+-- studio has not got it.
+--
+-- CREATE USER is NOT bounded the way Postgres 16's CREATEROLE is. It covers
+-- every account on this server, so `ALTER USER 'root'@'localhost' IDENTIFIED BY
+-- ...` is a statement this role may legally run. Nothing in MariaDB stops it.
+-- What stops it is src/pammydb/ident.ts RESERVED_USERS, checked before the
+-- helper composes anything, and test/pammydb.test.ts proves the refusal is the
+-- only thing in the way by calling the driver underneath and watching it
+-- succeed. If that test ever goes green for the wrong reason, this comment is
+-- the thing to re-read.
+GRANT CREATE USER ON *.* TO 'pammy_studio'@'%';
+GRANT SELECT, INSERT, UPDATE, DELETE,
+      CREATE, DROP, ALTER, INDEX, REFERENCES,
+      CREATE VIEW, SHOW VIEW, CREATE TEMPORARY TABLES, LOCK TABLES,
+      TRIGGER, EVENT, CREATE ROUTINE, ALTER ROUTINE, EXECUTE
+  ON *.* TO 'pammy_studio'@'%' WITH GRANT OPTION;

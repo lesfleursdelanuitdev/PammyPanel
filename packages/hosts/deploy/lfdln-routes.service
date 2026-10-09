@@ -1,0 +1,69 @@
+# lfdln panel: the routing helper (docs/hosts-plan.md H7). The only thing that
+# writes the hosts' nginx files (/etc/nginx/lfdln-hosts). Started on demand by
+# lfdln-routes.socket; the panel sends the whole table of hosts and routes, this
+# renders every file, writes what changed, has nginx test it, puts everything
+# back if nginx says no, and reloads nginx if it says yes.
+# Installed by lfdln's installer (docs/platform-plan.md phase 5).
+#
+# Root, because nginx's files are root's -- and nothing more:
+#   - no capabilities at all: root owns the folder it writes, so it needs none
+#   - writable: /etc/nginx/lfdln-hosts, and sites-enabled -- where it takes out, or puts back,
+#     only the links of the hand-written files docs/adopt-plan.md V6 names (the files
+#     themselves, in sites-available, it can't change)
+#   - no network: it talks to systemd over the system bus's socket, and that is all
+#   - it can't see the certificates' keys or the DreamHost key (/etc/letsencrypt):
+#     `nginx -t`, the reload, the zone's listing (dreamhost-dns.sh list) and the hosts'
+#     read-only checks (packages/hosts/src/probe.ts: DNS, the certificate nginx gives,
+#     the answer; docs/domains-hosts-plan.md step 3) each run as a named root unit of
+#     their own, which it asks systemd for (@panel/core/runner: "lfdln-routes-<what>-...").
+# Plainly: a root process that may ask systemd for units can have anything done.
+# The boundary is the socket (only the panel's user) and the five operations,
+# none of which takes a path or a command; every name in the table is checked
+# again before it reaches a file (packages/hosts/src/names.ts, render.ts).
+[Unit]
+Description=lfdln panel: routing helper (hosts and routes in nginx)
+Requires=lfdln-routes.socket
+After=lfdln-routes.socket
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=root
+Group=root
+ExecStart=/usr/bin/node --disable-warning=ExperimentalWarning /opt/lfdln-panel/sites/lfdln/src/helpers/routes.ts
+UMask=0022
+Restart=on-failure
+RestartSec=2
+
+CapabilityBoundingSet=
+AmbientCapabilities=
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/etc/nginx/lfdln-hosts /etc/nginx/sites-enabled
+InaccessiblePaths=-/etc/letsencrypt -/etc/ssl/private -/etc/ssl/cloudflare -/pamela -/srv -/var/www -/etc/pammy-panel -/etc/lfdln-panel -/run/user
+PrivateTmp=yes
+PrivateDevices=yes
+PrivateIPC=yes
+PrivateNetwork=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+RestrictAddressFamilies=AF_UNIX
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@privileged @debug
+MemoryMax=256M
+MemorySwapMax=0
+TasksMax=32
+
+[Install]
+WantedBy=multi-user.target

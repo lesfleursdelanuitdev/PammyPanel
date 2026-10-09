@@ -1,0 +1,15 @@
+# The routing helper's door (docs/hosts-plan.md H7). Only the lfdln panel's own
+# user may open it (root always can). The group is the panel's service user,
+# settled with lfdln's installer (docs/platform-plan.md phase 5).
+[Unit]
+Description=lfdln panel: routing helper socket
+
+[Socket]
+ListenStream=/run/lfdln-routes.sock
+SocketUser=root
+SocketGroup=svc-lfdlnpanel
+SocketMode=0660
+Accept=no
+
+[Install]
+WantedBy=sockets.target

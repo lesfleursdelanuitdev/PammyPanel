@@ -1,0 +1,87 @@
+/* Example look: Garden (09-protected-folders.txt, PART 9).
+   Soft and warm: cream paper, a white card with round corners,
+   a sage-green button and an old-style serif lettering.
+   All five sign-in pages use this file. */
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+  background-color: #f3eee4;
+  background-image:
+    radial-gradient(circle at 12% 18%, #dfe8d3 0, transparent 38%),
+    radial-gradient(circle at 88% 85%, #f0dcd2 0, transparent 34%);
+  color: #36412f;
+  font: 17px/1.6 "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+}
+
+.card {
+  width: 100%;
+  max-width: 25rem;
+  padding: 2.5rem 2rem 2rem;
+  background: #fffdf8;
+  border: 1px solid #e4ddcd;
+  border-radius: 20px;
+  box-shadow: 0 18px 50px rgba(70, 86, 60, 0.14);
+}
+
+.site-name {
+  margin: 0 0 0.25rem;
+  text-align: center;
+  font-style: italic;
+  color: #7a8b6f;
+}
+
+/* The forms: their colours and corners */
+pammy-login,
+pammy-forgot,
+pammy-invite,
+pammy-request,
+pammy-signed-out {
+  --pammy-accent: #5d7b53;
+  --pammy-accent-text: #ffffff;
+  --pammy-radius: 12px;
+  --pammy-width: 100%;
+  --pammy-gap: 1rem;
+  --pammy-field-bg: #ffffff;
+  --pammy-field-border: #d9d2c1;
+  --pammy-error: #a4453a;
+  --pammy-success: #5d7b53;
+}
+
+.pammy-heading {
+  margin-bottom: 0.5rem;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: normal;
+  color: #2f3a2a;
+}
+
+.pammy-intro,
+.pammy-note {
+  text-align: center;
+}
+
+.pammy-label {
+  font-weight: normal;
+  color: #55624c;
+}
+
+.pammy-button {
+  margin-top: 0.5rem;
+  padding: 0.85rem;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+}
+
+.pammy-button:hover {
+  background: #4b6843;
+}
+
+.pammy-links {
+  justify-content: center;
+  margin-top: 1.25rem;
+}

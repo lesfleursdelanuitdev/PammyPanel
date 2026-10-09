@@ -1,0 +1,15 @@
+# The routing helper's door (docs/hosts-plan.md H7). Only the pammy.org panel's own
+# user may open it (root always can). The group is the panel's service user,
+# pammy.org's (svc-pammypanel).
+[Unit]
+Description=pammy.org panel: routing helper socket
+
+[Socket]
+ListenStream=/run/pammy-routes.sock
+SocketUser=root
+SocketGroup=svc-pammypanel
+SocketMode=0660
+Accept=no
+
+[Install]
+WantedBy=sockets.target

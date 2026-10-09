@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>@TITLE@</title>
+  <link rel="stylesheet" href="@FILES@/style.css">
+  <script src="@FILES@/recipes.js" defer></script>
+</head>
+<body>
+  <main class="page">
+    <header class="top">
+      <h1><a href="#">@TITLE@</a></h1>
+      <p class="intro">Everything we cook more than once, written down.</p>
+    </header>
+
+    <!-- recipes.js fills this in from the database at data-api: its recipes,
+         cooks, ingredients and tags, which are set to "Anyone can read these"
+         (see 14-databases-in-the-control-panel.txt, PART 16). -->
+    <div class="book" data-api="@API@">
+      <section class="all" aria-label="All the recipes">
+        <form class="find" role="search">
+          <label for="find-text">Find a recipe</label>
+          <input id="find-text" type="search" placeholder="pancakes, lemon, soup…" autocomplete="off">
+        </form>
+        <div class="tags" role="group" aria-label="Show only"></div>
+        <ul class="cards"><li class="note">Loading the recipes…</li></ul>
+      </section>
+
+      <!-- one recipe, when its card is clicked (the address ends in #recipe-12) -->
+      <article class="recipe" hidden>
+        <p class="back"><a href="#">&larr; All the recipes</a></p>
+        <div class="picture"></div>
+        <h2 class="title"></h2>
+        <p class="summary"></p>
+        <p class="facts"></p>
+        <div class="columns">
+          <section>
+            <h3>You will need</h3>
+            <ul class="ingredients"></ul>
+          </section>
+          <section>
+            <h3>Method</h3>
+            <ol class="method"></ol>
+          </section>
+        </div>
+        <p class="tags-here"></p>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

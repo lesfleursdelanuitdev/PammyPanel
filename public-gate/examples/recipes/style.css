@@ -1,0 +1,84 @@
+/* Example: Recipe book (14-databases-in-the-control-panel.txt, PART 16).
+   Warm paper and a kitchen-table feel. Change any of it you like: the cards
+   across the page are --across, and the accent colour is --tomato. */
+
+:root {
+  --across: 3;
+  --paper: #fbf6ee;
+  --card: #ffffff;
+  --ink: #3b2f2a;
+  --soft: #7a6a60;
+  --line: #eadfd2;
+  --tomato: #c0462b;
+  --round: 12px;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  padding: 2rem 1rem 4rem;
+  background: var(--paper);
+  color: var(--ink);
+  font: 17px/1.6 "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+}
+.page { max-width: 62rem; margin: 0 auto; }
+.top h1 { margin: 0; font-size: 2.4rem; font-weight: normal; }
+.top h1 a { color: inherit; text-decoration: none; }
+.intro { margin: 0 0 1.5rem; color: var(--soft); }
+.note { color: var(--soft); list-style: none; }
+
+/* finding a recipe */
+.find { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem; margin-bottom: 0.75rem; }
+.find label { font-weight: bold; }
+.find input {
+  flex: 1 1 16rem; min-width: 0;
+  padding: 0.55rem 0.8rem; border: 1px solid var(--line); border-radius: 999px;
+  background: var(--card); color: inherit; font: inherit;
+}
+.tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem; }
+.tag {
+  padding: 0.25rem 0.8rem; border: 1px solid var(--line); border-radius: 999px;
+  background: var(--card); color: var(--ink); font: inherit; font-size: 0.9rem; cursor: pointer;
+}
+.tag[aria-pressed="true"] { background: var(--tomato); border-color: var(--tomato); color: #fff; }
+
+/* the cards */
+.cards {
+  display: grid; grid-template-columns: repeat(var(--across), minmax(0, 1fr)); gap: 1.25rem;
+  margin: 0; padding: 0; list-style: none;
+}
+@media (max-width: 52rem) { .cards { --across: 2; } }
+@media (max-width: 34rem) { .cards { --across: 1; } }
+.card a {
+  display: block; height: 100%; overflow: hidden;
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--round);
+  color: inherit; text-decoration: none;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.card a:hover, .card a:focus-visible { transform: translateY(-2px); box-shadow: 0 8px 20px rgb(60 40 30 / 0.12); }
+.card .words { padding: 0.8rem 1rem 1rem; }
+.card h2 { margin: 0; font-size: 1.2rem; }
+.card .about { margin: 0.1rem 0 0.4rem; color: var(--soft); font-size: 0.9rem; }
+.card .summary { margin: 0; font-size: 0.95rem; }
+
+.pic { aspect-ratio: 10 / 7; background: var(--line); }
+.pic img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.pic.blank {
+  display: grid; place-items: center;
+  background: linear-gradient(135deg, #f0b27a, var(--tomato)); color: #fff; font-size: 3.5rem;
+}
+
+/* one recipe */
+.recipe .back a { color: var(--tomato); }
+.recipe .picture .pic { max-height: 24rem; border-radius: var(--round); overflow: hidden; }
+.recipe .title { margin: 1rem 0 0.25rem; font-size: 2rem; font-weight: normal; }
+.recipe .summary { margin: 0; font-size: 1.1rem; }
+.recipe .facts { color: var(--soft); }
+.columns { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 2rem; }
+@media (max-width: 40rem) { .columns { grid-template-columns: 1fr; gap: 0; } }
+.columns h3 { margin: 1rem 0 0.5rem; font-size: 1.1rem; }
+.ingredients { margin: 0; padding: 0; list-style: none; }
+.ingredients li { padding: 0.3rem 0; border-bottom: 1px solid var(--line); }
+.method { margin: 0; padding-left: 1.3rem; }
+.method li { margin-bottom: 0.75rem; }
+.tags-here { margin-top: 2rem; color: var(--soft); font-size: 0.9rem; }

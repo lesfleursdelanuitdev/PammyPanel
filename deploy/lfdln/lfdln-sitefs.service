@@ -1,0 +1,60 @@
+# lfdln panel: the folder helper (docs/hosts-plan.md H8) -- lists, makes and trashes the
+# site folders in /var/www/lesfleursdelanuit-sub, and nothing else. Started on demand by
+# lfdln-sitefs.socket; the panel asks, this does.
+#
+# Runs as svc-lfdlnsites, which owns the site folders (platform plan D3), never a person.
+# UMask=0027: folders 2750 and files 640, group lfdln-sites (the setgid root gives it),
+# which nginx and PHP read through and nobody else can.
+#
+# Writable: only /var/www/lesfleursdelanuit-sub. Its trash is inside it, as .trash (700),
+# because systemd makes each ReadWritePaths entry its own mount and rename() can't cross
+# mounts (EXDEV); no route can show a name starting with a dot, and the helper lists none.
+# Installed by ~/pamela-setup/panel/deploy/lfdln/install-lfdln.sh
+[Unit]
+Description=lfdln panel: folder helper (runs as svc-lfdlnsites)
+Requires=lfdln-sitefs.socket
+After=lfdln-sitefs.socket
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=svc-lfdlnsites
+Group=lfdln-sites
+ExecStart=/usr/bin/node --disable-warning=ExperimentalWarning /opt/lfdln-panel/sites/lfdln/src/helpers/sitefs.ts
+Environment=SITEFS_PUBLIC=/var/www/lesfleursdelanuit-sub
+Environment=SITEFS_TRASH=/var/www/lesfleursdelanuit-sub/.trash
+Environment=SITEFS_PURGE_DAYS=30
+UMask=0027
+Restart=on-failure
+RestartSec=2
+
+NoNewPrivileges=yes
+ProtectSystem=strict
+# of /var/www only its own folder (the other sites there aren't even visible), writable
+TemporaryFileSystem=/var/www:ro
+BindPaths=/var/www/lesfleursdelanuit-sub
+ProtectHome=yes
+InaccessiblePaths=-/pamela -/srv -/var/lib -/etc/ssl/private -/etc/ssl/cloudflare -/etc/letsencrypt -/etc/pammy-panel -/etc/lfdln-panel -/run/user
+PrivateTmp=yes
+PrivateDevices=yes
+PrivateNetwork=yes
+PrivateIPC=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+ProtectProc=invisible
+RestrictAddressFamilies=AF_UNIX
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@privileged @debug
+MemoryMax=256M

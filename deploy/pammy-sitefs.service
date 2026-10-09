@@ -1,0 +1,66 @@
+# pammy.org panel: website folder helper -- lists, creates, trashes and restores
+# top-level folders in /pamela/public, and nothing else. Started on demand by
+# pammy-sitefs.socket; the panel asks, this does.
+#
+# Runs as pamela so what it makes is hers, exactly like her own uploads (and so
+# it can move her folders, which Linux only allows their owner to do). That is
+# why its sandbox is tighter than the panel's: it can write only under /pamela
+# (its code touches only /pamela/public and /pamela/trash), can't see her home (her Claude login, her shell history),
+# her app's secrets or any other site, has no network at all, can't use sudo
+# (NoNewPrivileges), and can't attach to her other processes (no ptrace).
+# Installed by ~/pamela-setup/panel/deploy/install-panel.sh
+[Unit]
+Description=pammy.org panel: website folder helper (runs as pamela)
+Requires=pammy-sitefs.socket
+After=pammy-sitefs.socket
+# a helper that can't start gives up after 5 tries instead of looping forever
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=pamela
+Group=pamela
+ExecStart=/usr/bin/node --disable-warning=ExperimentalWarning /opt/pammy-panel/src/sitefs/main.ts
+Environment=SITEFS_PUBLIC=/pamela/public
+Environment=SITEFS_TRASH=/pamela/trash
+Environment=SITEFS_PLACEMENT=/etc/nginx/pammy-wordpress/placement
+Environment=SITEFS_PURGE_DAYS=30
+UMask=0022
+Restart=on-failure
+RestartSec=2
+
+NoNewPrivileges=yes
+ProtectSystem=strict
+# ALL of /pamela, not "/pamela/public /pamela/trash": systemd makes each
+# ReadWritePaths entry its own bind mount, and rename() refuses to cross mounts
+# (EXDEV) even on the same disk, so trash/restore failed. Its secrets stay
+# walled off below: /pamela/app is inaccessible (and a mount point can't be
+# renamed away), and the home/instructions/wordpress shortcuts lead into paths
+# that are hidden or inaccessible.
+ReadWritePaths=/pamela
+ProtectHome=yes
+# Not all of /etc/ssl: node reads /etc/ssl/openssl.cnf at startup and exits without it.
+InaccessiblePaths=-/pamela/app -/srv -/var/lib -/etc/ssl/private -/etc/ssl/cloudflare -/etc/letsencrypt -/etc/pammy-panel -/run/user
+PrivateTmp=yes
+PrivateDevices=yes
+PrivateNetwork=yes
+PrivateIPC=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+ProtectProc=invisible
+RestrictAddressFamilies=AF_UNIX
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@privileged @debug
+MemoryMax=256M

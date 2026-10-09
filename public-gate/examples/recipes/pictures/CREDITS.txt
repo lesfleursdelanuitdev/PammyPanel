@@ -1,0 +1,53 @@
+The pictures in the recipe book example
+
+Each is public domain: CC0 or the Public Domain Mark, found through Openverse
+(openverse.org). Neither asks for credit; it is given here anyway, because
+someone took these pictures.
+
+pancakes.jpg
+  "Free pancake berries plate image" by unknown (rawpixel)
+  https://www.rawpixel.com/image/5911370/image-background-public-domain-food
+  Licence: CC0 1.0 (public domain dedication) -- https://creativecommons.org/publicdomain/zero/1.0/
+  Resized and cropped to 800 x 560 for this example.
+
+tomato-soup.jpg
+  "Free tomato soup porcelain bowl" by unknown (rawpixel)
+  https://www.rawpixel.com/image/5922180/photo-image-public-domain-free-vegetable
+  Licence: CC0 1.0 (public domain dedication) -- https://creativecommons.org/publicdomain/zero/1.0/
+  Resized and cropped to 800 x 560 for this example.
+
+banana-bread.jpg
+  "Walnut / Banana Bread in the Morning" by cogdogblog (flickr)
+  https://www.flickr.com/photos/37996646802@N01/33276667233
+  Licence: CC0 1.0 (public domain dedication) -- https://creativecommons.org/publicdomain/zero/1.0/
+  Resized and cropped to 800 x 560 for this example.
+
+lemon-drizzle.jpg
+  "Free lemon cake image" by unknown (rawpixel)
+  https://www.rawpixel.com/image/5928093/free-lemon-cake-image-public-domain-cc0-photo
+  Licence: CC0 1.0 (public domain dedication) -- https://creativecommons.org/publicdomain/zero/1.0/
+  Resized and cropped to 800 x 560 for this example.
+
+chickpea-curry.jpg
+  "Free vegan chickpea curry image" by unknown (rawpixel)
+  https://www.rawpixel.com/image/5918870/image-public-domain-leaves-black-background
+  Licence: CC0 1.0 (public domain dedication) -- https://creativecommons.org/publicdomain/zero/1.0/
+  Resized and cropped to 800 x 560 for this example.
+
+greek-salad.jpg
+  "Greek salad" by unknown (rawpixel)
+  https://www.rawpixel.com/image/5945418/free-public-domain-cc0-photo
+  Licence: CC0 1.0 (public domain dedication) -- https://creativecommons.org/publicdomain/zero/1.0/
+  Resized and cropped to 800 x 560 for this example.
+
+brownies.jpg
+  "Free chocolate brownies image" by unknown (rawpixel)
+  https://www.rawpixel.com/image/5906085/photo-image-background-public-domain-tree
+  Licence: CC0 1.0 (public domain dedication) -- https://creativecommons.org/publicdomain/zero/1.0/
+  Resized and cropped to 800 x 560 for this example.
+
+spaghetti-bolognese.jpg
+  "Spaghetti Bolognese" by chooyutshing (flickr)
+  https://www.flickr.com/photos/25802865@N08/54706781448
+  Licence: Public Domain Mark 1.0 -- https://creativecommons.org/publicdomain/mark/1.0/
+  Resized and cropped to 800 x 560 for this example.

@@ -1,0 +1,21 @@
+import { test } from './fixtures.ts';
+test('shots', async ({ page }) => {
+  await page.goto('/files/edit?path=recipes%2Findex.html');
+  await page.locator('.cm-content').click();
+  await page.keyboard.press('Control+a');
+  await page.keyboard.insertText('<!doctype html>\n<html>\n<head>\n  <title>Recipes</title>\n  <style>body { font-family: Georgia, serif; margin: 2rem; } h1 { color: #8a2f6e; }</style>\n</head>\n<body>\n  <h1>Recipes</h1>\n  <p>Lemon cake, stew and more.</p>\n  <pammy-form name="rsvp"></pammy-form>\n</body>\n</html>\n');
+  await page.waitForTimeout(1500);
+  await page.screenshot({ path: '/tmp/claude-1000/-home-momolig/dc527a19-ff22-4960-ade5-9ee94264f50b/scratchpad/editor-light.png' });
+  await page.emulateMedia({ colorScheme: 'dark' });
+  await page.waitForTimeout(500);
+  await page.screenshot({ path: '/tmp/claude-1000/-home-momolig/dc527a19-ff22-4960-ade5-9ee94264f50b/scratchpad/editor-dark.png' });
+  await page.emulateMedia({ colorScheme: 'light' });
+  await page.getByRole('button', { name: 'Earlier versions' }).click();
+  await page.waitForTimeout(600);
+  await page.screenshot({ path: '/tmp/claude-1000/-home-momolig/dc527a19-ff22-4960-ade5-9ee94264f50b/scratchpad/editor-versions.png' });
+  await page.keyboard.press('Escape');
+  await page.goto('/files?path=blog-drafts');
+  await page.getByRole('button', { name: 'New file' }).click();
+  await page.waitForTimeout(400);
+  await page.screenshot({ path: '/tmp/claude-1000/-home-momolig/dc527a19-ff22-4960-ade5-9ee94264f50b/scratchpad/new-file.png' });
+});

@@ -1,0 +1,17 @@
+{
+  "name": "@panel/monitoring",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    "./module": "./src/module.ts",
+    "./panel/collect": "./src/panel/collect.ts",
+    "./panel/monitor": "./src/panel/monitor.ts",
+    "./panel/routes/monitoring": "./src/panel/routes/monitoring.ts",
+    "./state": "./src/state.ts",
+    "./watchdog": "./src/watchdog.ts"
+  },
+  "dependencies": {
+    "@panel/core": "*"
+  }
+}

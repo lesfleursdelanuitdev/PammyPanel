@@ -1,0 +1,31 @@
+# lfdln's MariaDB for the Studio's databases (docs/lfdln-mariadb-plan.md M1). Rootless Quadlet
+# for svc-lfdlnmaria, installed by deploy/lfdln/appmaria/install-appmaria.sh. 127.0.0.1:3308
+# only: 3307 is Pamela's MariaDB. Services' containers reach it at 10.0.2.2:3308 (slirp4netns,
+# allow_host_loopback).
+[Unit]
+Description=lesfleursdelanuit.com MariaDB for the Studio's databases (127.0.0.1:3308)
+
+[Container]
+# 11.4 is an LTS series: auto-update brings patch releases, never a major jump
+Image=docker.io/library/mariadb:11.4
+ContainerName=lfdln-appmaria
+PublishPort=127.0.0.1:3308:3306
+Volume=lfdln-appmaria.volume:/var/lib/mysql
+# First start only: root, inside the container alone, and nothing else (M2). The installer
+# makes the Studio's login.
+Environment=MARIADB_ROOT_PASSWORD_FILE=/run/secrets/lfdln-appmaria-root
+Environment=MARIADB_ROOT_HOST=localhost
+Environment=MARIADB_AUTO_UPGRADE=1
+Secret=lfdln-appmaria-root
+Exec=--character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max-connections=100
+HealthCmd=healthcheck.sh --connect --innodb_initialized
+HealthInterval=30s
+AutoUpdate=registry
+
+[Service]
+Restart=always
+TimeoutStartSec=300
+MemoryMax=1G
+
+[Install]
+WantedBy=default.target

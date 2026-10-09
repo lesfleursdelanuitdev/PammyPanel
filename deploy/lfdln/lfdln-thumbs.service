@@ -1,0 +1,62 @@
+# lfdln panel: thumbnail service (docs/phase8-plan.md step 8-1; pammy.org's is
+# pammy-thumbs, docs/media-plan.md D18-D19). Makes small pictures of files in the site
+# folders for File Explorer: images with sharp, video frames and cover art with ffmpeg,
+# PDF pages with pdftoppm. Started on demand by lfdln-thumbs.socket.
+#
+# Decoding files that strangers may have made is the riskiest thing the panel does, so
+# this gets its own cage: its own user, the lfdln-sites group only while running (to READ
+# the site folders, as nginx does), of /var/www only the site folders and read-only, their
+# .trash hidden, nothing writable but a private /tmp, no network at all, no capabilities,
+# and a memory cap. It hands the picture back over the socket; the panel keeps it.
+# Installed by ~/pamela-setup/panel/deploy/lfdln/install-lfdln.sh
+[Unit]
+Description=lfdln panel: thumbnail service
+Requires=lfdln-thumbs.socket
+After=lfdln-thumbs.socket
+StartLimitIntervalSec=60
+StartLimitBurst=10
+
+[Service]
+Type=simple
+User=svc-lfdlnthumbs
+Group=svc-lfdlnthumbs
+SupplementaryGroups=lfdln-sites
+ExecStart=/usr/bin/node --disable-warning=ExperimentalWarning /opt/lfdln-panel/sites/lfdln/src/helpers/thumbs.ts
+Environment=THUMBS_PUBLIC=/var/www/lesfleursdelanuit-sub
+UMask=0077
+Restart=on-failure
+RestartSec=2
+
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+TemporaryFileSystem=/var/www:ro
+BindReadOnlyPaths=/var/www/lesfleursdelanuit-sub
+InaccessiblePaths=-/var/www/lesfleursdelanuit-sub/.trash -/pamela -/srv -/var/lib -/etc/ssl/private -/etc/ssl/cloudflare -/etc/letsencrypt -/etc/pammy-panel -/etc/lfdln-panel -/etc/nginx -/run/user
+PrivateTmp=yes
+PrivateDevices=yes
+PrivateNetwork=yes
+PrivateIPC=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+ProtectProc=invisible
+RestrictAddressFamilies=AF_UNIX
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@privileged @debug
+MemoryMax=512M
+MemorySwapMax=0
+TasksMax=32
+
+[Install]
+WantedBy=multi-user.target

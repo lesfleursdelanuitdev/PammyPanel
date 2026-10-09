@@ -1,0 +1,15 @@
+{
+  "name": "@panel/api-keys",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    "./gate/forms/api-keys": "./src/gate/forms/api-keys.ts",
+    "./module": "./src/module.ts",
+    "./panel/covers": "./src/panel/covers.ts",
+    "./panel/routes/api-keys": "./src/panel/routes/api-keys.ts"
+  },
+  "dependencies": {
+    "@panel/core": "*"
+  }
+}

@@ -1,0 +1,84 @@
+# pammy.org: the PHP pages on her website (docs/tutorials-plan.md P1-P7).
+# nginx hands every *.php request that has passed the gate to this PHP-FPM over
+# /run/pammy-php/fpm.sock. Installed by ~/pamela-setup/panel/deploy/install-panel.sh
+#
+# PHP she (or a helper, or a stranger's bug) writes is the least trusted code on
+# the server, so its cage is the tightest (P2): its own user, the www-data group
+# only while running (to READ her website, as nginx does), nothing writable but
+# a private /tmp, no network at all, no capabilities, no other programs. Of
+# /pamela only public/ is there, and read-only (of /var/lib, only the tutorial
+# examples' copies, for its second pool). The one thing it can talk to is
+# the gate's data and forms API, through /run/pammy-gate-php.sock (P3); every
+# other socket anyone could open is hidden. The distribution's php8.3-fpm
+# service is masked (P6): this is the only PHP that runs.
+[Unit]
+Description=pammy.org: PHP pages on her website
+After=network.target pammy-gate-php.socket
+Wants=pammy-gate-php.socket
+StartLimitIntervalSec=60
+StartLimitBurst=10
+
+[Service]
+Type=notify
+NotifyAccess=main
+User=svc-pammyphp
+Group=svc-pammyphp
+SupplementaryGroups=www-data
+ExecStart=/usr/sbin/php-fpm8.3 --nodaemonize --fpm-config /etc/pammy-php/php-fpm.conf -c /etc/pammy-php/php.ini
+ExecReload=/bin/kill -USR2 $MAINPID
+RuntimeDirectory=pammy-php
+RuntimeDirectoryMode=0755
+# kept across restarts: lfdln-php hides /run/pammy-php from itself (InaccessiblePaths), and
+# that hiding is on this folder; removed and made again at a restart, it would no longer apply
+RuntimeDirectoryPreserve=yes
+Restart=always
+RestartSec=2
+UMask=0077
+
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+# of /pamela, only her website, read-only: never app/, trash/ or anything new
+TemporaryFileSystem=/pamela:ro
+BindReadOnlyPaths=/pamela/public
+# of /var/lib only the tutorial examples' copies (docs/tutorial-examples-plan.md),
+# read-only: the second pool's pages. Never the panel's or anyone's data.
+TemporaryFileSystem=/var/lib:ro
+BindReadOnlyPaths=-/var/lib/pammy-tutorial-examples
+InaccessiblePaths=-/srv -/var/www -/var/log -/opt -/etc/ssl/private -/etc/ssl/cloudflare -/etc/letsencrypt -/etc/pammy-panel -/etc/nginx -/etc/php/8.3/fpm/pool.d
+# every socket on the machine that anyone may open, bar the journal and systemd's notify
+InaccessiblePaths=-/run/user -/run/postgresql -/run/mysqld -/run/dbus -/run/snapd.socket -/run/snapd-snap.socket -/run/uuidd -/run/systemd/resolve -/run/systemd/userdb -/run/systemd/io.systemd.ManagedOOM -/run/podman -/run/containers
+PrivateTmp=yes
+PrivateDevices=yes
+PrivateNetwork=yes
+PrivateIPC=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+ProtectProc=invisible
+ProcSubset=pid
+RestrictAddressFamilies=AF_UNIX
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+# PHP's regex JIT is off (php.ini) so no memory need be writable and runnable
+MemoryDenyWriteExecute=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@privileged @debug
+# ...except fchown: PHP-FPM gives its sockets to the www-data group (listen.group)
+# so nginx may knock, and was killed for it (SIGSYS). With no capabilities it can
+# only give its own files to a group it is in -- www-data, and only while running.
+SystemCallFilter=@chown
+MemoryMax=512M
+MemorySwapMax=0
+TasksMax=32
+
+[Install]
+WantedBy=multi-user.target

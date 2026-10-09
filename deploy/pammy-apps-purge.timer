@@ -1,0 +1,13 @@
+# pammy.org panel: once a day, the software deleted 30 days ago goes for good
+# (pammy-apps-purge.service, docs/apps-plan.md 4c). Persistent: a day the
+# server was off is caught up at the next boot.
+[Unit]
+Description=pammy.org panel: delete for good the software deleted 30 days ago (daily)
+
+[Timer]
+OnCalendar=*-*-* 04:20:00
+RandomizedDelaySec=10min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

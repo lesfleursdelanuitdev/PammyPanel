@@ -1,0 +1,15 @@
+{
+  "name": "@panel/help",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    "./help": "./src/help.ts",
+    "./module": "./src/module.ts",
+    "./panel/routes/first-steps": "./src/panel/routes/first-steps.ts",
+    "./panel/routes/help": "./src/panel/routes/help.ts"
+  },
+  "dependencies": {
+    "@panel/core": "*"
+  }
+}

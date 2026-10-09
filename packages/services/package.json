@@ -1,0 +1,28 @@
+{
+  "name": "@panel/services",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    "./adopt": "./src/adopt.ts",
+    "./client": "./src/client.ts",
+    "./helper/main": "./src/helper/main.ts",
+    "./helper/ops": "./src/helper/ops.ts",
+    "./helper/service": "./src/helper/service.ts",
+    "./known": "./src/known.ts",
+    "./module": "./src/module.ts",
+    "./panel/account-deleted": "./src/panel/account-deleted.ts",
+    "./panel/backups": "./src/panel/backups.ts",
+    "./panel/route-kind": "./src/panel/route-kind.ts",
+    "./panel/routes/backups": "./src/panel/routes/backups.ts",
+    "./panel/routes/services": "./src/panel/routes/services.ts",
+    "./prune": "./src/prune.ts",
+    "./record": "./src/record.ts",
+    "./route-kind": "./src/route-kind.ts",
+    "./storage": "./src/storage.ts"
+  },
+  "dependencies": {
+    "@panel/core": "*",
+    "@panel/hosts": "*"
+  }
+}

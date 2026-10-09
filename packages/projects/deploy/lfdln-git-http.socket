@@ -1,0 +1,14 @@
+# Git over HTTPS (docs/phase8b-plan.md 8b-7, D7-5): fcgiwrap's door. Only nginx (www-data)
+# connects, and only for git.<domain>, after the panel's check (packages/projects/nginx/git.conf).
+[Unit]
+Description=lfdln projects: git over HTTPS (fcgiwrap socket)
+
+[Socket]
+ListenStream=/run/lfdln-git-http.sock
+SocketUser=root
+SocketGroup=www-data
+SocketMode=0660
+Accept=no
+
+[Install]
+WantedBy=sockets.target

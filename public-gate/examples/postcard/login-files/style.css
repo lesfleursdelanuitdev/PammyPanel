@@ -1,0 +1,125 @@
+/* Example look: Postcard (09-protected-folders.txt, PART 11).
+   Bright and friendly: a postcard with an airmail border, a
+   coloured picture side with the folder's name, and the form on
+   the back. On a phone the two sides stack.
+   All five sign-in pages use this file. */
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+  background: #e8edf1;
+  color: #22303c;
+  font: 16px/1.55 "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+}
+
+.postcard {
+  width: 100%;
+  max-width: 50rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  background: repeating-linear-gradient(-45deg,
+    #d63a3a 0 14px, #ffffff 14px 28px, #2b5fb3 28px 42px, #ffffff 42px 56px);
+  box-shadow: 0 20px 45px rgba(34, 48, 60, 0.2);
+  transform: rotate(-1deg);
+}
+
+.postcard-front {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 20rem;
+  padding: 2rem;
+  border-radius: 4px 0 0 4px;
+  color: #ffffff;
+  background:
+    linear-gradient(to top, rgba(20, 30, 60, 0.7), rgba(20, 30, 60, 0) 60%),
+    linear-gradient(135deg, #f6b26b 0%, #e8705a 45%, #6a5acd 100%);
+}
+
+.postcard-place {
+  margin: 0;
+  font-family: "Brush Script MT", "Segoe Script", cursive;
+  font-size: 2.75rem;
+  line-height: 1.1;
+}
+
+.postcard-note {
+  margin: 0.5rem 0 0;
+}
+
+.postcard-back {
+  padding: 2rem;
+  border-radius: 0 4px 4px 0;
+  border-left: 2px dashed #cbbfaa;
+  background: #fffaf0;
+}
+
+@media (max-width: 40rem) {
+  .postcard {
+    grid-template-columns: 1fr;
+    transform: none;
+  }
+  .postcard-front {
+    min-height: 9rem;
+    border-radius: 4px 4px 0 0;
+  }
+  .postcard-back {
+    border-radius: 0 0 4px 4px;
+    border-left: 0;
+    border-top: 2px dashed #cbbfaa;
+  }
+}
+
+/* The forms: their colours and corners */
+pammy-login,
+pammy-forgot,
+pammy-invite,
+pammy-request,
+pammy-signed-out {
+  --pammy-accent: #2b5fb3;
+  --pammy-accent-text: #ffffff;
+  --pammy-radius: 6px;
+  --pammy-width: 100%;
+  --pammy-field-bg: transparent;
+  --pammy-field-border: #b9ad97;
+  --pammy-error: #d63a3a;
+}
+
+.pammy-heading {
+  font-size: 1.4rem;
+  color: #2b5fb3;
+}
+
+/* boxes drawn as lines, like writing on a postcard */
+.pammy-input {
+  padding-left: 0.25rem;
+  border-width: 0 0 2px;
+  border-radius: 0;
+}
+
+.pammy-input:focus {
+  outline: none;
+  border-color: #2b5fb3;
+}
+
+.pammy-button {
+  justify-self: start;
+  padding: 0.7rem 1.75rem;
+  box-shadow: 0 3px 0 #1d4585;
+}
+
+.pammy-button:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #1d4585;
+}
+
+.pammy-links {
+  margin-top: 1rem;
+}

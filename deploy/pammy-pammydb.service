@@ -1,0 +1,75 @@
+# pammy.org panel: database helper (docs/studio-plan.md). The only thing on this
+# machine that speaks to PAMELA's own MariaDB (127.0.0.1:3307) and Postgres
+# (127.0.0.1:5433). Started on demand by pammy-pammydb.socket; the panel asks, this
+# does (the gate asks pammy-pammydb-gate.service, row ops only: S2). Installed by ~/pamela-setup/panel/deploy/install-panel.sh
+#
+# Two things here are deliberately UNLIKE the website folder helper:
+#
+#  1. No PrivateNetwork=yes. pammy-sitefs has no network at all because it only
+#     touches disk; this one has to reach loopback, so the cage is built out of
+#     IPAddressAllow= instead: localhost and nothing else, over AF_INET only.
+#     Loopback is not a small place -- the panel's own database (5434) and the
+#     host's (5432: gonsalves, tutorstar) are on it too -- so the ports are
+#     settled in src/pammydb/config.ts, which refuses those two outright, and no
+#     request can name a host or a port (S7).
+#
+#  2. It does not run as pamela. sitefs runs as her so the folders it makes are
+#     hers; this needs nothing of hers but two passwords, so it gets its own user
+#     with no home, no files, and no way into /pamela or /etc/pammy-panel.
+[Unit]
+Description=pammy.org panel: database helper for Pamela's own MariaDB and Postgres
+Requires=pammy-pammydb.socket
+After=pammy-pammydb.socket
+# a helper that can't start gives up after 5 tries instead of looping forever
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=svc-pammystudio
+Group=svc-pammystudio
+ExecStart=/usr/bin/node --disable-warning=ExperimentalWarning /opt/pammy-panel/src/pammydb/main.ts
+# the two studio passwords, read by systemd as root and handed over in
+# $CREDENTIALS_DIRECTORY: this user may not read /etc/pammy-panel itself
+LoadCredential=studio-postgres.pass:/etc/pammy-panel/db/studio-postgres.pass
+LoadCredential=studio-mariadb.pass:/etc/pammy-panel/db/studio-mariadb.pass
+UMask=0077
+Restart=on-failure
+RestartSec=2
+
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+# It has no business with her files, her site, the panel's own secrets or any
+# other service's data. (Not all of /etc/ssl: node reads /etc/ssl/openssl.cnf at
+# startup and exits without it.)
+InaccessiblePaths=-/pamela -/srv -/var/lib -/var/www -/etc/nginx -/etc/pammy-panel -/etc/ssl/private -/etc/ssl/cloudflare -/etc/letsencrypt -/run/user
+PrivateTmp=yes
+PrivateDevices=yes
+PrivateIPC=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+ProtectProc=invisible
+# the socket, and TCP to her two engines on loopback -- nothing else
+RestrictAddressFamilies=AF_UNIX AF_INET
+IPAddressDeny=any
+IPAddressAllow=localhost
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@privileged @debug
+MemoryMax=512M
+MemorySwapMax=0
+TasksMax=32
+
+[Install]
+WantedBy=multi-user.target

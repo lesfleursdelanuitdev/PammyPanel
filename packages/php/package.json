@@ -1,0 +1,13 @@
+{
+  "name": "@panel/php",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    "./gate/php-socket": "./src/gate/php-socket.ts",
+    "./module": "./src/module.ts"
+  },
+  "dependencies": {
+    "@panel/core": "*"
+  }
+}

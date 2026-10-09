@@ -1,0 +1,17 @@
+{
+  "name": "@panel/mail",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    "./mail/client": "./src/mail/client.ts",
+    "./mail/main": "./src/mail/main.ts",
+    "./mail/service": "./src/mail/service.ts",
+    "./mail/settings": "./src/mail/settings.ts",
+    "./module": "./src/module.ts",
+    "./panel/notices": "./src/panel/notices.ts"
+  },
+  "dependencies": {
+    "@panel/core": "*"
+  }
+}

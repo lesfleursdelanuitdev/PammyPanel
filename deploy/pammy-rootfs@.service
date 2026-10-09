@@ -1,0 +1,59 @@
+# pammy.org panel: File Explorer's helper for one piece of installed software (%i):
+# its wp-content/ folder and nothing else of it (docs/catalog-plan.md step 3, S3-2).
+# The same helper code as pammy-sitefs, in its software mode: File Explorer and the
+# editor only; .php files only for panel admins; names starting with a dot never.
+#
+# The instance's drop-in (pammy-rootfs@<id>.service.d/root.conf, written by the
+# software helper) says who it runs as -- the software's own user (svc-pammywp,
+# svc-app-<id>), never root and never pamela -- which folder, its trash
+# (/var/lib/<user>/files-trash, outside the web root), and makes the software's
+# config, backups, containers and wp-config.php unreachable.
+#
+# ProtectSystem=full, not strict: with strict, the folder and its trash would each be
+# a ReadWritePaths bind mount, and rename() refuses to cross mounts (EXDEV), so trash
+# and restore would fail (pammy-sitefs.service has the same note). What it can write
+# is what its user owns; everything of the panel's and hers is made unreachable below.
+# Installed by ~/pamela-setup/panel/deploy/install-panel.sh
+[Unit]
+Description=pammy.org panel: files helper for software %i
+Requires=pammy-rootfs@%i.socket
+After=pammy-rootfs@%i.socket
+StartLimitIntervalSec=60
+StartLimitBurst=5
+# no drop-in, no helper (the software helper hasn't set this instance up)
+ConditionPathExists=/etc/systemd/system/pammy-rootfs@%i.service.d/root.conf
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/node --disable-warning=ExperimentalWarning /opt/pammy-panel/src/rootfs/main.ts
+Environment=SITEFS_PURGE_DAYS=30
+UMask=0002
+Restart=on-failure
+RestartSec=2
+
+NoNewPrivileges=yes
+ProtectSystem=full
+ProtectHome=yes
+InaccessiblePaths=-/pamela -/srv/apps -/srv/pamela-db -/srv/lfdln-projects -/var/lib/pammy-apps -/var/lib/svc-pammypanel -/var/lib/svc-pammypanel-db -/etc/ssl/private -/etc/ssl/cloudflare -/etc/letsencrypt -/etc/pammy-panel -/etc/lfdln-panel -/run/user
+PrivateTmp=yes
+PrivateDevices=yes
+PrivateNetwork=yes
+PrivateIPC=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+ProtectProc=invisible
+RestrictAddressFamilies=AF_UNIX
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@privileged @debug
+MemoryMax=256M

@@ -1,0 +1,18 @@
+{
+  "name": "@panel/thumbs",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    "./media-thumbs": "./src/media-thumbs.ts",
+    "./module": "./src/module.ts",
+    "./thumbs/icons": "./src/thumbs/icons.ts",
+    "./thumbs/main": "./src/thumbs/main.ts",
+    "./thumbs/make": "./src/thumbs/make.ts",
+    "./thumbs/service": "./src/thumbs/service.ts"
+  },
+  "dependencies": {
+    "@panel/catalog": "*",
+    "@panel/core": "*"
+  }
+}

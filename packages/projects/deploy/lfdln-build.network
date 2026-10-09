@@ -1,0 +1,6 @@
+# The build boxes' network (docs/phase8b-plan.md 8b-8b, P8b-11): internal, so nothing on it has
+# a route out; lfdln-build-proxy is on it too, and is their one way to the package registries.
+# svc-lfdln-apps' own Quadlet, put in place by install-lfdln.sh.
+[Network]
+NetworkName=lfdln-build
+Internal=true

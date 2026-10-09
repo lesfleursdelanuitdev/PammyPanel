@@ -1,0 +1,98 @@
+/* Example: Guest book (10-forms.txt, PART 12).
+   Cream paper and a white card, like the Garden sign-in look, so the two
+   sit happily on the same website. Change any of it you like. */
+
+body {
+  margin: 0;
+  padding: 2.5rem 1rem 4rem;
+  background-color: #f3eee4;
+  background-image: radial-gradient(circle at 12% 12%, #dfe8d3 0, transparent 40%);
+  color: #36412f;
+  font: 17px/1.6 "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+}
+
+.page {
+  max-width: 36rem;
+  margin: 0 auto;
+}
+
+h1 {
+  margin: 0 0 0.25rem;
+  font-size: 2.2rem;
+  font-weight: normal;
+}
+
+h2 {
+  margin: 2.5rem 0 1rem;
+  font-size: 1.4rem;
+  font-weight: normal;
+  color: #55624c;
+}
+
+.intro {
+  margin: 0 0 2rem;
+  color: #6a7561;
+}
+
+/* The form's own colours and corners */
+pammy-form {
+  display: block;
+  padding: 1.75rem 1.5rem;
+  background: #fffdf8;
+  border: 1px solid #e4ddcd;
+  border-radius: 20px;
+  box-shadow: 0 18px 50px rgba(70, 86, 60, 0.12);
+  --pammy-accent: #5d7b53;
+  --pammy-accent-text: #ffffff;
+  --pammy-radius: 12px;
+  --pammy-gap: 1rem;
+  --pammy-field-bg: #ffffff;
+  --pammy-field-border: #d9d2c1;
+  --pammy-error: #a4453a;
+}
+
+.pammy-label { font-weight: normal; color: #55624c; }
+.pammy-button { padding: 0.85rem 1.5rem; font-size: 1.05rem; }
+.pammy-sent { font-size: 1.1rem; }
+
+/* The messages */
+.entries {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 1rem;
+}
+
+.entry {
+  padding: 1.25rem 1.5rem;
+  background: #fffdf8;
+  border: 1px solid #e8e1d1;
+  border-radius: 16px;
+}
+
+.who {
+  margin: 0 0 0.35rem;
+  font-size: 0.95rem;
+  color: #7a8b6f;
+}
+
+.name { font-size: 1.05rem; font-weight: 600; color: #36412f; }
+.from { font-style: italic; }
+.when::before { content: "· "; }
+.said { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.empty { color: #7a8b6f; font-style: italic; }
+
+.more {
+  margin: 1.25rem auto 0;
+  display: block;
+  padding: 0.6rem 1.25rem;
+  background: #fffdf8;
+  border: 1px solid #d9d2c1;
+  border-radius: 12px;
+  color: #55624c;
+  font: inherit;
+  cursor: pointer;
+}
+
+.more:hover { background: #f7f3e9; }

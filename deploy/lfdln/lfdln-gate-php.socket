@@ -1,0 +1,17 @@
+# lfdln's gate: PHP's door to the data API (docs/phase8-plan.md step 8-4), as pammy.org's
+# pammy-gate-php.socket: PHP in site folders reaches the records it holds a key for through
+# /_pammy/api/ here, and nothing else (@panel/php/gate/php-socket). Only lfdln-php (group
+# svc-lfdlnphp) may open it. Installed by ~/pamela-setup/panel/deploy/lfdln/install-lfdln.sh
+[Unit]
+Description=lesfleursdelanuit.com gate: PHP's door to the data API
+
+[Socket]
+ListenStream=/run/lfdln-gate-php.sock
+SocketUser=root
+SocketGroup=svc-lfdlnphp
+SocketMode=0660
+Accept=no
+Service=lfdln-gate.service
+
+[Install]
+WantedBy=sockets.target

@@ -1,0 +1,90 @@
+# pammy.org password-protected folders ("the gate"). nginx asks it about every
+# request to her site (127.0.0.1:3045) before serving a file, and it handles
+# visitor sign-in. Installed by ~/pamela-setup/panel/deploy/install-panel.sh
+#
+# Her whole static site depends on this answering: if it's down, nginx serves
+# 500s rather than risk serving a protected file. Hence Restart=always.
+#
+# It needs to READ her website (to find protection markers, the way nginx reads
+# it), reach its own Postgres on 127.0.0.1:5434, and talk to nothing but nginx.
+# It gets the www-data group only while running (SupplementaryGroups), never
+# permanently.
+#
+# At boot it starts before the database container (a system unit can't wait for a
+# user one), so it answers from the areas it saved last time until Postgres
+# answers -- docs/postgres-plan.md P14.
+[Unit]
+Description=pammy.org password-protected folders (gate)
+After=network.target pammy-gate-admin.socket pammy-gate-php.socket
+Requires=pammy-gate-admin.socket
+# PHP's door to the data API (docs/tutorials-plan.md P3): wanted, not required,
+# so her static site never waits on PHP's side
+Wants=pammy-gate-php.socket
+StartLimitIntervalSec=60
+StartLimitBurst=20
+
+[Service]
+Type=simple
+# both doors, by name (LISTEN_FDNAMES): src/gate/main.ts tells them apart
+Sockets=pammy-gate-admin.socket pammy-gate-php.socket
+User=svc-pammygate
+Group=svc-pammygate
+SupplementaryGroups=www-data
+ExecStart=/usr/bin/node --disable-warning=ExperimentalWarning /opt/pammy-panel/src/gate/main.ts
+# the database password, as root, into $CREDENTIALS_DIRECTORY/db.pass: this
+# service may not read /etc/pammy-panel (InaccessiblePaths below)
+LoadCredential=db.pass:/etc/pammy-panel/db/gate.pass
+# nginx's edge secret (docs/s1-plan.md S1c): X-Real-IP is believed only with it
+LoadCredential=edge.secret:/etc/pammy-panel/edge.secret
+Environment=GATE_PG_HOST=127.0.0.1
+Environment=GATE_PG_PORT=5434
+Environment=GATE_PG_DATABASE=pammy
+# what it can still answer with while Postgres is out of reach (P14)
+Environment=GATE_AREAS_SNAPSHOT=/var/lib/svc-pammygate/areas.json
+Environment=GATE_PUBLIC=/pamela/public
+Environment=GATE_DOMAIN=pammy.org
+Environment=GATE_HOST=127.0.0.1
+Environment=GATE_PORT=3045
+# the media API reads what the panel publishes (read-only here: ProtectSystem=strict)
+Environment=GATE_MEDIA_INDEX=/var/lib/pammy-media-public/index.db
+# the database helper, for the data API, forms and comments: the gate's own door
+# (pammy-pammydb-gate.socket, group svc-pammygate), which answers row ops only. The
+# gate's user is NOT in pammydb-clients (the panel's door) since S2 (docs/s2-plan.md).
+Environment=GATE_PAMMYDB_SOCKET=/run/pammy-pammydb-gate.sock
+Environment=GATE_MEDIA_THUMBS=/var/lib/pammy-media-public/thumbs
+Restart=always
+RestartSec=1
+UMask=0077
+
+NoNewPrivileges=yes
+ProtectSystem=strict
+ReadWritePaths=/var/lib/svc-pammygate
+ProtectHome=yes
+# www-data can read these; the gate has no business with them
+InaccessiblePaths=-/pamela/app -/srv -/var/www -/var/lib/svc-pammypanel -/var/lib/svc-pammywp -/etc/ssl/private -/etc/ssl/cloudflare -/etc/letsencrypt -/etc/pammy-panel -/run/user
+PrivateTmp=yes
+PrivateDevices=yes
+PrivateIPC=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+ProtectProc=invisible
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@privileged @debug
+IPAddressDeny=any
+IPAddressAllow=localhost
+MemoryMax=512M
+
+[Install]
+WantedBy=multi-user.target

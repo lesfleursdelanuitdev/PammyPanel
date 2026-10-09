@@ -1,0 +1,12 @@
+[Unit]
+Description=Nightly backup of the pammy.org panel + gate database
+
+[Timer]
+# after Pamela's (04:00) so the two don't overlap much
+OnCalendar=*-*-* 04:30:00
+RandomizedDelaySec=15min
+# run at next boot if the server was off at 04:30
+Persistent=true
+
+[Install]
+WantedBy=timers.target

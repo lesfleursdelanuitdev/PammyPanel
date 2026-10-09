@@ -1,0 +1,14 @@
+# The thumbnail service's door. Only the panel's own user may open it.
+# Installed by ~/pamela-setup/panel/deploy/install-panel.sh
+[Unit]
+Description=pammy.org panel: thumbnail service socket
+
+[Socket]
+ListenStream=/run/pammy-thumbs.sock
+SocketUser=root
+SocketGroup=svc-pammypanel
+SocketMode=0660
+Accept=no
+
+[Install]
+WantedBy=sockets.target

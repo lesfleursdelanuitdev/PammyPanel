@@ -1,0 +1,75 @@
+/* Example: Gallery (12-media-on-your-pages.txt).
+   Cream paper, like the other examples. Change any of it you like: the number of
+   pictures across is --across, and their corners are --round. */
+
+:root {
+  --across: 3;
+  --gap: 0.75rem;
+  --round: 10px;
+  --paper: #f3eee4;
+  --ink: #36412f;
+  --soft: #6a7561;
+}
+
+body {
+  margin: 0;
+  padding: 2.5rem 1rem 4rem;
+  background: var(--paper);
+  color: var(--ink);
+  font: 17px/1.6 "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+}
+.page { max-width: 60rem; margin: 0 auto; }
+h1 { margin: 0 0 0.25rem; font-size: 2.2rem; font-weight: normal; }
+.intro { margin: 0 0 1.5rem; color: var(--soft); }
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(var(--across), minmax(0, 1fr));
+  gap: var(--gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (max-width: 40rem) { .gallery { --across: 2; } }
+
+.gallery button {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: var(--round);
+  overflow: hidden;
+  background: #e6dfd1;
+  cursor: zoom-in;
+}
+.gallery img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+.gallery button:hover img, .gallery button:focus-visible img { transform: scale(1.04); }
+.gallery button:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+.gallery figure { margin: 0; }
+.gallery figcaption { margin-top: 0.35rem; font-size: 0.9rem; color: var(--soft); }
+.gallery .empty { grid-column: 1 / -1; color: var(--soft); }
+.more { text-align: center; margin-top: 1.5rem; }
+.more-button { font: inherit; padding: 0.5rem 1.2rem; border: 1px solid var(--soft); border-radius: 999px; background: none; color: var(--ink); cursor: pointer; }
+
+/* the big picture */
+.lightbox {
+  width: 100vw; max-width: 100vw; height: 100vh; max-height: 100vh; margin: 0; padding: 0;
+  border: 0; background: rgba(20, 18, 14, 0.92); color: #fff;
+}
+.lightbox figure { display: grid; place-items: center; height: 100%; margin: 0; padding: 3.5rem 4rem; box-sizing: border-box; }
+.lightbox img { max-width: 100%; max-height: calc(100vh - 9rem); border-radius: 6px; }
+.lightbox figcaption { margin-top: 0.75rem; text-align: center; }
+.lightbox button {
+  position: absolute; width: 3rem; height: 3rem; border: 0; border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15); color: #fff; font-size: 2rem; line-height: 1; cursor: pointer;
+}
+.lightbox button:hover, .lightbox button:focus-visible { background: rgba(255, 255, 255, 0.3); }
+.lightbox .prev { left: 0.75rem; top: 50%; transform: translateY(-50%); }
+.lightbox .next { right: 0.75rem; top: 50%; transform: translateY(-50%); }
+.lightbox .close { right: 0.75rem; top: 0.75rem; }

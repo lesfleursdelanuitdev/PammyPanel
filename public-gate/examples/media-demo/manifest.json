@@ -1,0 +1,227 @@
+{
+  "about": "The built-in example folder of the media examples (tools/make-example-media.ts).",
+  "files": [
+    {
+      "file": "sunset-beach.jpg",
+      "kind": "images",
+      "title": "Sunset at the beach",
+      "alt": "An orange sky over purple hills, with a pale sun.",
+      "tags": [
+        "summer",
+        "evening"
+      ],
+      "categories": [
+        "landscapes"
+      ],
+      "thumb": "thumbs/sunset-beach.webp",
+      "width": 320,
+      "height": 213
+    },
+    {
+      "file": "morning-lake.jpg",
+      "kind": "images",
+      "title": "Morning by the lake",
+      "alt": "A pale blue morning sky above green hills.",
+      "tags": [
+        "summer",
+        "morning"
+      ],
+      "categories": [
+        "landscapes"
+      ],
+      "thumb": "thumbs/morning-lake.webp",
+      "width": 320,
+      "height": 213
+    },
+    {
+      "file": "autumn-hills.jpg",
+      "kind": "images",
+      "title": "Autumn hills",
+      "alt": "Rust-brown hills under a golden sky.",
+      "tags": [
+        "autumn"
+      ],
+      "categories": [
+        "landscapes"
+      ],
+      "thumb": "thumbs/autumn-hills.webp",
+      "width": 320,
+      "height": 213
+    },
+    {
+      "file": "night-sky.jpg",
+      "kind": "images",
+      "title": "A clear night",
+      "alt": "A dark blue sky with a bright moon over black hills.",
+      "tags": [
+        "evening"
+      ],
+      "categories": [
+        "landscapes"
+      ],
+      "thumb": "thumbs/night-sky.webp",
+      "width": 320,
+      "height": 213
+    },
+    {
+      "file": "snowy-peaks.jpg",
+      "kind": "images",
+      "title": "Snowy peaks",
+      "alt": "White snowy hills under a light blue sky.",
+      "tags": [
+        "winter"
+      ],
+      "categories": [
+        "landscapes"
+      ],
+      "thumb": "thumbs/snowy-peaks.webp",
+      "width": 320,
+      "height": 213
+    },
+    {
+      "file": "garden-roses.jpg",
+      "kind": "images",
+      "title": "Roses in the garden",
+      "alt": "A tall picture: pink sky, green garden, a red sun like a rose.",
+      "tags": [
+        "summer",
+        "flowers"
+      ],
+      "categories": [
+        "garden"
+      ],
+      "thumb": "thumbs/garden-roses.webp",
+      "width": 213,
+      "height": 320
+    },
+    {
+      "file": "harbour-boats.jpg",
+      "kind": "images",
+      "title": "Boats in the harbour",
+      "alt": "Blue water under a turquoise sky.",
+      "tags": [
+        "summer",
+        "sea"
+      ],
+      "categories": [
+        "travel"
+      ],
+      "thumb": "thumbs/harbour-boats.webp",
+      "width": 320,
+      "height": 213
+    },
+    {
+      "file": "city-lights.jpg",
+      "kind": "images",
+      "title": "City lights",
+      "alt": "A purple evening sky over dark rooftops.",
+      "tags": [
+        "evening"
+      ],
+      "categories": [
+        "travel"
+      ],
+      "thumb": "thumbs/city-lights.webp",
+      "width": 320,
+      "height": 213
+    },
+    {
+      "file": "morning-song.mp3",
+      "kind": "audio",
+      "title": "Morning song",
+      "alt": "A cover of soft colours with a circle in the middle.",
+      "tags": [
+        "morning"
+      ],
+      "categories": [
+        "music"
+      ],
+      "thumb": "thumbs/morning-song.webp",
+      "width": 320,
+      "height": 320
+    },
+    {
+      "file": "evening-hum.mp3",
+      "kind": "audio",
+      "title": "Evening hum",
+      "alt": "A cover of soft colours with a circle in the middle.",
+      "tags": [
+        "evening"
+      ],
+      "categories": [
+        "music"
+      ],
+      "thumb": "thumbs/evening-hum.webp",
+      "width": 320,
+      "height": 320
+    },
+    {
+      "file": "little-waltz.mp3",
+      "kind": "audio",
+      "title": "A little waltz",
+      "alt": "A cover of soft colours with a circle in the middle.",
+      "tags": [
+        "summer"
+      ],
+      "categories": [
+        "music"
+      ],
+      "thumb": "thumbs/little-waltz.webp",
+      "width": 320,
+      "height": 320
+    },
+    {
+      "file": "menu.pdf",
+      "kind": "files",
+      "title": "Menu",
+      "tags": [
+        "food"
+      ],
+      "categories": [
+        "documents"
+      ],
+      "thumb": "thumbs/menu.webp",
+      "width": 227,
+      "height": 320
+    },
+    {
+      "file": "autumn-newsletter.pdf",
+      "kind": "files",
+      "title": "Autumn newsletter",
+      "tags": [
+        "autumn"
+      ],
+      "categories": [
+        "documents"
+      ],
+      "thumb": "thumbs/autumn-newsletter.webp",
+      "width": 227,
+      "height": 320
+    },
+    {
+      "file": "booking-form.pdf",
+      "kind": "files",
+      "title": "Booking form",
+      "tags": [
+        "events"
+      ],
+      "categories": [
+        "documents"
+      ],
+      "thumb": "thumbs/booking-form.webp",
+      "width": 227,
+      "height": 320
+    },
+    {
+      "file": "price-list.csv",
+      "kind": "files",
+      "title": "Price list",
+      "tags": [
+        "food"
+      ],
+      "categories": [
+        "documents"
+      ]
+    }
+  ]
+}

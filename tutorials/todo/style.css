@@ -1,0 +1,72 @@
+/* style.css -- the look of the to-do list. Change anything you like. */
+
+body {
+  margin: 0;
+  background: #f4f7f5;
+  color: #1f2a24;
+  font: 18px/1.5 system-ui, sans-serif;
+}
+
+main {
+  max-width: 32rem;
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem;
+}
+
+.who {
+  color: #56635b;
+  font-size: 0.9em;
+}
+
+#add {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+#add label {
+  width: 100%;
+  font-weight: bold;
+}
+
+#add input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.5rem;
+  font: inherit;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  font: inherit;
+  cursor: pointer;
+}
+
+#problem {
+  color: #9b1c1c;
+}
+
+#tasks {
+  list-style: none;
+  padding: 0;
+}
+
+#tasks li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid #d9e2dc;
+  padding: 0.5rem 0;
+}
+
+#tasks .done span {
+  color: #7d8a82;
+  text-decoration: line-through;
+}
+
+#tasks .remove {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.85em;
+}

@@ -1,0 +1,17 @@
+# lfdln's database helper's door (docs/phase8-plan.md 8-4): the panel's (the Studio), every op.
+# Its group lfdln-pammydb-clients holds the panel's user only since S2 (docs/s2-plan.md); the
+# gate has a door of its own, row ops only (lfdln-pammydb-gate.socket). Not the gate, not
+# momolig, not the web server.
+# (root always can.) Installed by ~/pamela-setup/panel/deploy/lfdln/install-lfdln.sh
+[Unit]
+Description=lesfleursdelanuit.com panel: database helper socket
+
+[Socket]
+ListenStream=/run/lfdln-pammydb.sock
+SocketUser=root
+SocketGroup=lfdln-pammydb-clients
+SocketMode=0660
+Accept=no
+
+[Install]
+WantedBy=sockets.target

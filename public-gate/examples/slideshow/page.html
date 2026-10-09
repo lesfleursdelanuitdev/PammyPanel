@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>@TITLE@</title>
+  <link rel="stylesheet" href="@FILES@/style.css">
+  <script src="@FILES@/slideshow.js" defer></script>
+</head>
+<body>
+  <main class="page">
+    <h1>@TITLE@</h1>
+
+    <!-- slideshow.js fills this in from the address in data-api: the pictures in a
+         media folder that have every tag and category in it (see 12-media-on-your-pages.txt).
+         data-seconds is how long each picture stays (0: only when the arrows are used). -->
+    <section class="slideshow" aria-roledescription="slide show" aria-label="@TITLE@"
+      data-api="@API@" data-seconds="5" data-empty="No pictures here yet.">
+      <figure class="slide">
+        <img alt="">
+        <figcaption aria-live="polite"></figcaption>
+      </figure>
+      <button type="button" class="prev" aria-label="Previous picture">&#8249;</button>
+      <button type="button" class="next" aria-label="Next picture">&#8250;</button>
+      <div class="controls">
+        <button type="button" class="pause" aria-pressed="false">Pause</button>
+        <div class="dots" role="group" aria-label="Choose a picture"></div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

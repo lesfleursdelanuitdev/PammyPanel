@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# /usr/local/sbin/lfdln-panel -- lfdln's panel command line (sites/lfdln/src/cli.ts), run
+# as the panel's own user against its own database, as pammy-panel is for pammy.org.
+#   sudo lfdln-panel users
+#   sudo lfdln-panel add-user <username> "<Name>" [--manager]
+#   sudo lfdln-panel invite <username>
+#
+# The database password is root-only (/etc/lfdln-panel/db/panel.pass), and this runs
+# as svc-lfdlnpanel, which may not read it: root opens it here and the command line
+# inherits it as file descriptor 3.
+set -euo pipefail
+[[ $EUID -eq 0 ]] || { echo "run with sudo: sudo lfdln-panel $*" >&2; exit 1; }
+set -a; . /etc/lfdln-panel/panel.env; set +a
+PASS=/etc/lfdln-panel/db/panel.pass
+[[ -r $PASS ]] || { echo "can't read $PASS (is lfdln's panel installed? deploy/lfdln/install-lfdln.sh)" >&2; exit 1; }
+cd /
+umask 077
+exec 3<"$PASS"
+exec runuser -u svc-lfdlnpanel -- env -i PATH=/usr/bin:/bin \
+    PANEL_ORIGIN="$PANEL_ORIGIN" PANEL_RP_ID="$PANEL_RP_ID" \
+    PANEL_PG_PASSWORD_FD=3 PANEL_PG_HOST="$PANEL_PG_HOST" PANEL_PG_PORT="$PANEL_PG_PORT" PANEL_PG_DATABASE="$PANEL_PG_DATABASE" \
+    PANEL_SITEFS_SOCKET="$PANEL_SITEFS_SOCKET" PANEL_ROUTES_SOCKET="$PANEL_ROUTES_SOCKET" PANEL_MAIL_SOCKET="$PANEL_MAIL_SOCKET" \
+    /usr/bin/node --disable-warning=ExperimentalWarning /opt/lfdln-panel/sites/lfdln/src/cli.ts "$@"

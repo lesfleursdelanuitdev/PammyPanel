@@ -1,0 +1,18 @@
+# lfdln's database helper's second door: the gate's (S2, docs/s2-plan.md), as pammy.org's
+# pammy-pammydb-gate.socket. Behind it lfdln-pammydb-gate.service answers row ops only (the
+# data API, forms and comments). Only the gate's user may open it: not the panel (its door is
+# lfdln-pammydb.socket), not pammy.org's gate, not the apps. (root always can.)
+# Installed by ~/pamela-setup/panel/deploy/lfdln/install-lfdln.sh
+[Unit]
+Description=lfdln panel: database helper socket for the gate (row ops only)
+
+[Socket]
+ListenStream=/run/lfdln-pammydb-gate.sock
+SocketUser=root
+SocketGroup=svc-lfdlngate
+SocketMode=0660
+Accept=no
+Service=lfdln-pammydb-gate.service
+
+[Install]
+WantedBy=sockets.target

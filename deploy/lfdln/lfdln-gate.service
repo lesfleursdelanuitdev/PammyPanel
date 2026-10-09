@@ -1,0 +1,90 @@
+# lesfleursdelanuit.com's gate (docs/accounts-plan.md step 3): visitor accounts and
+# the areas people sign in to, as pammy.org's pammy-gate.service is for her site.
+# Installed by ~/pamela-setup/panel/deploy/lfdln/install-lfdln.sh
+#
+# Its own user (svc-lfdlngate), database role (pammy_gate on lfdln-pg, 127.0.0.1:5435)
+# and port (127.0.0.1:3047); nothing of pammy.org's. Every host sends /_pammy/ to it
+# (docs/phase8-plan.md 8-2), and nginx asks it about the routes with accounts (roles
+# plan step 5). It reads the routes from the routing helper's gate-routes.json in
+# /etc/nginx/lfdln-hosts (read-only here, as all of /etc).
+#
+# It READS the site folders (to find areas in them, the way nginx reads them), with
+# the lfdln-sites group only while running; the rest of /var/www isn't there.
+#
+# At boot it starts before the database container (a system unit can't wait for a
+# user one), so it answers from the areas it saved last time until Postgres answers
+# (docs/postgres-plan.md P14).
+[Unit]
+Description=lesfleursdelanuit.com gate (visitor accounts)
+After=network.target lfdln-gate-admin.socket lfdln-gate-php.socket
+Requires=lfdln-gate-admin.socket lfdln-gate-php.socket
+StartLimitIntervalSec=60
+StartLimitBurst=20
+
+[Service]
+Type=simple
+Sockets=lfdln-gate-admin.socket lfdln-gate-php.socket
+User=svc-lfdlngate
+Group=svc-lfdlngate
+SupplementaryGroups=lfdln-sites
+ExecStart=/usr/bin/node --disable-warning=ExperimentalWarning /opt/lfdln-panel/sites/lfdln/src/gate/main.ts
+WorkingDirectory=/opt/lfdln-panel
+# the database password, as root, into $CREDENTIALS_DIRECTORY/db.pass: this
+# service may not read /etc/lfdln-panel (InaccessiblePaths below)
+LoadCredential=db.pass:/etc/lfdln-panel/db/gate.pass
+# the key it signs what apps behind routes with accounts are told with (docs/s1-plan.md S1a,
+# review S1): the installer makes it once; apps hold only /etc/lfdln-identity/identity.pub
+LoadCredential=identity.key:/etc/lfdln-panel/identity.key
+# nginx's edge secret (docs/s1-plan.md S1c): X-Real-IP is believed only with it
+LoadCredential=edge.secret:/etc/lfdln-panel/edge.secret
+Environment=GATE_PG_HOST=127.0.0.1
+Environment=GATE_PG_PORT=5435
+Environment=GATE_PG_DATABASE=lfdln
+# what it can still answer with while Postgres is out of reach (P14)
+Environment=GATE_AREAS_SNAPSHOT=/var/lib/svc-lfdlngate/areas.json
+Environment=GATE_PUBLIC=/var/www/lesfleursdelanuit-sub
+Environment=GATE_DOMAIN=lesfleursdelanuit.com
+# the Studio's helper, for the data API, forms and comments: the gate's own door
+# (lfdln-pammydb-gate.socket, group svc-lfdlngate), which answers row ops only. This user is
+# NOT in lfdln-pammydb-clients (the panel's door) since S2 (docs/s2-plan.md).
+Environment=GATE_PAMMYDB_SOCKET=/run/lfdln-pammydb-gate.sock
+Environment=GATE_HOST=127.0.0.1
+Environment=GATE_PORT=3047
+Restart=always
+RestartSec=1
+UMask=0077
+
+NoNewPrivileges=yes
+ProtectSystem=strict
+ReadWritePaths=/var/lib/svc-lfdlngate
+ProtectHome=yes
+TemporaryFileSystem=/var/www:ro
+BindReadOnlyPaths=/var/www/lesfleursdelanuit-sub
+InaccessiblePaths=-/pamela -/srv -/etc/ssl/private -/etc/ssl/cloudflare -/etc/letsencrypt -/etc/pammy-panel -/etc/lfdln-panel -/etc/lfdln-mail -/etc/pammy-mail -/run/user
+InaccessiblePaths=-/var/lib/svc-lfdlnpanel -/var/lib/svc-lfdlnpanel-db -/var/lib/svc-lfdlnappdb -/var/lib/svc-pammypanel -/var/lib/svc-pammypanel-db -/var/lib/svc-pammygate -/var/lib/svc-pammywp -/var/lib/lfdln-services
+PrivateTmp=yes
+PrivateDevices=yes
+PrivateIPC=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+ProtectProc=invisible
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@privileged @debug
+IPAddressDeny=any
+IPAddressAllow=localhost
+MemoryMax=384M
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,3 @@
+# lfdln's MariaDB's data (svc-lfdlnmaria's container storage).
+[Volume]
+VolumeName=lfdln-appmaria

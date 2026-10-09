@@ -1,0 +1,14 @@
+# The services helper's door (docs/adopt-plan.md V7). Only the lfdln panel's own
+# user may open it (root always can).
+[Unit]
+Description=lfdln panel: services helper socket
+
+[Socket]
+ListenStream=/run/lfdln-services.sock
+SocketUser=root
+SocketGroup=svc-lfdlnpanel
+SocketMode=0660
+Accept=no
+
+[Install]
+WantedBy=sockets.target

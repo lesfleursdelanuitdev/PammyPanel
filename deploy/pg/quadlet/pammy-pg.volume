@@ -1,0 +1,3 @@
+# The panel's and the gate's Postgres data (svc-pammypanel-db's container storage).
+[Volume]
+VolumeName=pammy-pg

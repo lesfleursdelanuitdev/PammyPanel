@@ -1,0 +1,56 @@
+# Git over HTTPS (docs/phase8b-plan.md 8b-7, D7-5): git-http-backend under fcgiwrap, as
+# svc-lfdln-apps (who owns the projects' repositories), started by lfdln-git-http.socket.
+# nginx fixes the script (/usr/lib/git-core/git-http-backend), GIT_PROJECT_ROOT and
+# REMOTE_USER (the name the panel's check answered); nothing else can reach the socket.
+#
+# A push runs the repositories' one hook (core.hooksPath, root's, in the release: 8b-3 D3-3),
+# which drops a line into the helper's spool. So it writes the repositories and the spool,
+# and nothing more:
+#   - no network at all (its socket is handed to it)
+#   - it can't see the certificates, the panels' settings, the helper's record, the sites or the homes
+[Unit]
+Description=lfdln projects: git over HTTPS (git-http-backend under fcgiwrap)
+Requires=lfdln-git-http.socket
+After=lfdln-git-http.socket
+
+[Service]
+Type=simple
+User=svc-lfdln-apps
+Group=svc-lfdln-apps
+ExecStart=/usr/sbin/fcgiwrap -c 4
+# what a push writes is group-writable (core.sharedRepository=0664 says the same)
+UMask=0002
+Restart=on-failure
+RestartSec=2
+
+CapabilityBoundingSet=
+AmbientCapabilities=
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/srv/lfdln-projects /run/lfdln-projects/pushes
+InaccessiblePaths=-/etc/letsencrypt -/etc/ssl/private -/etc/ssl/cloudflare -/pamela -/var/www -/etc/pammy-panel -/etc/lfdln-panel -/var/lib/lfdln-projects -/run/user -/mnt/storage
+PrivateTmp=yes
+PrivateDevices=yes
+PrivateIPC=yes
+IPAddressDeny=any
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+RestrictAddressFamilies=AF_UNIX
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@privileged @debug
+MemoryMax=512M
+MemorySwapMax=0
+TasksMax=64
+
+[Install]
+WantedBy=multi-user.target

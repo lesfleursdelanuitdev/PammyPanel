@@ -1,0 +1,20 @@
+{
+  "name": "@panel/comments",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    "./gate/routes/comments": "./src/gate/routes/comments.ts",
+    "./module": "./src/module.ts",
+    "./panel/comment-areas": "./src/panel/comment-areas.ts",
+    "./panel/routes/comments": "./src/panel/routes/comments.ts",
+    "./studio/comments-tables": "./src/studio/comments-tables.ts"
+  },
+  "dependencies": {
+    "@panel/areas": "*",
+    "@panel/core": "*",
+    "@panel/form-links": "*",
+    "@panel/forms": "*",
+    "@panel/studio": "*"
+  }
+}

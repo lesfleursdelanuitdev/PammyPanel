@@ -1,0 +1,15 @@
+{
+  "name": "@panel/requests",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    "./gate/routes/requests": "./src/gate/routes/requests.ts",
+    "./module": "./src/module.ts",
+    "./panel/routes/requests": "./src/panel/routes/requests.ts"
+  },
+  "dependencies": {
+    "@panel/core": "*",
+    "@panel/areas": "*"
+  }
+}

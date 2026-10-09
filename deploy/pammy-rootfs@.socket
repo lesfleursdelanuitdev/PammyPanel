@@ -1,0 +1,17 @@
+# pammy.org panel: File Explorer's door to one piece of installed software's files
+# (docs/catalog-plan.md step 3). One instance per install (%i: its id, "blog"),
+# switched on by the software helper (src/apps/rootfs.ts). Only the panel's own
+# user may open it. (root always can.)
+# Installed by ~/pamela-setup/panel/deploy/install-panel.sh
+[Unit]
+Description=pammy.org panel: files helper socket for software %i
+
+[Socket]
+ListenStream=/run/pammy-rootfs-%i.sock
+SocketUser=root
+SocketGroup=svc-pammypanel
+SocketMode=0660
+Accept=no
+
+[Install]
+WantedBy=sockets.target

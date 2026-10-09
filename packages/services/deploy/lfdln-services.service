@@ -1,0 +1,67 @@
+# lfdln panel: the services helper (docs/adopt-plan.md V7). Tells how the services
+# taken in are (TutorStar, the Gonsalves apps), and starts, stops and restarts
+# them for the panel. Started on demand by lfdln-services.socket. What it looks
+# after is /var/lib/lfdln-services/services.json, which only the installer writes.
+#
+# Root, because it asks systemd to run `systemctl --user` as each service's own
+# user (@panel/core/runner: "lfdln-services-<what>-...") -- and nothing more:
+#   - no capabilities at all
+#   - nothing writable: it changes nothing on disk itself
+#   - the network: 127.0.0.1 only, to ask each part whether it answers
+#   - it can't see the certificates, the panels' settings, the sites or the homes
+# Plainly: a root process that may ask systemd for units can have anything done.
+# The boundary is the socket (only the panel's user) and its operations, none of
+# which takes a unit, a user, a path or a command: each names a service and a
+# part in the record, and there is no delete of a service (D2). storage
+# (monitoring) runs a read-only root unit, "lfdln-services-storage-...", over the
+# backup folders and disks known.ts lists: this helper's own root can't open
+# them. prune runs one more, "lfdln-services-prune-...", that deletes the copies
+# older than the panel's Settings > Backups (7-365 days) in the folders known.ts
+# marks pruned, never their newest nightly copy (docs/lfdln-mariadb-plan.md B2).
+[Unit]
+Description=lfdln panel: services helper (start, stop, restart what runs)
+Requires=lfdln-services.socket
+After=lfdln-services.socket
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=root
+Group=root
+ExecStart=/usr/bin/node --disable-warning=ExperimentalWarning /opt/lfdln-panel/sites/lfdln/src/helpers/services.ts
+UMask=0077
+Restart=on-failure
+RestartSec=2
+
+CapabilityBoundingSet=
+AmbientCapabilities=
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+InaccessiblePaths=-/etc/letsencrypt -/etc/ssl/private -/etc/ssl/cloudflare -/pamela -/srv -/var/www -/etc/pammy-panel -/etc/lfdln-panel -/run/user -/mnt/storage
+PrivateTmp=yes
+PrivateDevices=yes
+PrivateIPC=yes
+IPAddressDeny=any
+IPAddressAllow=localhost
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+RestrictAddressFamilies=AF_UNIX AF_INET
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@privileged @debug
+MemoryMax=256M
+MemorySwapMax=0
+TasksMax=32
+
+[Install]
+WantedBy=multi-user.target

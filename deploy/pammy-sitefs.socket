@@ -1,0 +1,15 @@
+# The website folder helper's door. Only the panel's own user may open it:
+# not pamela, not momolig, not the web server. (root always can.)
+# Installed by ~/pamela-setup/panel/deploy/install-panel.sh
+[Unit]
+Description=pammy.org panel: website folder helper socket
+
+[Socket]
+ListenStream=/run/pammy-sitefs.sock
+SocketUser=root
+SocketGroup=svc-pammypanel
+SocketMode=0660
+Accept=no
+
+[Install]
+WantedBy=sockets.target

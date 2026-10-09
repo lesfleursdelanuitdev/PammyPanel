@@ -1,0 +1,66 @@
+# pammy.org panel: mail service (docs/apps-plan.md phase 3). Sends the panel's
+# emails -- its notices and a test -- through Resend's API, as
+# noreply@mail.lesfleursdelanuit.com, to the one notice address in
+# /etc/pammy-mail/settings.json. Started on demand by pammy-mail.socket.
+# Installed by ~/pamela-setup/panel/deploy/install-panel.sh
+#
+# It is the ONLY service here allowed off this machine, and it is small on
+# purpose: its own user with no home and no files, no capabilities, nothing
+# of hers or anyone's readable, and nothing it can write. The key reaches it
+# from systemd (LoadCredential); it may not read /etc/pammy-mail/resend.key
+# itself. What it will send is decided in src/mail/service.ts: to the notice
+# address only, a subject, a few lines and a link into the panel.
+#
+# No IPAddressDeny=: Resend's addresses aren't fixed, and systemd can't allow a
+# name. So the limit is what it does, not where it can reach.
+[Unit]
+Description=pammy.org panel: mail service (Resend)
+Requires=pammy-mail.socket
+After=pammy-mail.socket network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=svc-pammymail
+Group=svc-pammymail
+ExecStart=/usr/bin/node --disable-warning=ExperimentalWarning /opt/pammy-panel/src/mail/main.ts
+LoadCredential=resend.key:/etc/pammy-mail/resend.key
+Environment=MAIL_SETTINGS=/etc/pammy-mail/settings.json
+Environment=MAIL_PANEL_ORIGIN=https://panel.pammy.org
+UMask=0077
+Restart=on-failure
+RestartSec=2
+
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+InaccessiblePaths=-/pamela -/srv -/var/lib -/var/www -/etc/nginx -/etc/pammy-panel -/etc/pammy-php -/etc/ssl/private -/etc/ssl/cloudflare -/etc/letsencrypt -/run/user
+PrivateTmp=yes
+PrivateDevices=yes
+PrivateIPC=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+ProtectProc=invisible
+ProcSubset=pid
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@privileged @debug
+MemoryMax=192M
+MemorySwapMax=0
+TasksMax=24
+
+[Install]
+WantedBy=multi-user.target

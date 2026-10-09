@@ -1,0 +1,12 @@
+# A push waiting for the projects helper (docs/phase8b-plan.md D3-5): the git hook drops a
+# file into /run/lfdln-projects/pushes; if the helper isn't running, this starts it, and it
+# takes the file out (and watches the folder from then on).
+[Unit]
+Description=lfdln panel: pushes waiting for the projects helper
+
+[Path]
+DirectoryNotEmpty=/run/lfdln-projects/pushes
+Unit=lfdln-projects.service
+
+[Install]
+WantedBy=paths.target

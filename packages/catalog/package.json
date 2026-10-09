@@ -1,0 +1,19 @@
+{
+  "name": "@panel/catalog",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    "./apps": "./src/apps.ts",
+    "./items": "./src/items.ts",
+    "./labels": "./src/labels.ts",
+    "./module": "./src/module.ts",
+    "./panel/door": "./src/panel/door.ts",
+    "./panel/routes/apps": "./src/panel/routes/apps.ts",
+    "./panel/routes/everywhere": "./src/panel/routes/everywhere.ts",
+    "./scopes": "./src/scopes.ts"
+  },
+  "dependencies": {
+    "@panel/core": "*"
+  }
+}

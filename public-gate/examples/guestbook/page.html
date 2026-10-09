@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guest book</title>
+  <link rel="stylesheet" href="@FILES@/style.css">
+  <script src="/_pammy/forms.js" defer></script>
+  <script src="@FILES@/entries.js" defer></script>
+</head>
+<body>
+  <main class="page">
+    <h1>Guest book</h1>
+    <p class="intro">Do sign the book before you go. I read everything, and messages
+      appear below once I have.</p>
+
+    <pammy-form name="@FORM@"></pammy-form>
+
+    <h2>What people have written</h2>
+    <!-- entries.js fills this in with the messages that have been approved.
+         data-form is the form's name; data-empty is what to say when there are none. -->
+    <ol class="entries" data-form="@FORM@" data-empty="No messages yet &mdash; be the first to sign it."></ol>
+  </main>
+</body>
+</html>

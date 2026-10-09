@@ -1,0 +1,17 @@
+# lfdln's gate's admin door (docs/accounts-plan.md step 3): how lfdln's panel manages
+# areas and people. Only lfdln's panel user may open it: not pammy.org's panel, not
+# momolig, not the apps. (root always can.)
+# Installed by ~/pamela-setup/panel/deploy/lfdln/install-lfdln.sh
+[Unit]
+Description=lfdln panel: gate admin socket
+
+[Socket]
+ListenStream=/run/lfdln-gate-admin.sock
+SocketUser=root
+SocketGroup=svc-lfdlnpanel
+SocketMode=0660
+Accept=no
+Service=lfdln-gate.service
+
+[Install]
+WantedBy=sockets.target

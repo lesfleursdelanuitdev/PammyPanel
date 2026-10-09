@@ -1,0 +1,6 @@
+[Unit]
+Description=Back up the lesfleursdelanuit.com panel database
+
+[Service]
+Type=oneshot
+ExecStart=/var/lib/svc-lfdlnpanel-db/bin/backup-lfdln-pg.sh

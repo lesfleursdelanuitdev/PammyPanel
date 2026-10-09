@@ -1,0 +1,35 @@
+{
+  "name": "@panel/modules",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    "./index": "./src/index.ts"
+  },
+  "dependencies": {
+    "@panel/api-keys": "*",
+    "@panel/apps": "*",
+    "@panel/areas": "*",
+    "@panel/catalog": "*",
+    "@panel/comments": "*",
+    "@panel/core": "*",
+    "@panel/examples": "*",
+    "@panel/files": "*",
+    "@panel/form-links": "*",
+    "@panel/forms": "*",
+    "@panel/getting-started": "*",
+    "@panel/help": "*",
+    "@panel/hosts": "*",
+    "@panel/mail": "*",
+    "@panel/media": "*",
+    "@panel/monitoring": "*",
+    "@panel/people": "*",
+    "@panel/php": "*",
+    "@panel/projects": "*",
+    "@panel/requests": "*",
+    "@panel/services": "*",
+    "@panel/settings": "*",
+    "@panel/studio": "*",
+    "@panel/thumbs": "*"
+  }
+}

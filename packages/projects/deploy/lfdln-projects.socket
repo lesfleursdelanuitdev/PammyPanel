@@ -1,0 +1,14 @@
+# The projects helper's door (docs/phase8b-plan.md). Only the lfdln panel's own user may
+# open it (root always can).
+[Unit]
+Description=lfdln panel: projects helper socket
+
+[Socket]
+ListenStream=/run/lfdln-projects.sock
+SocketUser=root
+SocketGroup=svc-lfdlnpanel
+SocketMode=0660
+Accept=no
+
+[Install]
+WantedBy=sockets.target

@@ -1,0 +1,15 @@
+{
+  "name": "@panel/settings",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    "./module": "./src/module.ts",
+    "./panel/routes/mail": "./src/panel/routes/mail.ts",
+    "./panel/routes/visitor-settings": "./src/panel/routes/visitor-settings.ts"
+  },
+  "dependencies": {
+    "@panel/core": "*",
+    "@panel/people": "*"
+  }
+}

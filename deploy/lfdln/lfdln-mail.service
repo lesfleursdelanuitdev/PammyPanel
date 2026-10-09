@@ -1,0 +1,70 @@
+# lfdln panel: mail service (docs/accounts-plan.md step 2). Sends lfdln's emails -- the
+# panel's notices and, from accounts step 4, the fixed visitor emails -- through Resend's
+# API, as noreply@mail.lesfleursdelanuit.com. Started on demand by either of its doors:
+# lfdln-mail.socket (the panel's) or lfdln-mail-visitor.socket (the gate's, step 4:
+# visitor emails only). Both counted together against the daily limits.
+# Installed by ~/pamela-setup/panel/deploy/lfdln/install-lfdln.sh
+#
+# Like pammy-mail (deploy/pammy-mail.service): its own user with no home and no files,
+# no capabilities, nothing of anyone's readable, nothing it can write. The key (a copy of
+# pammy.org's, decided 2026-09-26) reaches it from systemd (LoadCredential); it may not
+# read /etc/lfdln-mail/resend.key itself. What it will send is decided in
+# packages/mail/src/mail/service.ts and visitor.ts.
+#
+# No IPAddressDeny=: Resend's addresses aren't fixed, and systemd can't allow a
+# name. So the limit is what it does, not where it can reach.
+[Unit]
+Description=lfdln panel: mail service (Resend)
+Requires=lfdln-mail.socket
+# the gate's door: wanted, not required, so the panel's mail never waits on it
+Wants=lfdln-mail-visitor.socket
+After=lfdln-mail.socket lfdln-mail-visitor.socket network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+Type=simple
+# both doors, by name (LISTEN_FDNAMES): packages/mail/src/mail/main.ts tells them apart
+Sockets=lfdln-mail.socket lfdln-mail-visitor.socket
+User=svc-lfdlnmail
+Group=svc-lfdlnmail
+ExecStart=/usr/bin/node --disable-warning=ExperimentalWarning /opt/lfdln-panel/sites/lfdln/src/helpers/mail.ts
+LoadCredential=resend.key:/etc/lfdln-mail/resend.key
+Environment=MAIL_SETTINGS=/etc/lfdln-mail/settings.json
+Environment=MAIL_PANEL_ORIGIN=https://panel.lesfleursdelanuit.com
+UMask=0077
+Restart=on-failure
+RestartSec=2
+
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+InaccessiblePaths=-/pamela -/srv -/var/lib -/var/www -/etc/nginx -/etc/pammy-panel -/etc/pammy-php -/etc/pammy-mail -/etc/lfdln-panel -/etc/lfdln-php -/etc/ssl/private -/etc/ssl/cloudflare -/etc/letsencrypt -/run/user
+PrivateTmp=yes
+PrivateDevices=yes
+PrivateIPC=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+ProtectProc=invisible
+ProcSubset=pid
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@privileged @debug
+MemoryMax=192M
+MemorySwapMax=0
+TasksMax=24
+
+[Install]
+WantedBy=multi-user.target

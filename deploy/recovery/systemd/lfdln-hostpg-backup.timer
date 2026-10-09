@@ -1,0 +1,10 @@
+[Unit]
+Description=Dump the server's own Postgres every night (before the off-server copies)
+
+[Timer]
+OnCalendar=*-*-* 05:30:00 UTC
+RandomizedDelaySec=5m
+Persistent=true
+
+[Install]
+WantedBy=timers.target

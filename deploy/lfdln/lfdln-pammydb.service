@@ -1,0 +1,69 @@
+# lesfleursdelanuit.com panel: database helper (docs/phase8-plan.md 8-4), as pammy.org's
+# pammy-pammydb.service. The only thing that speaks to lfdln-appdb (127.0.0.1:5436) and
+# lfdln-appmaria (127.0.0.1:3308, docs/lfdln-mariadb-plan.md) for the Studio: databases made
+# there, and the apps' own on lfdln-appdb (tutorstar, ligneous_frontend, examprep)
+# read-only -- the helper refuses changing them (sites/lfdln/src/studio-site.ts) and the
+# studio role has SELECT on them only. Started on demand by lfdln-pammydb.socket.
+# Installed by ~/pamela-setup/panel/deploy/lfdln/install-lfdln.sh
+#
+# No PrivateNetwork: it has to reach loopback, so the cage is IPAddressAllow=localhost, and
+# the ports are settled in studio-site.ts, which refuses every other database port on it
+# (5432 the server's, 5433/3307 Pamela's, 5434/5435 the panels' own). Its own user, no home.
+[Unit]
+Description=lesfleursdelanuit.com panel: database helper for lfdln-appdb and lfdln-appmaria
+Requires=lfdln-pammydb.socket
+After=lfdln-pammydb.socket
+# a helper that can't start gives up after 5 tries instead of looping forever
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=svc-lfdlnstudio
+Group=svc-lfdlnstudio
+ExecStart=/usr/bin/node --disable-warning=ExperimentalWarning /opt/lfdln-panel/sites/lfdln/src/helpers/pammydb.ts
+WorkingDirectory=/opt/lfdln-panel
+# the studio passwords, read by systemd as root and handed over in
+# $CREDENTIALS_DIRECTORY: this user may not read /etc/lfdln-panel itself
+LoadCredential=studio-postgres.pass:/etc/lfdln-panel/db/studio-postgres.pass
+LoadCredential=studio-mariadb.pass:/etc/lfdln-panel/db/studio-mariadb.pass
+UMask=0077
+Restart=on-failure
+RestartSec=2
+
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+# It has no business with her files, her site, the panel's own secrets or any
+# other service's data. (Not all of /etc/ssl: node reads /etc/ssl/openssl.cnf at
+# startup and exits without it.)
+InaccessiblePaths=-/pamela -/srv -/var/lib -/var/www -/etc/nginx -/etc/pammy-panel -/etc/lfdln-panel -/etc/lfdln-mail -/etc/pammy-mail -/etc/ssl/private -/etc/ssl/cloudflare -/etc/letsencrypt -/run/user
+PrivateTmp=yes
+PrivateDevices=yes
+PrivateIPC=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+ProtectProc=invisible
+# the socket, and TCP to lfdln-appdb on loopback -- nothing else
+RestrictAddressFamilies=AF_UNIX AF_INET
+IPAddressDeny=any
+IPAddressAllow=localhost
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@privileged @debug
+MemoryMax=512M
+MemorySwapMax=0
+TasksMax=32
+
+[Install]
+WantedBy=multi-user.target

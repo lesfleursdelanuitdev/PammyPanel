@@ -1,0 +1,28 @@
+# The build boxes' proxy (docs/phase8b-plan.md 8b-8b, P8b-11): HTTPS to the hosts in
+# packages/projects/container/proxy-allow.txt, nothing else. On the internal network lfdln-build
+# (where the boxes are) and podman's own (its way out). svc-lfdln-apps' Quadlet, put in place
+# and restarted by install-lfdln.sh after each release.
+[Unit]
+Description=lfdln build boxes' proxy to the package registries
+
+[Container]
+Image=docker.io/library/node:24-bookworm-slim
+ContainerName=lfdln-build-proxy
+Network=lfdln-build.network
+Network=podman
+Volume=/opt/lfdln-panel/packages/projects/container:/lfdln:ro
+Exec=node /lfdln/proxy.mjs
+# the server's own resolvers (install-lfdln.sh puts them in from systemd-resolved)
+Environment=PROXY_DNS=__RESOLVERS__
+User=node
+ReadOnly=true
+DropCapability=all
+NoNewPrivileges=true
+PodmanArgs=--memory=128m --cpus=0.5 --pids-limit=64
+
+[Service]
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=default.target

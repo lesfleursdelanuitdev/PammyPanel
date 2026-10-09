@@ -1,0 +1,19 @@
+# Where builds may reach (docs/phase8b-plan.md 8b-8b, P8b-11): HTTPS only, through
+# lfdln-build-proxy. One host a line; *.host for its subdomains. A change takes a new release.
+
+# the package registries (npm, pnpm; yarn's mirror), and npm's download counts (the Packages page)
+registry.npmjs.org
+registry.yarnpkg.com
+api.npmjs.org
+# git dependencies, and the binaries some packages fetch from GitHub releases
+github.com
+codeload.github.com
+objects.githubusercontent.com
+raw.githubusercontent.com
+# node-gyp's headers, for packages that compile native code
+nodejs.org
+# next/font/google fetches its fonts while building
+fonts.googleapis.com
+fonts.gstatic.com
+# Prisma's engines
+binaries.prisma.sh

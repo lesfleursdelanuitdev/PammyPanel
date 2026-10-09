@@ -1,0 +1,16 @@
+# The gate's admin door: how the panel manages protected folders and people.
+# Only the panel's own user may open it (and root).
+# Installed by ~/pamela-setup/panel/deploy/install-panel.sh
+[Unit]
+Description=pammy.org password-protected folders: admin socket
+
+[Socket]
+ListenStream=/run/pammy-gate-admin.sock
+SocketUser=root
+SocketGroup=svc-pammypanel
+SocketMode=0660
+Accept=no
+Service=pammy-gate.service
+
+[Install]
+WantedBy=sockets.target

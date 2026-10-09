@@ -1,0 +1,15 @@
+# The mail service's door (docs/apps-plan.md phase 3). Only the panel's own user
+# may open it: not pamela, not momolig, not the gate, not WordPress.
+# (root always can.) Installed by ~/pamela-setup/panel/deploy/install-panel.sh
+[Unit]
+Description=pammy.org panel: mail service socket
+
+[Socket]
+ListenStream=/run/pammy-mail.sock
+SocketUser=root
+SocketGroup=svc-pammypanel
+SocketMode=0660
+Accept=no
+
+[Install]
+WantedBy=sockets.target

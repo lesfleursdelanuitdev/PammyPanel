@@ -1,0 +1,64 @@
+# lesfleursdelanuit.com control panel -- https://panel.lesfleursdelanuit.com
+# Installed by ~/pamela-setup/panel/deploy/lfdln/install-lfdln.sh
+#
+# Like pammy.org's panel (deploy/pammy-panel.service), and sharing nothing with it: its
+# own user, database (Postgres on 127.0.0.1:5435), port and helpers. It needs only
+# those and two sockets -- the folder helper (/run/lfdln-sitefs.sock) and the routing
+# helper (/run/lfdln-routes.sock) -- so it gets nothing else: no root, no network
+# beyond localhost, no view of /home, /pamela, pammy.org's panel or the site folders.
+[Unit]
+Description=lesfleursdelanuit.com control panel (panel.lesfleursdelanuit.com)
+After=network.target lfdln-sitefs.socket lfdln-routes.socket lfdln-gate-admin.socket
+Wants=lfdln-sitefs.socket
+
+[Service]
+Type=simple
+User=svc-lfdlnpanel
+Group=svc-lfdlnpanel
+EnvironmentFile=/etc/lfdln-panel/panel.env
+# the database password, read by systemd as root and put where only this service
+# can see it: the service's user may not read /etc/lfdln-panel/db/panel.pass itself
+LoadCredential=db.pass:/etc/lfdln-panel/db/panel.pass
+# the keys it signs "this account was deleted" with, one per app (docs/accounts-plan.md step 4b):
+# a folder, so each file arrives as hooks_<file> (hooks_examprep.key)
+LoadCredential=hooks:/etc/lfdln-panel/hooks
+# nginx's edge secret (docs/s1-plan.md S1c): X-Real-IP is believed only with it
+LoadCredential=edge.secret:/etc/lfdln-panel/edge.secret
+WorkingDirectory=/opt/lfdln-panel
+ExecStart=/usr/bin/node --disable-warning=ExperimentalWarning /opt/lfdln-panel/sites/lfdln/src/server.ts
+Restart=on-failure
+RestartSec=2
+UMask=0077
+
+NoNewPrivileges=yes
+ProtectSystem=strict
+ReadWritePaths=/var/lib/svc-lfdlnpanel /var/lib/lfdln-media-public
+ProtectHome=yes
+InaccessiblePaths=-/pamela -/srv -/var/www -/etc/ssl/cloudflare -/etc/letsencrypt -/etc/pammy-panel -/var/lib/svc-pammypanel -/var/lib/svc-pammypanel-db -/var/lib/svc-lfdlnpanel-db
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+ProtectProc=invisible
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+RemoveIPC=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@privileged
+# It never connects out; only nginx on this machine talks to it.
+IPAddressDeny=any
+IPAddressAllow=localhost
+MemoryMax=384M
+
+[Install]
+WantedBy=multi-user.target

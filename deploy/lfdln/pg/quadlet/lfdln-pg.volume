@@ -1,0 +1,3 @@
+# lfdln's panel database's data (svc-lfdlnpanel-db's container storage).
+[Volume]
+VolumeName=lfdln-pg

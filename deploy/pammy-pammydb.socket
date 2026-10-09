@@ -1,0 +1,17 @@
+# The database helper's door: the panel's (the designer and the generated /app), every
+# op. Its group is `pammydb-clients`, which since S2 (docs/s2-plan.md) holds the panel's
+# user only; the gate has a door of its own, row ops only (pammy-pammydb-gate.socket).
+# Not the gate, not pamela, not momolig, not the web server.
+# (root always can.) Installed by ~/pamela-setup/panel/deploy/install-panel.sh
+[Unit]
+Description=pammy.org panel: database helper socket
+
+[Socket]
+ListenStream=/run/pammy-pammydb.sock
+SocketUser=root
+SocketGroup=pammydb-clients
+SocketMode=0660
+Accept=no
+
+[Install]
+WantedBy=sockets.target

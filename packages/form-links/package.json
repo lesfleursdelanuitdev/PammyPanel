@@ -1,0 +1,19 @@
+{
+  "name": "@panel/form-links",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    "./gate/saves/links": "./src/gate/saves/links.ts",
+    "./gate/saves/queue": "./src/gate/saves/queue.ts",
+    "./gate/saves/save": "./src/gate/saves/save.ts",
+    "./module": "./src/module.ts",
+    "./panel/routes/form-links": "./src/panel/routes/form-links.ts",
+    "./studio/form-links": "./src/studio/form-links.ts"
+  },
+  "dependencies": {
+    "@panel/core": "*",
+    "@panel/forms": "*",
+    "@panel/studio": "*"
+  }
+}

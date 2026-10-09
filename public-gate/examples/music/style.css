@@ -1,0 +1,42 @@
+/* Example: Music player (12-media-on-your-pages.txt). Change any of it you like. */
+
+:root { --paper: #f3eee4; --card: #fffdf8; --ink: #36412f; --soft: #6a7561; --line: #e2dacb; --accent: #55624c; }
+
+body {
+  margin: 0;
+  padding: 2.5rem 1rem 4rem;
+  background: var(--paper);
+  color: var(--ink);
+  font: 17px/1.6 "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+}
+.page { max-width: 40rem; margin: 0 auto; }
+h1 { margin: 0 0 1.25rem; font-size: 2.2rem; font-weight: normal; }
+
+.player { border: 1px solid var(--line); border-radius: 14px; background: var(--card); overflow: hidden; }
+.now { display: flex; gap: 1.25rem; align-items: center; padding: 1.25rem; }
+.cover { flex: none; width: 7.5rem; height: 7.5rem; object-fit: cover; border-radius: 10px; background: #e6dfd1; }
+.cover:not([src]) { visibility: hidden; }
+.about { flex: 1; min-width: 0; }
+.playing { margin: 0 0 0.5rem; font-size: 1.15rem; overflow-wrap: anywhere; }
+.buttons { display: flex; gap: 0.5rem; }
+.buttons button {
+  width: 2.75rem; height: 2.75rem; border: 1px solid var(--line); border-radius: 50%;
+  background: #fff; color: var(--ink); font-size: 1rem; cursor: pointer;
+}
+.buttons .play { background: var(--accent); border-color: var(--accent); color: #fff; }
+.buttons button:hover, .buttons button:focus-visible { border-color: var(--accent); }
+.progress { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.6rem; font: 0.8rem/1 system-ui, sans-serif; color: var(--soft); }
+.seek { flex: 1; accent-color: var(--accent); }
+
+.songs { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
+.songs button {
+  display: flex; align-items: center; gap: 0.75rem; width: 100%; padding: 0.65rem 1.25rem;
+  border: 0; background: none; color: var(--ink); font: inherit; text-align: left; cursor: pointer;
+}
+.songs li + li button { border-top: 1px solid var(--line); }
+.songs button:hover { background: #f7f3ea; }
+.songs button[aria-current="true"] { background: #eef0e6; font-weight: bold; }
+.songs .number { width: 1.5rem; color: var(--soft); font: 0.85rem/1 system-ui, sans-serif; }
+.songs img { width: 2.25rem; height: 2.25rem; object-fit: cover; border-radius: 4px; }
+.empty { padding: 1.25rem; color: var(--soft); }
+@media (max-width: 30rem) { .now { flex-direction: column; text-align: center; } .buttons, .progress { justify-content: center; } }

@@ -1,0 +1,8 @@
+#!/bin/sh
+# What the build image has, as one JSON line (the projects helper's "Check the build environment").
+set -e
+n=$(node --version)
+m=$(npm --version)
+p=$(pnpm --version)
+g=$(git --version | cut -d' ' -f3)
+printf '{"node":"%s","npm":"%s","pnpm":"%s","git":"%s"}\n' "$n" "$m" "$p" "$g"

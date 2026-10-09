@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "name": "Placement Exam Prep",
+  "resources": {
+    "questions": { "label": "Questions", "actions": ["read"] },
+    "attempts":  { "label": "Tries at an exam", "owned": true, "actions": ["create", "read", "update", "submit"] },
+    "progress":  { "label": "Saved progress", "owned": true, "actions": ["read", "update", "delete"] }
+  },
+  "actions": {
+    "submit": { "label": "Hand in" }
+  },
+  "groups": {
+    "practise":      { "label": "Practise",
+                       "privileges": ["pages.read", "questions.read", "attempts.create:own", "attempts.read:own", "attempts.update:own", "attempts.submit:own"] },
+    "keep-progress": { "label": "Keep progress on any device",
+                       "privileges": ["progress.read:own", "progress.update:own", "progress.delete:own"] },
+    "see-others":    { "label": "See other people's progress",
+                       "privileges": ["progress.read:any", "attempts.read:any"] }
+  },
+  "roles": {
+    "student": { "label": "Student", "groups": ["practise", "keep-progress"] },
+    "teacher": { "label": "Teacher", "groups": ["practise", "keep-progress", "see-others"] }
+  },
+  "slots": { "notSignedIn": { "groups": ["practise"] }, "signedIn": "student" },
+  "neverTogether": []
+}

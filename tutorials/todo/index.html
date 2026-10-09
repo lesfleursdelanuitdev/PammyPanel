@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>To do</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="todo.js" defer></script>
+</head>
+<body>
+  <main>
+    <h1>To do</h1>
+    <p class="who">Signed in as <span id="who">…</span>. <a href="logout.html">Sign out</a></p>
+
+    <form id="add">
+      <label for="new-task">Something to do</label>
+      <input id="new-task" required maxlength="200" autocomplete="off">
+      <button>Add it</button>
+    </form>
+
+    <p id="problem" role="alert" hidden></p>
+
+    <!-- todo.js puts your tasks in here -->
+    <ul id="tasks">
+      <li>Loading…</li>
+    </ul>
+  </main>
+</body>
+</html>

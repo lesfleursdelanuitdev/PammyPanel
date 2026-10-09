@@ -1,0 +1,8 @@
+-- One app's database, read by the Studio (studio.sql): run by install-appdb.sh once per entry of
+-- APPDB_STUDIO_READS with __DB__ and __SCHEMA__ filled in (names only: checked there).
+\set ON_ERROR_STOP on
+SET client_min_messages = warning;
+GRANT CONNECT ON DATABASE "__DB__" TO pammy_studio;
+\c "__DB__"
+GRANT USAGE ON SCHEMA "__SCHEMA__" TO pammy_studio;
+GRANT SELECT ON ALL TABLES IN SCHEMA "__SCHEMA__" TO pammy_studio;

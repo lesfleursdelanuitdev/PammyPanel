@@ -1,0 +1,6 @@
+[Unit]
+Description=Back up the lesfleursdelanuit.com apps' databases
+
+[Service]
+Type=oneshot
+ExecStart=/var/lib/svc-lfdlnappdb/bin/backup-lfdln-appdb.sh

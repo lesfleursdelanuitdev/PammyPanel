@@ -1,0 +1,30 @@
+# pammy.org panel: once a day, software that has been in the deleted software
+# for 30 days is deleted for good (docs/apps-plan.md 4c). It only asks the
+# software helper (purge-due), as the panel's own user, the one allowed to ask;
+# the helper decides what is due and does the work. Started by
+# pammy-apps-purge.timer. Installed by ~/pamela-setup/panel/deploy/install-panel.sh
+[Unit]
+Description=pammy.org panel: delete for good the software deleted 30 days ago
+Requires=pammy-apps.socket
+After=pammy-apps.socket
+
+[Service]
+Type=oneshot
+User=svc-pammypanel
+Group=svc-pammypanel
+WorkingDirectory=/
+ExecStart=/usr/bin/node --disable-warning=ExperimentalWarning /opt/pammy-panel/src/apps/call.ts '{"op":"purge-due","actor":"timer"}'
+NoNewPrivileges=yes
+CapabilityBoundingSet=
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_UNIX
+IPAddressDeny=any
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+MemoryMax=128M

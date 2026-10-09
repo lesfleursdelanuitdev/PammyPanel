@@ -1,0 +1,67 @@
+/* style.css -- the look of the journal. Change anything you like. */
+
+body {
+  margin: 0;
+  background: #fbf8f3;
+  color: #2b2622;
+  font: 18px/1.6 Georgia, serif;
+}
+
+main {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem;
+}
+
+h1, h2 {
+  line-height: 1.25;
+}
+
+a {
+  color: #8a3b2b;
+}
+
+.intro, .about, .topics, .back {
+  color: #6b625a;
+  font-size: 0.9em;
+}
+
+#posts {
+  list-style: none;
+  padding: 0;
+}
+
+#posts li {
+  border-bottom: 1px solid #e6ded3;
+  padding: 0.5rem 0;
+}
+
+#posts h2 {
+  margin: 0.5rem 0 0;
+  font-size: 1.3rem;
+}
+
+#posts .about {
+  margin: 0.25rem 0 0.5rem;
+}
+
+/* a table in a post scrolls sideways on a phone */
+.writing table {
+  display: block;
+  overflow-x: auto;
+  max-width: 100%;
+  border-collapse: collapse;
+}
+
+.writing th, .writing td {
+  border: 1px solid #e6ded3;
+  padding: 0.25rem 0.5rem;
+}
+
+/* the comments under a post */
+pammy-comments {
+  display: block;
+  margin-top: 3rem;
+  border-top: 1px solid #e6ded3;
+  padding-top: 1rem;
+}

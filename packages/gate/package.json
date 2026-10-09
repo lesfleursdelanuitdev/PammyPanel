@@ -1,0 +1,27 @@
+{
+  "name": "@panel/gate",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    "./admin": "./src/admin.ts",
+    "./app": "./src/app.ts",
+    "./housekeeping": "./src/housekeeping.ts",
+    "./start": "./src/start.ts"
+  },
+  "dependencies": {
+    "@panel/api-keys": "*",
+    "@panel/areas": "*",
+    "@panel/comments": "*",
+    "@panel/core": "*",
+    "@panel/examples": "*",
+    "@panel/files": "*",
+    "@panel/form-links": "*",
+    "@panel/forms": "*",
+    "@panel/media": "*",
+    "@panel/people": "*",
+    "@panel/php": "*",
+    "@panel/requests": "*",
+    "@panel/studio": "*"
+  }
+}

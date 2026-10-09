@@ -1,0 +1,14 @@
+# lfdln's folder helper's door. Only lfdln's panel user may open it (root always can).
+# Installed by ~/pamela-setup/panel/deploy/lfdln/install-lfdln.sh
+[Unit]
+Description=lfdln panel: folder helper socket
+
+[Socket]
+ListenStream=/run/lfdln-sitefs.sock
+SocketUser=root
+SocketGroup=svc-lfdlnpanel
+SocketMode=0660
+Accept=no
+
+[Install]
+WantedBy=sockets.target

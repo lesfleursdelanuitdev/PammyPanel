@@ -1,0 +1,3 @@
+# lfdln's apps' database's data (svc-lfdlnappdb's container storage).
+[Volume]
+VolumeName=lfdln-appdb

@@ -1,0 +1,10 @@
+[Unit]
+Description=Off-server copy: weekly read-back and restore test
+
+[Timer]
+OnCalendar=Sun *-*-* 08:30:00 UTC
+RandomizedDelaySec=30m
+Persistent=true
+
+[Install]
+WantedBy=timers.target

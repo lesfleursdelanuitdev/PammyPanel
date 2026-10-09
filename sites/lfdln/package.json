@@ -1,0 +1,38 @@
+{
+  "name": "@panel/lfdln",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    "./app": "./src/app.ts",
+    "./hosts": "./src/hosts.ts",
+    "./nginx": "./src/nginx.ts",
+    "./profile": "./src/profile.ts",
+    "./studio-site": "./src/studio-site.ts"
+  },
+  "dependencies": {
+    "@panel/api-keys": "*",
+    "@panel/areas": "*",
+    "@panel/catalog": "*",
+    "@panel/comments": "*",
+    "@panel/core": "*",
+    "@panel/files": "*",
+    "@panel/form-links": "*",
+    "@panel/forms": "*",
+    "@panel/gate": "*",
+    "@panel/help": "*",
+    "@panel/hosts": "*",
+    "@panel/mail": "*",
+    "@panel/media": "*",
+    "@panel/modules": "*",
+    "@panel/monitoring": "*",
+    "@panel/projects": "*",
+    "@panel/people": "*",
+    "@panel/php": "*",
+    "@panel/requests": "*",
+    "@panel/services": "*",
+    "@panel/settings": "*",
+    "@panel/studio": "*",
+    "@panel/thumbs": "*"
+  }
+}

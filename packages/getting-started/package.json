@@ -1,0 +1,21 @@
+{
+  "name": "@panel/getting-started",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    "./getting-started/facts": "./src/getting-started/facts.ts",
+    "./getting-started/paths": "./src/getting-started/paths.ts",
+    "./getting-started/questions": "./src/getting-started/questions.ts",
+    "./getting-started/store": "./src/getting-started/store.ts",
+    "./getting-started/view": "./src/getting-started/view.ts",
+    "./module": "./src/module.ts",
+    "./panel/routes/getting-started": "./src/panel/routes/getting-started.ts"
+  },
+  "dependencies": {
+    "@panel/core": "*",
+    "@panel/examples": "*",
+    "@panel/help": "*",
+    "@panel/studio": "*"
+  }
+}

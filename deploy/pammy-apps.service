@@ -1,0 +1,81 @@
+# pammy.org panel: software helper (docs/apps-plan.md G2). Looks after the
+# software installed on pammy.org -- in v1, WordPress. Started on demand by
+# pammy-apps.socket; the panel asks, this does. Installed by
+# ~/pamela-setup/panel/deploy/install-panel.sh
+#
+# It runs as root because what it looks after belongs to other system users
+# (svc-pammywp's files, backups and containers). Phase 2 (backups, restore,
+# offline/online, admin password) changes things, but the helper itself still
+# holds very little:
+#   - one capability, CAP_DAC_READ_SEARCH: read any file, write none that
+#     aren't its own (no CAP_DAC_OVERRIDE, no CAP_CHOWN, no CAP_SETUID)
+#   - writable: /var/lib/pammy-apps (its record and history),
+#     /etc/nginx/pammy-wordpress (WordPress's three placement files, root's),
+#     /etc/pammy-mail (the Resend key and mail settings, phase 3) and
+#     /var/lib/svc-pammywp/config (WordPress's settings, root's: its mail.json)
+#   - loopback only, for the one request through nginx that says "it answers"
+#   - everything else -- a command as svc-pammywp (backup, podman, systemctl
+#     --user), as root (nginx -t and reload, putting files back), as pamela
+#     (her login file) -- it asks systemd for over the system bus, as one named
+#     transient unit each (src/apps/runner.ts), and never does itself.
+# Plainly: a root process that may ask systemd for units can have anything
+# done. The boundary is the socket (only the panel's user) and the allow-list
+# of operations, whose every argument is checked against the helper's own
+# record (src/apps/). This unit keeps a mistake in the helper from writing
+# anywhere but those two folders. verify-apps.sh checks all of it.
+[Unit]
+Description=pammy.org panel: software helper (WordPress)
+Requires=pammy-apps.socket
+After=pammy-apps.socket
+# a helper that can't start gives up after 5 tries instead of looping forever
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=root
+Group=root
+ExecStart=/usr/bin/node --disable-warning=ExperimentalWarning /opt/pammy-panel/src/apps/main.ts
+# /var/lib/pammy-apps, root 700: apps.json (root 600) is the record of what is installed
+StateDirectory=pammy-apps
+StateDirectoryMode=0700
+UMask=0077
+Restart=on-failure
+RestartSec=2
+
+CapabilityBoundingSet=CAP_DAC_READ_SEARCH
+AmbientCapabilities=
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+# its writable places (StateDirectory= is the other)
+ReadWritePaths=/etc/nginx/pammy-wordpress -/etc/pammy-mail -/var/lib/svc-pammywp/config
+# Nothing of hers, and no one's secrets: it reads WordPress's own files, its
+# placement line, the containers' control groups, free memory and the journal.
+InaccessiblePaths=-/pamela -/etc/pammy-panel -/etc/pammy-php -/etc/ssl/private -/etc/ssl/cloudflare -/etc/letsencrypt -/run/user
+PrivateTmp=yes
+PrivateDevices=yes
+PrivateIPC=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+# read-only: it reads the containers' cgroup files, never writes them
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+RestrictAddressFamilies=AF_UNIX AF_INET
+IPAddressDeny=any
+IPAddressAllow=localhost
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@privileged @debug
+MemoryMax=256M
+MemorySwapMax=0
+TasksMax=32
+
+[Install]
+WantedBy=multi-user.target

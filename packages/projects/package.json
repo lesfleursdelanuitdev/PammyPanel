@@ -1,0 +1,25 @@
+{
+  "name": "@panel/projects",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    "./cli": "./src/cli.ts",
+    "./client": "./src/client.ts",
+    "./git-auth": "./src/git-auth.ts",
+    "./helper/main": "./src/helper/main.ts",
+    "./helper/ops": "./src/helper/ops.ts",
+    "./helper/service": "./src/helper/service.ts",
+    "./jobs": "./src/jobs.ts",
+    "./module": "./src/module.ts",
+    "./panel/route-kind": "./src/panel/route-kind.ts",
+    "./panel/routes/git": "./src/panel/routes/git.ts",
+    "./panel/routes/projects": "./src/panel/routes/projects.ts",
+    "./record": "./src/record.ts",
+    "./route-kind": "./src/route-kind.ts"
+  },
+  "dependencies": {
+    "@panel/core": "*",
+    "@panel/hosts": "*"
+  }
+}

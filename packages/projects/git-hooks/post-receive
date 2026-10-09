@@ -1,0 +1,39 @@
+#!/bin/sh
+# lfdln projects (docs/phase8b-plan.md D3-5): a push to main or dev tells the projects helper,
+# which builds and deploys that branch. Every project's repository runs this one (its
+# core.hooksPath), as whoever pushed; root's, so no pusher can change it.
+#
+# One file per branch pushed, "<project> <branch> <commit>[ via <user>]", dropped into the helper's spool
+# (root:lfdln-git 1730: members may add files, not see or touch others'). Written under a
+# dot name first, so the helper never reads half of one. Nothing here can fail a push.
+# (LFDLN_PUSH_SPOOL: the tests' stand-in; whoever sets it only misdirects their own push)
+spool=${LFDLN_PUSH_SPOOL:-/run/lfdln-projects/pushes}
+[ -d "$spool" ] && [ -w "$spool" ] || exit 0
+# the repository is /srv/lfdln-projects/<project>/repo.git, and git runs this in it
+project=$(basename "$(dirname "$(pwd -P)")")
+case "$project" in *[!a-z0-9-]*|'') exit 0 ;; esac
+# over HTTPS (8b-7, D7-7) git-http-backend runs as svc-lfdln-apps and says who the panel let in
+# (REMOTE_USER, a panel username: @panel/core/util USERNAME_RE); the helper believes it only
+# from svc-lfdln-apps' files
+via=
+case "${REMOTE_USER:-}" in
+    [a-z]*) case "$REMOTE_USER" in *[!a-z0-9-]*) ;; *) [ ${#REMOTE_USER} -ge 2 ] && [ ${#REMOTE_USER} -le 32 ] && via=" via $REMOTE_USER" ;; esac ;;
+esac
+told=
+while read -r old new ref; do
+    case "$ref" in
+        refs/heads/main) branch=main ;;
+        refs/heads/dev) branch=dev ;;
+        *) continue ;;
+    esac
+    case "$new" in *[!0-9a-f]*|0000000000000000000000000000000000000000) continue ;; esac
+    tmp=$(mktemp "$spool/.push.XXXXXXXXXX" 2>/dev/null) || continue
+    # (644: the helper is root without the power to read others' 600 files)
+    if printf '%s %s %s%s\n' "$project" "$branch" "$new" "$via" > "$tmp" && chmod 644 "$tmp" && mv -f "$tmp" "$spool/${tmp##*/.}"; then
+        told="$told $branch"
+    else
+        rm -f "$tmp"
+    fi
+done
+[ -n "$told" ] && echo "lfdln:$told will be built and deployed; follow it on the panel's Projects page."
+exit 0

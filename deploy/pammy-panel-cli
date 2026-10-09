@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# /usr/local/sbin/pammy-panel -- the panel's command line, run as the panel's
+# own user against its own database. Commands: see /opt/pammy-panel/src/cli.ts
+#   sudo pammy-panel users
+#   sudo pammy-panel invite <username>
+#
+# The database password is root-only (/etc/pammy-panel/db/panel.pass), and this
+# runs as svc-pammypanel, which may not read it. So root opens it here and the
+# command line inherits it as file descriptor 3 -- the same idea as the
+# service's LoadCredential=, without leaving the password in the environment.
+set -euo pipefail
+[[ $EUID -eq 0 ]] || { echo "run with sudo: sudo pammy-panel $*" >&2; exit 1; }
+set -a; . /etc/pammy-panel/panel.env; set +a
+PASS=${PANEL_PG_PASSWORD_FILE:-/etc/pammy-panel/db/panel.pass}
+[[ -r $PASS ]] || { echo "can't read $PASS (is the database installed? deploy/pg/install-pg.sh)" >&2; exit 1; }
+cd /
+umask 077
+exec 3<"$PASS"
+exec runuser -u svc-pammypanel -- env -i PATH=/usr/bin:/bin \
+    PANEL_ORIGIN="$PANEL_ORIGIN" PANEL_RP_ID="$PANEL_RP_ID" \
+    PANEL_PG_PASSWORD_FD=3 PANEL_PG_HOST="${PANEL_PG_HOST:-}" PANEL_PG_PORT="${PANEL_PG_PORT:-}" PANEL_PG_DATABASE="${PANEL_PG_DATABASE:-}" \
+    PANEL_SITEFS_SOCKET="$PANEL_SITEFS_SOCKET" \
+    PANEL_THUMBS_SOCKET="$PANEL_THUMBS_SOCKET" PANEL_THUMBS_DIR="$PANEL_THUMBS_DIR" PANEL_MEDIA_PUBLIC="$PANEL_MEDIA_PUBLIC" \
+    /usr/bin/node --disable-warning=ExperimentalWarning /opt/pammy-panel/src/cli.ts "$@"

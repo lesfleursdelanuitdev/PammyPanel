@@ -1,0 +1,14 @@
+# lfdln's mail service's door (docs/accounts-plan.md step 2). Only lfdln's panel user
+# may open it: not pammy.org's panel, not momolig, not the apps. (root always can.) Installed by ~/pamela-setup/panel/deploy/lfdln/install-lfdln.sh
+[Unit]
+Description=lfdln panel: mail service socket
+
+[Socket]
+ListenStream=/run/lfdln-mail.sock
+SocketUser=root
+SocketGroup=svc-lfdlnpanel
+SocketMode=0660
+Accept=no
+
+[Install]
+WantedBy=sockets.target

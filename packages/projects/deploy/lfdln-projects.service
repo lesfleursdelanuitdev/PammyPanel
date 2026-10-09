@@ -1,0 +1,63 @@
+# lfdln panel: the projects helper (docs/phase8b-plan.md). Keeps the projects' record and
+# jobs in /var/lib/lfdln-projects, hands out their ports (4200-4999), runs one job at a time,
+# and has every build and container started as svc-lfdln-apps. Started on demand by
+# lfdln-projects.socket, or by lfdln-projects-pushes.path when a push is waiting; it stays up.
+#
+# Root, because it asks systemd to run things as svc-lfdln-apps (@panel/core/runner:
+# "lfdln-projects-<what>-...") -- and nothing more:
+#   - no capabilities at all
+#   - writes only its own state folder (/var/lib/lfdln-projects) and takes pushes out of
+#     /run/lfdln-projects/pushes (the git hook drops them there; docs/phase8b-plan.md D3-5)
+#   - no network beyond 127.0.0.1 (the builds' network is their containers', not this)
+#   - it can't see the certificates, the panels' settings, the sites or the homes
+# Plainly: a root process that may ask systemd for units can have anything done. The
+# boundary is the socket (only the panel's user) and its operations, none of which takes a
+# path, a user, an image or a command: each names a project, a branch or a job.
+[Unit]
+Description=lfdln panel: projects helper (builds and runs projects)
+Requires=lfdln-projects.socket
+After=lfdln-projects.socket
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=root
+Group=root
+ExecStart=/usr/bin/node --disable-warning=ExperimentalWarning /opt/lfdln-panel/sites/lfdln/src/helpers/projects.ts
+UMask=0077
+Restart=on-failure
+RestartSec=2
+
+CapabilityBoundingSet=
+AmbientCapabilities=
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/var/lib/lfdln-projects /run/lfdln-projects
+InaccessiblePaths=-/etc/letsencrypt -/etc/ssl/private -/etc/ssl/cloudflare -/pamela -/var/www -/etc/pammy-panel -/etc/lfdln-panel -/run/user -/mnt/storage
+PrivateTmp=yes
+PrivateDevices=yes
+PrivateIPC=yes
+IPAddressDeny=any
+IPAddressAllow=localhost
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+RestrictAddressFamilies=AF_UNIX AF_INET
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@privileged @debug
+MemoryMax=256M
+MemorySwapMax=0
+TasksMax=32
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,39 @@
+[Unit]
+Description=Off-server copies, one target after the other (restic to Cloudflare R2 then Backblaze B2, docs/recovery-plan.md R1)
+Wants=network-online.target
+After=network-online.target lfdln-hostpg-backup.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/lfdln-offsite backup
+# the whole folder: restic-password and <target>/s3-* arrive as offsite_restic-password,
+# offsite_<target>_s3-access-key-id ...; a target without its files is simply not there
+LoadCredential=offsite:/etc/lfdln-offsite/credentials
+# root reads everything (the dump folders are 700 to their own users), writes almost nothing
+ProtectSystem=strict
+ReadWritePaths=/var/lib/lfdln-offsite /run/lock
+ProtectHome=read-only
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+NoNewPrivileges=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+SystemCallArchitectures=native
+# read any file
+CapabilityBoundingSet=CAP_DAC_READ_SEARCH CAP_DAC_OVERRIDE CAP_FOWNER CAP_CHOWN
+# the live sites come first
+Nice=10
+IOSchedulingClass=idle
+CPUQuota=200%
+MemoryMax=1G
+TimeoutStartSec=6h

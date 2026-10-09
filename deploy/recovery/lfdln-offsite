@@ -1,0 +1,332 @@
+#!/usr/bin/env bash
+# Off-server copies (docs/recovery-plan.md, R1): restic, encrypted on this server before
+# anything leaves, to each TARGET in turn through restic's S3 backend (Cloudflare R2, then
+# Backblaze B2), each its own repository with its own key.
+# Runs as root from lfdln-offsite.timer, after the nightly dumps; momolig runs the other commands by hand.
+#
+#   lfdln-offsite backup [T...]       copy every source to each configured target, one after
+#                                     the other; one failing doesn't stop the next
+#   lfdln-offsite check [N%] [T...]   restic check (with N% of the data read back, if given)
+#   lfdln-offsite restore-test [T...] restore the newest dumps and settings into a scratch
+#                                     folder and check they're readable (the drill is R3)
+#   lfdln-offsite dump-host-pg        dump the server's own Postgres (:5432) to this disk;
+#                                     needs no target (lfdln-hostpg-backup.timer)
+#   lfdln-offsite status              the last runs, as Monitoring reads them (status.json)
+#   lfdln-offsite targets             the targets and whether each is configured
+#   lfdln-offsite inventory           what would be copied, and how big it is
+#   lfdln-offsite restic T ARGS...    restic itself on target T (snapshots, ls, restore, ...)
+#
+# Settings: /etc/lfdln-offsite/offsite.conf (kept between installs): TARGETS="r2 b2" and per
+# target RESTIC_REPOSITORY_<t> (and REGION_<t>, found from the address when not set). Keys,
+# root only: credentials/restic-password (one, shared by the targets) and
+# credentials/<t>/{s3-access-key-id,s3-secret-access-key}. The units get the whole folder by
+# LoadCredential=offsite:... (files named offsite_<t>_<file>). A target without its keys is
+# "not-configured" and skipped; with no target configured, backup exits 3.
+set -Eeuo pipefail
+umask 077
+
+ETC=${OFFSITE_ETC:-/etc/lfdln-offsite}
+STATE=${OFFSITE_STATE:-/var/lib/lfdln-offsite}
+LOCK=${OFFSITE_LOCK:-/run/lock/lfdln-offsite.lock}
+RESTIC=${RESTIC:-restic}
+STATUS=$STATE/status.json
+
+# offsite.conf may set any of these
+TARGETS=
+HOST_TAG=$(hostname -s)
+KEEP_DAILY=7 KEEP_WEEKLY=4 KEEP_MONTHLY=6
+HOST_PG=on                              # dump-host-pg does something
+HOST_PG_SKIP='*_test|*_shadow'          # databases not dumped (shell patterns, | between them)
+HOST_PG_KEEP_DAYS=7                     # the local dumps; the targets keep the history
+CHECK_SUBSET=                           # e.g. 2%: read back part of the data after each backup
+[[ -r $ETC/offsite.conf ]] && . "$ETC/offsite.conf"
+
+say() { printf '%s\n' "$*" >&2; }
+now() { date -u +%Y-%m-%dT%H:%M:%SZ; }
+var() { local n="$1_$2"; printf '%s' "${!n:-}"; }      # var RESTIC_REPOSITORY r2
+
+# --- the keys: from systemd's credentials when the unit runs, from /etc by hand
+cred() {   # cred <target|-> <name>: the file holding it
+    if [[ -n ${CREDENTIALS_DIRECTORY:-} ]]; then
+        [[ $1 == - ]] && printf '%s' "$CREDENTIALS_DIRECTORY/offsite_$2" || printf '%s' "$CREDENTIALS_DIRECTORY/offsite_$1_$2"
+    else
+        [[ $1 == - ]] && printf '%s' "$ETC/credentials/$2" || printf '%s' "$ETC/credentials/$1/$2"
+    fi
+}
+missing_for() {   # what target $1 still lacks, comma separated; empty = configured
+    local m=() f
+    [[ $1 =~ ^[a-z0-9]{1,20}$ ]] || { printf 'a name of a-z and 0-9 only'; return; }
+    local repo; repo=$(var RESTIC_REPOSITORY "$1")
+    if [[ -z $repo ]]; then m+=("RESTIC_REPOSITORY_$1 in $ETC/offsite.conf")
+    # https, or plain http only to this machine's loopback (the full-tier test's MinIO)
+    elif [[ ! $repo =~ ^s3:(https://[^/]+|http://127\.0\.0\.1(:[0-9]+)?)/[^/]+/. ]]; then m+=("RESTIC_REPOSITORY_$1 as s3:https://<host>/<bucket>/<folder> (it is $repo)"); fi
+    for f in s3-access-key-id s3-secret-access-key; do [[ -s $(cred "$1" "$f") ]] || m+=("$ETC/credentials/$1/$f"); done
+    [[ -s $(cred - restic-password) ]] || m+=("$ETC/credentials/restic-password")
+    local IFS=,; printf '%s' "${m[*]}"
+}
+region_for() {    # REGION_<t>, else from the address: R2 wants "auto", B2 its region
+    local r repo; r=$(var REGION "$1"); repo=$(var RESTIC_REPOSITORY "$1")
+    if [[ -n $r ]]; then printf '%s' "$r"
+    elif [[ $repo == *.r2.cloudflarestorage.com/* ]]; then printf auto
+    elif [[ $repo =~ //s3\.([a-z0-9-]+)\.backblazeb2\.com/ ]]; then printf '%s' "${BASH_REMATCH[1]}"
+    fi
+}
+use_target() {    # in a subshell: restic's environment for target $1
+    export RESTIC_REPOSITORY; RESTIC_REPOSITORY=$(var RESTIC_REPOSITORY "$1")
+    export AWS_ACCESS_KEY_ID; AWS_ACCESS_KEY_ID=$(<"$(cred "$1" s3-access-key-id)")
+    export AWS_SECRET_ACCESS_KEY; AWS_SECRET_ACCESS_KEY=$(<"$(cred "$1" s3-secret-access-key)")
+    export RESTIC_PASSWORD_FILE; RESTIC_PASSWORD_FILE=$(cred - restic-password)
+    export RESTIC_CACHE_DIR=$STATE/cache/$1
+    local r; r=$(region_for "$1")
+    if [[ -n $r ]]; then export AWS_DEFAULT_REGION=$r; else unset AWS_DEFAULT_REGION; fi
+}
+repo_shown() { local r; r=$(var RESTIC_REPOSITORY "$1"); printf '%s' "${r%%\?*}"; }
+
+# --- status: one file per target, and status.json gathering them (no secrets in either)
+write_json() { mkdir -p "$STATE"; chmod 755 "$STATE"; cat > "$1.tmp"; chmod 644 "$1.tmp"; mv "$1.tmp" "$1"; }
+target_status() {   # target_status <t> <state> <message> [extra json]
+    local extra=${4:-}; [[ -n $extra ]] || extra='{}'
+    jq -n --arg t "$1" --arg state "$2" --arg message "$3" --arg at "$(now)" --arg repo "$(repo_shown "$1")" \
+        --argjson extra "$extra" \
+        '{target: $t, state: $state, message: $message, at: $at, repository: $repo} + $extra' |
+        write_json "$STATE/status-$1.json"
+    gather_status
+}
+gather_status() {
+    local t files=()
+    for t in $TARGETS; do [[ $t =~ ^[a-z0-9]{1,20}$ && -r $STATE/status-$t.json ]] && files+=("$STATE/status-$t.json"); done
+    { if (( ${#files[@]} )); then jq -s '.' "${files[@]}"; else echo '[]'; fi; } | jq \
+        --slurpfile pg <(cat "$STATE/host-pg.json" 2>/dev/null || echo null) '{
+            state: (if length == 0 then "not-configured"
+                    elif any(.[]; .state == "failed") then "failed"
+                    elif any(.[]; .state == "running") then "running"
+                    elif all(.[]; .state == "not-configured") then "not-configured"
+                    else "ok" end),
+            targets: (map({(.target): .}) | add // {}),
+            host_pg: $pg[0]
+        }' | write_json "$STATUS"
+}
+
+# --- one run at a time (a backup, a check, a restore test, a dump)
+take_lock() {
+    exec 9>>"$LOCK"
+    flock -w "${OFFSITE_LOCK_WAIT:-3600}" 9 || { say "another lfdln-offsite run holds $LOCK"; exit 4; }
+}
+
+# --- the sources: one path per line, # comments; globs allowed (/var/lib/svc-*/.config)
+sources() {
+    local line p
+    while IFS= read -r line || [[ -n $line ]]; do
+        line=${line%%#*}; line=${line#"${line%%[![:space:]]*}"}; line=${line%"${line##*[![:space:]]}"}
+        [[ -z $line ]] && continue
+        [[ $line == /* ]] || { say "sources: not an absolute path: $line"; continue; }
+        # shellcheck disable=SC2086  # the glob is the point
+        for p in $line; do printf '%s\n' "$p"; done
+    done < "$ETC/sources.conf"
+}
+split_sources() {   # the ones that are there (to $1) and the ones that aren't (to $2)
+    : > "$1"; : > "$2"
+    local p
+    while IFS= read -r p; do
+        if [[ -e $p ]]; then printf '%s\n' "$p" >> "$1"; else printf '%s\n' "$p" >> "$2"; fi
+    done < <(sources)
+}
+
+# --- the server's own Postgres: each database to $STATE/dumps/host-pg/<db>--<stamp>.dump,
+# kept HOST_PG_KEEP_DAYS days here. As postgres over its socket, without PAM (setpriv).
+skipped() {   # skipped <database>: matches one of HOST_PG_SKIP's patterns
+    local pat; local -a pats
+    IFS='|' read -ra pats <<<"$HOST_PG_SKIP"
+    # shellcheck disable=SC2053  # each is a pattern
+    for pat in "${pats[@]}"; do [[ $1 == $pat ]] && return 0; done
+    return 1
+}
+cmd_dump_host_pg() {
+    [[ $HOST_PG == on ]] || { say "HOST_PG is off"; return 0; }
+    take_lock
+    local out=$STATE/dumps/host-pg db stamp n=0
+    mkdir -p "$out"; stamp=$(date -u +%Y%m%dT%H%M%SZ)
+    local as_pg=(${OFFSITE_AS_PG:-setpriv --reuid=postgres --regid=postgres --init-groups --})
+    trap 'jq -n --arg at "$(now)" --arg db "${db:-}" "{state: \"failed\", at: \$at, message: (\"failed at \" + \$db)}" | write_json "$STATE/host-pg.json"; gather_status' ERR
+    local -a dbs
+    mapfile -t dbs < <("${as_pg[@]}" psql -XAtq -d postgres \
+        -c "SELECT datname FROM pg_database WHERE NOT datistemplate AND datallowconn ORDER BY 1")
+    for db in "${dbs[@]}"; do
+        skipped "$db" && continue
+        "${as_pg[@]}" pg_dump -Fc -d "$db" > "$out/$db--$stamp.dump.part"
+        pg_restore --list "$out/$db--$stamp.dump.part" > /dev/null      # a dump nothing can read is no dump
+        mv "$out/$db--$stamp.dump.part" "$out/$db--$stamp.dump"; n=$((n+1))
+    done
+    db=roles
+    "${as_pg[@]}" pg_dumpall --roles-only --no-role-passwords > "$out/roles--$stamp.sql.part"
+    mv "$out/roles--$stamp.sql.part" "$out/roles--$stamp.sql"
+    trap - ERR
+    find "$out" -maxdepth 1 -type f \( -name '*.dump' -o -name '*.sql' \) -mtime +"$HOST_PG_KEEP_DAYS" -delete
+    find "$out" -maxdepth 1 -name '*.part' -mmin +600 -delete
+    jq -n --arg at "$(now)" --argjson n "$n" --arg dir "$out" \
+        '{state: "ok", at: $at, databases: $n, folder: $dir}' | write_json "$STATE/host-pg.json"
+    gather_status
+    say "host Postgres: $n databases dumped to $out"
+}
+
+# --- one target's backup, in a subshell: its failure is its own
+backup_one() {
+    local t=$1 stage=start started; started=$(now)
+    use_target "$t"
+    trap 'target_status "$t" failed "failed at: $stage" "$(jq -n --arg s "$started" "{started: \$s}")"; say "$t: failed at: $stage"' ERR
+    target_status "$t" running "backing up" "$(jq -n --arg s "$started" '{started: $s}')"
+    stage="restic backup"
+    local summary
+    summary=$("$RESTIC" backup --json --quiet --tag nightly --host "$HOST_TAG" \
+        --files-from-verbatim "$LIST" --exclude-file "$ETC/excludes.conf" \
+        --exclude-caches | jq -c 'select(.message_type == "summary")')
+    [[ -n $summary ]] || { say "$t: restic said no summary"; false; }
+    stage="restic forget (keep $KEEP_DAILY daily, $KEEP_WEEKLY weekly, $KEEP_MONTHLY monthly)"
+    "$RESTIC" forget --quiet --host "$HOST_TAG" --tag nightly --group-by host,tags \
+        --keep-daily "$KEEP_DAILY" --keep-weekly "$KEEP_WEEKLY" --keep-monthly "$KEEP_MONTHLY" --prune
+    stage="restic check"
+    if [[ -n $CHECK_SUBSET ]]; then "$RESTIC" check --quiet --read-data-subset="$CHECK_SUBSET"
+    else "$RESTIC" check --quiet; fi
+    stage="counting"
+    local stats; stats=$("$RESTIC" stats --json --mode raw-data 2>/dev/null || echo '{}')
+    trap - ERR
+    target_status "$t" ok "backed up" "$(jq -n --arg s "$started" --argjson sum "$summary" --argjson st "$stats" \
+        --rawfile missing "$MISSING_LIST" '{
+            started: $s, snapshot: $sum.snapshot_id, files: $sum.total_files_processed,
+            bytes: $sum.total_bytes_processed, added: $sum.data_added,
+            repository_bytes: ($st.total_size // null),
+            missing: ($missing | split("\n") | map(select(length > 0)))
+        }')"
+    say "$t: backup ok, snapshot $(jq -r .snapshot_id <<<"$summary"), $(jq -r .data_added <<<"$summary") bytes added"
+}
+
+# run "$1" (a function) for every chosen target that is configured, one after the other
+each_target() {
+    local fn=$1; shift
+    local -a chosen; if (( $# )); then chosen=("$@"); else read -ra chosen <<<"$TARGETS"; fi
+    (( ${#chosen[@]} )) || { say "no TARGETS in $ETC/offsite.conf"; return 3; }
+    local t m ran=0 failed=0
+    for t in "${chosen[@]}"; do
+        [[ $t =~ ^[a-z0-9]{1,20}$ ]] || { say "target \"$t\": a name of a-z and 0-9 only (skipped)"; continue; }
+        m=$(missing_for "$t")
+        if [[ -n $m ]]; then
+            say "$t: not configured: missing $m (docs/recovery-plan.md: what to put where)"
+            [[ $fn == backup_one ]] && target_status "$t" not-configured "missing $m"
+            continue
+        fi
+        ran=$((ran+1))
+        # not "( ... ) || ...": on the left of || bash turns set -e and the ERR trap off inside
+        set +e; ( set -e; "$fn" "$t" ); local rc=$?; set -e
+        (( rc == 0 )) || { failed=$((failed+1)); say "$t: FAILED"; }
+    done
+    (( ran )) || return 3
+    (( failed == 0 ))
+}
+
+cmd_backup() {
+    take_lock
+    LIST=$STATE/sources.now MISSING_LIST=$STATE/sources.missing
+    mkdir -p "$STATE"; chmod 755 "$STATE"
+    split_sources "$LIST" "$MISSING_LIST"
+    [[ -s $LIST ]] || { say "no source exists"; return 1; }
+    [[ -s $MISSING_LIST ]] && say "not there (skipped): $(paste -sd' ' "$MISSING_LIST")"
+    each_target backup_one "$@"
+}
+
+check_one() {    # its result in check-<t>.json (the weekly unit goes on to the restore test either way)
+    local r=ok; use_target "$1"
+    if [[ -n $CHECK_N ]]; then "$RESTIC" check --read-data-subset="$CHECK_N" || r=failed
+    else "$RESTIC" check || r=failed; fi
+    jq -n --arg t "$1" --arg r "$r" --arg at "$(now)" --arg read "${CHECK_N:-none}" \
+        '{target: $t, result: $r, at: $at, data_read: $read}' | write_json "$STATE/check-$1.json"
+    [[ $r == ok ]]
+}
+cmd_check() {
+    take_lock
+    CHECK_N=; [[ ${1:-} == *% ]] && { CHECK_N=$1; shift; }
+    each_target check_one "$@"
+}
+
+# restore the newest file of each kind in every dump folder, and the panels' settings, into a
+# scratch folder; each must be readable. pg_restore here is the host's (15): a newer archive
+# (the containers' 17) is checked by its header only, and the drill (R3) restores it for real.
+newest_dumps() {
+    # a kind: the folder, the name up to "--" (host-pg) or its first digit, and the extension
+    # (lfdln-20261005T044500Z-nightly.dump -> lfdln- .dump; rumi_quotes--2026….dump -> rumi_quotes)
+    "$RESTIC" ls latest --host "$HOST_TAG" --json | jq -r '
+        select(.struct_type == "node" and .type == "file")
+        | select(.path | test("/(backups|dumps/host-pg)/[^/]+$"))
+        | (.path | split("/") | last) as $b
+        | (if ($b | test("--")) then ($b | split("--") | first) else ($b | capture("^(?<p>[^0-9]*)").p) end) as $p
+        | [(.path | sub("/[^/]+$"; "")) + "|" + $p + "|"
+             + (try ($b | capture("(?<e>\\.[a-z][a-z.]*)$").e) catch ""), .mtime, .path] | @tsv' |
+        sort -t$'\t' -k1,1 -k2,2r | awk -F'\t' '$1 != last { print $3; last = $1 }'
+}
+check_file() {     # 0 readable, 1 not; HEADER_ONLY counts the header-only ones
+    local err
+    case $1 in
+        *.dump)
+            err=$(pg_restore --list "$1" 2>&1 >/dev/null) && return 0
+            if [[ $err == *"unsupported version"* && $(head -c5 "$1") == PGDMP ]]; then
+                HEADER_ONLY=$((HEADER_ONLY+1)); return 0
+            fi
+            return 1 ;;
+        *.gz) gzip -t "$1" 2>/dev/null ;;
+        *)    [[ -s $1 ]] ;;
+    esac
+}
+restore_test_one() {
+    local t=$1 scratch=$STATE/restore-test/$1 bad=0 n=0 f
+    use_target "$t"
+    HEADER_ONLY=0
+    rm -rf "$scratch"; mkdir -p "$scratch"
+    # shellcheck disable=SC2064  # the path now: $scratch is local
+    trap "rm -rf $(printf %q "$scratch")" EXIT
+    local -a inc=(--include /etc/lfdln-panel --include /etc/pammy-panel)
+    while IFS= read -r f; do inc+=(--include "$f"); done < <(newest_dumps)
+    "$RESTIC" restore latest --host "$HOST_TAG" --target "$scratch" --quiet "${inc[@]}" > /dev/null
+    while IFS= read -r -d '' f; do
+        n=$((n+1))
+        check_file "$f" || { say "$t: unreadable: ${f#"$scratch"}"; bad=$((bad+1)); }
+    done < <(find "$scratch" -type f -print0)
+    (( n > 0 )) || { say "$t: restore test: nothing came back"; bad=$((bad+1)); }
+    local result=ok; (( bad )) && result=failed
+    jq -n --arg t "$t" --arg r "$result" --arg at "$(now)" --argjson n "$n" --argjson bad "$bad" --argjson h "$HEADER_ONLY" \
+        '{target: $t, result: $r, at: $at, files: $n, unreadable: $bad, header_only: $h}' | write_json "$STATE/restore-test-$t.json"
+    say "$t: restore test: $n files back, $bad unreadable, $HEADER_ONLY newer dumps checked by header only"
+    (( bad == 0 ))
+}
+cmd_restore_test() { take_lock; each_target restore_test_one "$@"; }
+
+cmd_targets() {
+    local t m
+    for t in $TARGETS; do
+        m=$(missing_for "$t")
+        if [[ -z $m ]]; then printf '%-6s configured   %s (region %s)\n' "$t" "$(repo_shown "$t")" "$(region_for "$t")"
+        else printf '%-6s not-configured: missing %s\n' "$t" "$m"; fi
+    done
+}
+
+cmd_inventory() {
+    local list missing p
+    list=$(mktemp); missing=$(mktemp)
+    split_sources "$list" "$missing"
+    echo "(sizes before the excludes)"
+    while IFS= read -r p; do printf '%10s  %s\n' "$(du -sh "$p" 2>/dev/null | cut -f1)" "$p"; done < "$list"
+    while IFS= read -r p; do printf '%10s  %s\n' "not there" "$p"; done < "$missing"
+    rm -f "$list" "$missing"
+}
+
+case ${1:-} in
+    backup)       shift; cmd_backup "$@" ;;
+    check)        shift; cmd_check "$@" ;;
+    restore-test) shift; cmd_restore_test "$@" ;;
+    dump-host-pg) cmd_dump_host_pg ;;
+    status)       if [[ -r $STATUS ]]; then cat "$STATUS"; else echo '{"state":"never-run"}'; fi ;;
+    targets)      cmd_targets ;;
+    inventory)    cmd_inventory ;;
+    restic)       shift; t=${1:?which target}; shift
+                  m=$(missing_for "$t"); [[ -z $m ]] || { say "$t: not configured: missing $m"; exit 3; }
+                  use_target "$t"; exec "$RESTIC" "$@" ;;
+    *)            sed -n '2,24p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;
+esac

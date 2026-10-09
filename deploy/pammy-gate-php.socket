@@ -1,0 +1,18 @@
+# PHP's door to the gate's API (docs/tutorials-plan.md P3). Her PHP pages run
+# with no network at all (pammy-php.service); this socket is the one thing they
+# can reach, and behind it only /_pammy/api/... answers. Only pammy-php's user
+# may open it (and root).
+# Installed by ~/pamela-setup/panel/deploy/install-panel.sh
+[Unit]
+Description=pammy.org gate: PHP's door to the data API
+
+[Socket]
+ListenStream=/run/pammy-gate-php.sock
+SocketUser=root
+SocketGroup=svc-pammyphp
+SocketMode=0660
+Accept=no
+Service=pammy-gate.service
+
+[Install]
+WantedBy=sockets.target

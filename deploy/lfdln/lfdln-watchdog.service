@@ -1,0 +1,50 @@
+# lfdln panel: the watchdog (docs/monitoring-plan.md M6, step 3). Run by lfdln-watchdog.timer
+# every 10 minutes: does the panel answer, and do its rounds of checks still run? If not,
+# one notice through lfdln-mail's socket (the panel can't send one about itself).
+# Installed by ~/pamela-setup/panel/deploy/lfdln/install-lfdln.sh
+[Unit]
+Description=lfdln panel: watchdog (the panel answers and its checks run)
+After=lfdln-panel.service lfdln-mail.socket
+
+[Service]
+Type=oneshot
+Environment=WATCHDOG_PORT=3046
+Environment=WATCHDOG_BEAT=/var/lib/svc-lfdlnpanel/monitor-round.json
+Environment=WATCHDOG_STATE=/var/lib/lfdln-watchdog/state.json
+Environment=WATCHDOG_MAIL_SOCKET=/run/lfdln-mail.sock
+Environment=WATCHDOG_ORIGIN=https://panel.lesfleursdelanuit.com
+Environment=WATCHDOG_SITE=lesfleursdelanuit.com
+ExecStart=/usr/bin/node --disable-warning=ExperimentalWarning /opt/lfdln-panel/packages/monitoring/src/watchdog.ts
+StateDirectory=lfdln-watchdog
+StateDirectoryMode=0700
+TimeoutStartSec=90
+UMask=0077
+
+# root, only to read the panel's round file (its folder is the panel user's, 0700) and to
+# open the mail socket: nothing else
+CapabilityBoundingSet=CAP_DAC_READ_SEARCH
+AmbientCapabilities=
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+InaccessiblePaths=-/pamela -/srv -/var/www -/etc/ssl/cloudflare -/etc/letsencrypt -/etc/pammy-panel -/etc/lfdln-panel -/var/lib/svc-pammypanel -/var/lib/svc-pammypanel-db -/var/lib/svc-lfdlnpanel-db
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+ProtectProc=invisible
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@privileged
+IPAddressDeny=any
+IPAddressAllow=localhost
+MemoryMax=128M

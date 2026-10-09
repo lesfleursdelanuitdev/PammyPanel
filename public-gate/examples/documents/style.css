@@ -1,0 +1,31 @@
+/* Example: Documents (12-media-on-your-pages.txt). Change any of it you like. */
+
+:root { --paper: #f3eee4; --card: #fffdf8; --ink: #36412f; --soft: #6a7561; --line: #e2dacb; }
+
+body {
+  margin: 0;
+  padding: 2.5rem 1rem 4rem;
+  background: var(--paper);
+  color: var(--ink);
+  font: 17px/1.6 "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+}
+.page { max-width: 44rem; margin: 0 auto; }
+h1 { margin: 0 0 0.25rem; font-size: 2.2rem; font-weight: normal; }
+.intro { margin: 0 0 1.5rem; color: var(--soft); }
+
+.documents { margin: 0; padding: 0; list-style: none; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
+.documents li { display: flex; align-items: center; gap: 1rem; padding: 0.9rem 1rem; }
+.documents li + li { border-top: 1px solid var(--line); }
+.documents .picture {
+  flex: none; display: grid; place-items: center; width: 3.2rem; height: 4rem; overflow: hidden;
+  border: 1px solid var(--line); border-radius: 6px; background: #f7f3ea;
+  font: 700 0.7rem/1 system-ui, sans-serif; letter-spacing: 0.05em; text-transform: uppercase; color: var(--soft);
+}
+.documents .picture img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.documents .about { flex: 1; min-width: 0; }
+.documents .title { display: block; font-size: 1.05rem; color: var(--ink); text-decoration: none; overflow-wrap: anywhere; }
+.documents .title:hover { text-decoration: underline; }
+.documents .facts { display: block; font-size: 0.85rem; color: var(--soft); }
+.documents .download { flex: none; font-size: 0.9rem; padding: 0.3rem 0.8rem; border: 1px solid var(--soft); border-radius: 999px; color: var(--ink); text-decoration: none; }
+.documents .download:hover { background: var(--line); }
+.documents .empty { color: var(--soft); }

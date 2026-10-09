@@ -1,0 +1,19 @@
+# lfdln's mail service's second door: the gate's (docs/accounts-plan.md step 4). Behind it
+# the mail service answers only `visitor` -- the fixed emails of the accounts (confirm an
+# address, a new password, and the notes after the fact), to the one address the gate
+# names, linking only to the site's own /_pammy/ pages. Only the gate's user may open it:
+# not the panel, not pammy.org's gate, not the apps. (root always can.)
+# Installed by ~/pamela-setup/panel/deploy/lfdln/install-lfdln.sh
+[Unit]
+Description=lfdln panel: mail service socket for the gate (visitor emails only)
+
+[Socket]
+ListenStream=/run/lfdln-mail-visitor.sock
+SocketUser=root
+SocketGroup=svc-lfdlngate
+SocketMode=0660
+Accept=no
+Service=lfdln-mail.service
+
+[Install]
+WantedBy=sockets.target

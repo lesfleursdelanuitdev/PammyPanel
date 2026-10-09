@@ -1,0 +1,35 @@
+# The panel's and the gate's own Postgres (docs/postgres-plan.md P1-P3).
+# Rootless Quadlet for svc-pammypanel-db. Installed by deploy/pg/install-pg.sh.
+# 127.0.0.1:5434 only: 5432 is the host's Postgres (TutorStar), 5433 Pamela's.
+[Unit]
+Description=pammy.org panel + gate database (127.0.0.1:5434)
+
+[Container]
+# a major version: auto-update brings 17.x patch releases only
+Image=docker.io/library/postgres:17
+ContainerName=pammy-pg
+PublishPort=127.0.0.1:5434:5432
+Volume=pammy-pg.volume:/var/lib/postgresql/data
+# who may connect to what: only the three pammy roles, only to pammy, only
+# with a password; the superuser only over the container's own socket. The folder, not the file:
+# the installer replaces the file (a new inode), which a single-file mount never shows the engine
+Volume=/var/lib/svc-pammypanel-db/conf:/etc/pammy-pg:ro
+Environment=POSTGRES_PASSWORD_FILE=/run/secrets/pammy-pg-super
+Secret=pammy-pg-super
+Secret=pammy-pg-owner
+Secret=pammy-pg-panel
+Secret=pammy-pg-gate
+Exec=postgres -c hba_file=/etc/pammy-pg/pg_hba.conf -c password_encryption=scram-sha-256 -c max_connections=40 -c shared_buffers=256MB -c idle_in_transaction_session_timeout=60s -c log_min_duration_statement=500ms -c log_connections=on
+# Postgres uses /dev/shm for shared memory between workers; podman's default is 64M
+PodmanArgs=--shm-size=256m
+HealthCmd=pg_isready -U postgres -h /var/run/postgresql
+HealthInterval=30s
+AutoUpdate=registry
+
+[Service]
+Restart=always
+TimeoutStartSec=300
+MemoryMax=1G
+
+[Install]
+WantedBy=default.target

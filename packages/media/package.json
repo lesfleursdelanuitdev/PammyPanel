@@ -1,0 +1,23 @@
+{
+  "name": "@panel/media",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    "./cli": "./src/cli.ts",
+    "./gate/media-api": "./src/gate/media-api.ts",
+    "./gate/media-examples": "./src/gate/media-examples.ts",
+    "./media-public": "./src/media-public.ts",
+    "./module": "./src/module.ts",
+    "./panel/api-key-cover": "./src/panel/api-key-cover.ts",
+    "./panel/routes/media": "./src/panel/routes/media.ts"
+  },
+  "dependencies": {
+    "@panel/api-keys": "*",
+    "@panel/areas": "*",
+    "@panel/catalog": "*",
+    "@panel/core": "*",
+    "@panel/files": "*",
+    "@panel/thumbs": "*"
+  }
+}

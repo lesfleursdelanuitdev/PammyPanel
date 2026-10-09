@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My journal</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="journal.js" defer></script>
+  <script src="post.js" defer></script>
+  <!-- the comments under each post (guide 20) -->
+  <script src="/_pammy/comments.js" defer></script>
+</head>
+<body>
+  <main>
+    <p class="back"><a href="./">&larr; All posts</a></p>
+
+    <!-- post.js fills these in with the post named in the address -->
+    <article>
+      <h1 id="title">Loading…</h1>
+      <p class="about" id="about"></p>
+      <div class="writing" id="writing"></div>
+      <p class="topics" id="topics"></p>
+    </article>
+
+    <!-- post.js puts this post's comments here -->
+    <section id="comments"></section>
+  </main>
+</body>
+</html>

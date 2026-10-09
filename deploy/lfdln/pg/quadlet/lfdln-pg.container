@@ -1,0 +1,35 @@
+# lfdln's panel database (docs/lfdln-standup-plan.md Q2): its own Postgres, like
+# pammy.org's pammy-pg. Rootless Quadlet for svc-lfdlnpanel-db. Installed by
+# deploy/lfdln/pg/install-pg.sh. 127.0.0.1:5435 only: 5432 is the host's Postgres,
+# 5433 Pamela's, 5434 pammy.org's panel.
+[Unit]
+Description=lesfleursdelanuit.com panel database (127.0.0.1:5435)
+
+[Container]
+# a major version: auto-update brings 17.x patch releases only
+Image=docker.io/library/postgres:17
+ContainerName=lfdln-pg
+PublishPort=127.0.0.1:5435:5432
+Volume=lfdln-pg.volume:/var/lib/postgresql/data
+# who may connect to what: only the panel's roles, only to lfdln, only with a
+# password; the superuser only over the container's own socket. The folder, not the file:
+# the installer replaces the file (a new inode), which a single-file mount never shows the engine
+Volume=/var/lib/svc-lfdlnpanel-db/conf:/etc/lfdln-pg:ro
+Environment=POSTGRES_PASSWORD_FILE=/run/secrets/lfdln-pg-super
+Secret=lfdln-pg-super
+Secret=lfdln-pg-owner
+Secret=lfdln-pg-panel
+Secret=lfdln-pg-gate
+Exec=postgres -c hba_file=/etc/lfdln-pg/pg_hba.conf -c password_encryption=scram-sha-256 -c max_connections=30 -c shared_buffers=128MB -c idle_in_transaction_session_timeout=60s -c log_min_duration_statement=500ms -c log_connections=on
+PodmanArgs=--shm-size=128m
+HealthCmd=pg_isready -U postgres -h /var/run/postgresql
+HealthInterval=30s
+AutoUpdate=registry
+
+[Service]
+Restart=always
+TimeoutStartSec=300
+MemoryMax=512M
+
+[Install]
+WantedBy=default.target

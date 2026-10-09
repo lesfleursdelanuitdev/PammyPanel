@@ -1,0 +1,30 @@
+{
+  "name": "@panel/apps",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    "./apps/adopt": "./src/apps/adopt.ts",
+    "./apps/client": "./src/apps/client.ts",
+    "./apps/host": "./src/apps/host.ts",
+    "./apps/install": "./src/apps/install.ts",
+    "./apps/jobs": "./src/apps/jobs.ts",
+    "./apps/mail": "./src/apps/mail.ts",
+    "./apps/main": "./src/apps/main.ts",
+    "./apps/nginx": "./src/apps/nginx.ts",
+    "./apps/ops": "./src/apps/ops.ts",
+    "./apps/placement": "./src/apps/placement.ts",
+    "./apps/record": "./src/apps/record.ts",
+    "./apps/remove": "./src/apps/remove.ts",
+    "./apps/rootfs": "./src/apps/rootfs.ts",
+    "./apps/runner": "./src/apps/runner.ts",
+    "./apps/service": "./src/apps/service.ts",
+    "./module": "./src/module.ts",
+    "./panel/routes/software": "./src/panel/routes/software.ts"
+  },
+  "dependencies": {
+    "@panel/core": "*",
+    "@panel/mail": "*",
+    "@panel/studio": "*"
+  }
+}

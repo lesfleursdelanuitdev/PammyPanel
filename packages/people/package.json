@@ -1,0 +1,28 @@
+{
+  "name": "@panel/people",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    "./gate/accounts-store": "./src/gate/accounts-store.ts",
+    "./gate/housekeeping": "./src/gate/housekeeping.ts",
+    "./gate/links": "./src/gate/links.ts",
+    "./gate/passwords": "./src/gate/passwords.ts",
+    "./gate/reset-requests": "./src/gate/reset-requests.ts",
+    "./gate/routes/accounts": "./src/gate/routes/accounts.ts",
+    "./gate/routes/sign-in": "./src/gate/routes/sign-in.ts",
+    "./gate/self-service": "./src/gate/self-service.ts",
+    "./gate/session-cache": "./src/gate/session-cache.ts",
+    "./gate/sessions": "./src/gate/sessions.ts",
+    "./gate/sign-in-check": "./src/gate/sign-in-check.ts",
+    "./gate/visitor-settings": "./src/gate/visitor-settings.ts",
+    "./gate/visitors": "./src/gate/visitors.ts",
+    "./module": "./src/module.ts",
+    "./panel/routes/people": "./src/panel/routes/people.ts",
+    "./shared/visitor-switches": "./src/shared/visitor-switches.ts"
+  },
+  "dependencies": {
+    "@panel/core": "*",
+    "@panel/areas": "*"
+  }
+}

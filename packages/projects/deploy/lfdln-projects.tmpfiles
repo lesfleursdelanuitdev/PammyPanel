@@ -1,0 +1,4 @@
+# lfdln projects (docs/phase8b-plan.md D3-5): the git hook's spool. lfdln-git (svc-lfdln-apps
+# and the projects' Unix people) may drop files in; only the helper (root) reads them.
+d /run/lfdln-projects        0755 root root      -
+d /run/lfdln-projects/pushes 1730 root lfdln-git -

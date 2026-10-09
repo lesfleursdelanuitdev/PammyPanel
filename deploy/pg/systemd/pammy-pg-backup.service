@@ -1,0 +1,6 @@
+[Unit]
+Description=Back up the pammy.org panel + gate database
+
+[Service]
+Type=oneshot
+ExecStart=/var/lib/svc-pammypanel-db/bin/backup-pammy-pg.sh

@@ -1,0 +1,28 @@
+{
+  "name": "@panel/examples",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    "./gate/db-examples": "./src/gate/db-examples.ts",
+    "./gate/examples": "./src/gate/examples.ts",
+    "./module": "./src/module.ts",
+    "./panel/examples": "./src/panel/examples.ts",
+    "./panel/routes/db-examples": "./src/panel/routes/db-examples.ts",
+    "./panel/routes/tutorial-examples": "./src/panel/routes/tutorial-examples.ts",
+    "./studio/db-examples": "./src/studio/db-examples.ts",
+    "./studio/tutorial-examples": "./src/studio/tutorial-examples.ts",
+    "./tutorial-demos": "./src/tutorial-demos.ts"
+  },
+  "dependencies": {
+    "@panel/api-keys": "*",
+    "@panel/apps": "*",
+    "@panel/areas": "*",
+    "@panel/comments": "*",
+    "@panel/core": "*",
+    "@panel/files": "*",
+    "@panel/form-links": "*",
+    "@panel/forms": "*",
+    "@panel/studio": "*"
+  }
+}

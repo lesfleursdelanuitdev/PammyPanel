@@ -1,0 +1,69 @@
+/* Example: Blog (14-databases-in-the-control-panel.txt, PART 16).
+   A quiet page for reading. Change any of it you like: the width of the
+   writing is --measure, and the accent colour is --ink-blue. */
+
+:root {
+  --measure: 40rem;
+  --paper: #fdfcf9;
+  --ink: #26282b;
+  --soft: #6b6f75;
+  --line: #e7e4dd;
+  --ink-blue: #2f5d8a;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  padding: 2.5rem 1rem 4rem;
+  background: var(--paper);
+  color: var(--ink);
+  font: 18px/1.7 Charter, "Bitstream Charter", "Iowan Old Style", Georgia, serif;
+}
+.page { max-width: var(--measure); margin: 0 auto; }
+.top { border-bottom: 1px solid var(--line); margin-bottom: 1.5rem; }
+.top h1 { margin: 0; font-size: 2.2rem; }
+.top h1 a { color: inherit; text-decoration: none; }
+.intro { margin: 0 0 1.25rem; color: var(--soft); }
+.note { color: var(--soft); list-style: none; }
+a { color: var(--ink-blue); }
+
+.topics { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem; }
+.topic {
+  padding: 0.2rem 0.75rem; border: 1px solid var(--line); border-radius: 999px;
+  background: #fff; color: var(--ink); font: inherit; font-size: 0.85rem; cursor: pointer;
+}
+.topic[aria-pressed="true"] { background: var(--ink-blue); border-color: var(--ink-blue); color: #fff; }
+
+.posts { margin: 0; padding: 0; list-style: none; }
+.item { padding: 1.25rem 0; border-bottom: 1px solid var(--line); }
+.item h2 { margin: 0; font-size: 1.45rem; line-height: 1.3; }
+.item h2 a { color: inherit; text-decoration: none; }
+.item h2 a:hover, .item h2 a:focus-visible { color: var(--ink-blue); text-decoration: underline; }
+.byline { margin: 0.2rem 0 0.5rem; color: var(--soft); font-size: 0.9rem; }
+.summary { margin: 0; }
+.topics-here { margin: 0.5rem 0 0; color: var(--soft); font-size: 0.85rem; }
+.more { text-align: center; margin-top: 1.5rem; }
+.more button {
+  padding: 0.5rem 1.2rem; border: 1px solid var(--line); border-radius: 999px;
+  background: #fff; color: var(--ink); font: inherit; cursor: pointer;
+}
+
+.post .title { margin: 0.5rem 0 0; font-size: 2rem; line-height: 1.25; }
+.post .body p { margin: 0 0 1.1rem; }
+.post .body h2, .post .body h3, .post .body h4 { margin: 1.8rem 0 0.6rem; line-height: 1.3; }
+.post .body ul, .post .body ol { margin: 0 0 1.1rem; padding-left: 1.4rem; }
+.post .body li p { margin: 0; }
+.post .body blockquote { margin: 0 0 1.1rem; padding-left: 1rem; border-left: 3px solid var(--line); color: var(--soft); }
+.post .body hr { border: 0; border-top: 1px solid var(--line); margin: 1.8rem 0; }
+.post .body a { color: var(--ink-blue); }
+/* A table scrolls sideways on a phone instead of squashing its words or making
+   the whole page wider than the screen (docs/rich-text-plan.md T20). */
+.post .body table { display: block; overflow-x: auto; max-width: 100%; border-collapse: collapse; margin: 0 0 1.1rem; }
+.post .body th, .post .body td { border: 1px solid var(--line); padding: 0.4rem 0.6rem; text-align: left; vertical-align: top; }
+.post .body th { background: #f6f4ef; }
+.post .body td p, .post .body th p { margin: 0; }
+.post .topics-here { margin-top: 2rem; }
+.comment-count { margin: 0.4rem 0 0; color: var(--soft); font-size: 0.85rem; }
+.comment-count:empty { display: none; }
+.post .comments { margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+.post pammy-comments { --pammy-accent: var(--ink-blue); max-width: none; }

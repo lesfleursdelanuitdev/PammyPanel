@@ -1,0 +1,577 @@
+panel GET    /                                                            64K public                public
+panel HEAD   /                                                            64K public                public
+panel GET    /subdomains                                                  64K public                public
+panel HEAD   /subdomains                                                  64K public                public
+panel GET    /protected-folders                                           64K public                public
+panel HEAD   /protected-folders                                           64K public                public
+panel GET    /access/:id                                                  64K public                public
+panel HEAD   /access/:id                                                  64K public                public
+panel GET    /access/:id/:tab                                             64K public                public
+panel HEAD   /access/:id/:tab                                             64K public                public
+panel GET    /people                                                      64K public                public
+panel HEAD   /people                                                      64K public                public
+panel GET    /requests                                                    64K public                public
+panel HEAD   /requests                                                    64K public                public
+panel GET    /visitor-settings                                            64K public                public
+panel HEAD   /visitor-settings                                            64K public                public
+panel GET    /forms                                                       64K public                public
+panel HEAD   /forms                                                       64K public                public
+panel GET    /forms/new                                                   64K public                public
+panel HEAD   /forms/new                                                   64K public                public
+panel GET    /forms/:id                                                   64K public                public
+panel HEAD   /forms/:id                                                   64K public                public
+panel GET    /forms/:id/database                                          64K public                public
+panel HEAD   /forms/:id/database                                          64K public                public
+panel GET    /responses                                                   64K public                public
+panel HEAD   /responses                                                   64K public                public
+panel GET    /comments                                                    64K public                public
+panel HEAD   /comments                                                    64K public                public
+panel GET    /files                                                       64K public                public
+panel HEAD   /files                                                       64K public                public
+panel GET    /files/edit                                                  64K public                public
+panel HEAD   /files/edit                                                  64K public                public
+panel GET    /media                                                       64K public                public
+panel HEAD   /media                                                       64K public                public
+panel GET    /tags                                                        64K public                public
+panel HEAD   /tags                                                        64K public                public
+panel GET    /media/tags                                                  64K public                public
+panel HEAD   /media/tags                                                  64K public                public
+panel GET    /media/folders                                               64K public                public
+panel HEAD   /media/folders                                               64K public                public
+panel GET    /media/examples                                              64K public                public
+panel HEAD   /media/examples                                              64K public                public
+panel GET    /media/examples/:kind                                        64K public                public
+panel HEAD   /media/examples/:kind                                        64K public                public
+panel GET    /examples                                                    64K public                public
+panel HEAD   /examples                                                    64K public                public
+panel GET    /examples/:kind                                              64K public                public
+panel HEAD   /examples/:kind                                              64K public                public
+panel GET    /databases                                                   64K public                public
+panel HEAD   /databases                                                   64K public                public
+panel GET    /databases/users                                             64K public                public
+panel HEAD   /databases/users                                             64K public                public
+panel GET    /databases/users/:engine/:user                               64K public                public
+panel HEAD   /databases/users/:engine/:user                               64K public                public
+panel GET    /databases/examples                                          64K public                public
+panel HEAD   /databases/examples                                          64K public                public
+panel GET    /databases/examples/:kind                                    64K public                public
+panel HEAD   /databases/examples/:kind                                    64K public                public
+panel GET    /databases/tutorial-examples                                 64K public                public
+panel HEAD   /databases/tutorial-examples                                 64K public                public
+panel GET    /databases/:engine/:name                                     64K public                public
+panel HEAD   /databases/:engine/:name                                     64K public                public
+panel GET    /databases/:engine/:name/canvas                              64K public                public
+panel HEAD   /databases/:engine/:name/canvas                              64K public                public
+panel GET    /databases/:engine/:name/tables/:table                       64K public                public
+panel HEAD   /databases/:engine/:name/tables/:table                       64K public                public
+panel GET    /databases/:engine/:name/review                              64K public                public
+panel HEAD   /databases/:engine/:name/review                              64K public                public
+panel GET    /databases/:engine/:name/app                                 64K public                public
+panel HEAD   /databases/:engine/:name/app                                 64K public                public
+panel GET    /databases/:engine/:name/app/:table                          64K public                public
+panel HEAD   /databases/:engine/:name/app/:table                          64K public                public
+panel GET    /databases/:engine/:name/programs                            64K public                public
+panel HEAD   /databases/:engine/:name/programs                            64K public                public
+panel GET    /app/:engine/:name/:table                                    64K public                public
+panel HEAD   /app/:engine/:name/:table                                    64K public                public
+panel GET    /app/:engine/:name/:table/new                                64K public                public
+panel HEAD   /app/:engine/:name/:table/new                                64K public                public
+panel GET    /app/:engine/:name/:table/edit                               64K public                public
+panel HEAD   /app/:engine/:name/:table/edit                               64K public                public
+panel GET    /software                                                    64K public                public
+panel HEAD   /software                                                    64K public                public
+panel GET    /software/new                                                64K public                public
+panel HEAD   /software/new                                                64K public                public
+panel GET    /software/:id                                                64K public                public
+panel HEAD   /software/:id                                                64K public                public
+panel GET    /email                                                       64K public                public
+panel HEAD   /email                                                       64K public                public
+panel GET    /hosts                                                       64K public                public
+panel HEAD   /hosts                                                       64K public                public
+panel GET    /hosts/add-domain                                            64K public                public
+panel HEAD   /hosts/add-domain                                            64K public                public
+panel GET    /services                                                    64K public                public
+panel HEAD   /services                                                    64K public                public
+panel GET    /backups                                                     64K public                public
+panel HEAD   /backups                                                     64K public                public
+panel GET    /catalog                                                     64K public                public
+panel HEAD   /catalog                                                     64K public                public
+panel GET    /catalog/:service/:resource                                  64K public                public
+panel HEAD   /catalog/:service/:resource                                  64K public                public
+panel GET    /monitoring                                                  64K public                public
+panel HEAD   /monitoring                                                  64K public                public
+panel GET    /projects                                                    64K public                public
+panel HEAD   /projects                                                    64K public                public
+panel GET    /projects/git-tokens                                         64K public                public
+panel HEAD   /projects/git-tokens                                         64K public                public
+panel GET    /projects/:id/packages                                       64K public                public
+panel HEAD   /projects/:id/packages                                       64K public                public
+panel GET    /api-keys                                                    64K public                public
+panel HEAD   /api-keys                                                    64K public                public
+panel GET    /passkeys                                                    64K public                public
+panel HEAD   /passkeys                                                    64K public                public
+panel GET    /accounts                                                    64K public                public
+panel HEAD   /accounts                                                    64K public                public
+panel GET    /activity                                                    64K public                public
+panel HEAD   /activity                                                    64K public                public
+panel GET    /help                                                        64K public                public
+panel HEAD   /help                                                        64K public                public
+panel GET    /help/:guide                                                 64K public                public
+panel HEAD   /help/:guide                                                 64K public                public
+panel GET    /help/:guide/:section                                        64K public                public
+panel HEAD   /help/:guide/:section                                        64K public                public
+panel GET    /getting-started                                             64K public                public
+panel HEAD   /getting-started                                             64K public                public
+panel GET    /home                                                        64K public                public
+panel HEAD   /home                                                        64K public                public
+panel GET    /login                                                       64K public                public
+panel HEAD   /login                                                       64K public                public
+panel GET    /invite                                                      64K public                public
+panel HEAD   /invite                                                      64K public                public
+panel GET    /healthz                                                     64K public                public
+panel HEAD   /healthz                                                     64K public                public
+panel GET    /assets/*                                                    64K public                public
+panel HEAD   /assets/*                                                    64K public                public
+panel POST   /api/login/options                                           64K public                public
+panel POST   /api/login/verify                                            64K public                public
+panel POST   /api/logout                                                  64K public                public
+panel GET    /api/session                                                 64K signed-in             AMKP
+panel HEAD   /api/session                                                 64K signed-in             AMKP
+panel POST   /api/invite/info                                             64K public                public
+panel POST   /api/invite/options                                          64K public                public
+panel POST   /api/invite/verify                                           64K public                public
+panel POST   /api/reauth/options                                          64K signed-in             AMKP
+panel POST   /api/reauth/verify                                           64K signed-in             AMKP
+panel GET    /api/me/passkeys                                             64K signed-in             AMKP
+panel HEAD   /api/me/passkeys                                             64K signed-in             AMKP
+panel POST   /api/me/passkeys/options                                     64K signed-in             AMKP
+panel POST   /api/me/passkeys/verify                                      64K signed-in             AMKP
+panel POST   /api/me/passkeys/:id/rename                                  64K signed-in             AMKP
+panel POST   /api/me/passkeys/:id/delete                                  64K signed-in             AMKP
+panel GET    /api/me/sessions                                             64K signed-in             AMKP
+panel HEAD   /api/me/sessions                                             64K signed-in             AMKP
+panel POST   /api/me/sessions/:id/revoke                                  64K signed-in             AMKP
+panel GET    /api/activity                                                64K signed-in             AMKP
+panel HEAD   /api/activity                                                64K signed-in             AMKP
+panel GET    /api/sites                                                   64K subdomains            AMP
+panel HEAD   /api/sites                                                   64K subdomains            AMP
+panel POST   /api/sites                                                   64K subdomains whole-site AM
+panel POST   /api/sites/trash                                             64K subdomains whole-site AM
+panel POST   /api/sites/restore                                           64K subdomains whole-site AM
+panel GET    /api/sites/:name/home-page                                   64K subdomains            AMP
+panel HEAD   /api/sites/:name/home-page                                   64K subdomains            AMP
+panel POST   /api/sites/:name/home-page                                   64K subdomains            AMP
+panel POST   /api/sites/:name/home-page/remove                            64K subdomains            AMP
+panel GET    /api/folders                                                 64K files      whole-site AM
+panel HEAD   /api/folders                                                 64K files      whole-site AM
+panel GET    /api/protected                                               64K protected             AMP
+panel HEAD   /api/protected                                               64K protected             AMP
+panel POST   /api/protected                                               64K protected             AMP
+panel POST   /api/protected/:id/pages                                     64K protected             AMP
+panel POST   /api/protected/:id/requests                                  64K protected             AMP
+panel POST   /api/protected/:id/unprotect                                 64K protected             AMP
+panel POST   /api/protected/:id/access                                    64K protected             AMP
+panel GET    /api/access/:id                                              64K protected             AMP
+panel HEAD   /api/access/:id                                              64K protected             AMP
+panel POST   /api/access/:id/copy                                         64K protected             AMP
+panel POST   /api/access/:id/reset                                        64K protected             AMP
+panel POST   /api/access/:id/resource                                     64K protected             AMP
+panel POST   /api/access/:id/resource-delete                              64K protected             AMP
+panel POST   /api/access/:id/group                                        64K protected             AMP
+panel POST   /api/access/:id/group-delete                                 64K protected             AMP
+panel POST   /api/access/:id/role                                         64K protected             AMP
+panel POST   /api/access/:id/role-delete                                  64K protected             AMP
+panel POST   /api/access/:id/signed-in                                    64K protected             AMP
+panel POST   /api/access/:id/never                                        64K protected             AMP
+panel POST   /api/access/:id/person                                       64K protected             AMP
+panel POST   /api/access/:id/manifest                                     64K protected             AMP
+panel GET    /api/people                                                  64K protected             AMP
+panel HEAD   /api/people                                                  64K protected             AMP
+panel POST   /api/visitors                                                64K protected             AMP
+panel POST   /api/visitors/:id/link                                       64K protected             AMP
+panel POST   /api/visitors/:id/password                                   64K protected             AMP
+panel POST   /api/visitors/:id/active                                     64K protected             AMP
+panel POST   /api/visitors/:id/rename                                     64K protected             AMP
+panel POST   /api/visitors/:id/contact                                    64K protected             AMP
+panel POST   /api/visitors/:id/link/cancel                                64K protected             AMP
+panel POST   /api/visitors/:id/signout                                    64K protected             AMP
+panel POST   /api/visitors/:id/delete                                     64K protected             AMP
+panel POST   /api/visitors/:id/send-reset                                 64K protected             AMP
+panel POST   /api/visitors/:id/resend-confirm                             64K protected             AMP
+panel GET    /api/requests                                                64K protected             AMP
+panel HEAD   /api/requests                                                64K protected             AMP
+panel POST   /api/requests/:id/approve                                    64K protected             AMP
+panel POST   /api/requests/:id/decline                                    64K protected             AMP
+panel POST   /api/requests/:id/delete                                     64K protected             AMP
+panel GET    /api/visitor-settings                                        64K visitor-settings            A
+panel HEAD   /api/visitor-settings                                        64K visitor-settings            A
+panel POST   /api/visitor-settings                                        64K visitor-settings            A
+panel GET    /api/forms                                                   64K forms                 AMKP
+panel HEAD   /api/forms                                                   64K forms                 AMKP
+panel GET    /api/forms/starters                                          64K forms                 AMKP
+panel HEAD   /api/forms/starters                                          64K forms                 AMKP
+panel GET    /api/forms/scopes                                            64K forms                 AMKP
+panel HEAD   /api/forms/scopes                                            64K forms                 AMKP
+panel POST   /api/forms/:id/scope                                         64K forms      whole-site AM
+panel POST   /api/forms                                                   64K forms                 AMKP
+panel GET    /api/forms/:id                                               64K forms                 AMKP
+panel HEAD   /api/forms/:id                                               64K forms                 AMKP
+panel POST   /api/forms/:id                                               64K forms                 AMKP
+panel POST   /api/forms/:id/switches                                      64K forms                 AMKP
+panel POST   /api/forms/:id/hide-unreviewed                               64K forms                 AMKP
+panel GET    /api/forms/:id/copy-name                                     64K forms                 AMKP
+panel HEAD   /api/forms/:id/copy-name                                     64K forms                 AMKP
+panel POST   /api/forms/:id/duplicate                                     64K forms                 AMKP
+panel POST   /api/forms/:id/trash                                         64K forms                 AMKP
+panel POST   /api/forms/:id/restore                                       64K forms                 AMKP
+panel GET    /api/examples                                                64K forms      whole-site AM
+panel HEAD   /api/examples                                                64K forms      whole-site AM
+panel POST   /api/examples/:kind/reset                                    64K forms      whole-site AM
+panel POST   /api/examples/:kind/install                                  64K forms      whole-site AM
+panel GET    /api/responses                                               64K responses             AMKP
+panel HEAD   /api/responses                                               64K responses             AMKP
+panel GET    /api/comments                                                64K comments              AMKP
+panel HEAD   /api/comments                                                64K comments              AMKP
+panel GET    /api/responses/unread                                        64K responses             AMKP
+panel HEAD   /api/responses/unread                                        64K responses             AMKP
+panel POST   /api/responses/:id/read                                      64K responses             AMKP
+panel POST   /api/responses/read-all                                      64K responses             AMKP
+panel POST   /api/responses/:id/approve                                   64K responses             AMKP
+panel POST   /api/responses/:id/trash                                     64K responses             AMKP
+panel POST   /api/responses/:id/restore                                   64K responses             AMKP
+panel GET    /api/api-keys                                                64K programs              A
+panel HEAD   /api/api-keys                                                64K programs              A
+panel POST   /api/api-keys                                                64K admin                 A
+panel POST   /api/api-keys/:id/revoke                                     64K admin                 A
+panel GET    /api/databases                                               64K databases             A
+panel HEAD   /api/databases                                               64K databases             A
+panel GET    /api/databases/visitor-areas                                 64K databases             A
+panel HEAD   /api/databases/visitor-areas                                 64K databases             A
+panel POST   /api/databases                                               64K databases             A
+panel GET    /api/databases/:engine/:name                                 64K databases             A
+panel HEAD   /api/databases/:engine/:name                                 64K databases             A
+panel POST   /api/databases/:engine/:name/settings                        64K databases             A
+panel POST   /api/databases/:engine/:name/adopt                           64K databases             A
+panel POST   /api/databases/:engine/:name/unmanage                        64K databases             A
+panel POST   /api/databases/:engine/:name/delete                          64K databases             A
+panel GET    /api/databases/users                                         64K databases             A
+panel HEAD   /api/databases/users                                         64K databases             A
+panel POST   /api/databases/users                                         64K databases             A
+panel GET    /api/databases/users/:engine/:user                           64K databases             A
+panel HEAD   /api/databases/users/:engine/:user                           64K databases             A
+panel POST   /api/databases/users/:engine/:user/note                      64K databases             A
+panel POST   /api/databases/users/:engine/:user/password                  64K databases             A
+panel POST   /api/databases/users/:engine/:user/delete                    64K databases             A
+panel POST   /api/databases/users/:engine/:user/access                    64K databases             A
+panel GET    /api/databases/:engine/:name/users                           64K databases             A
+panel HEAD   /api/databases/:engine/:name/users                           64K databases             A
+panel GET    /api/databases/:engine/:name/schema                          64K databases             A
+panel HEAD   /api/databases/:engine/:name/schema                          64K databases             A
+panel POST   /api/databases/:engine/:name/schema/draft                    64K databases             A
+panel POST   /api/databases/:engine/:name/schema/discard                  64K databases             A
+panel POST   /api/databases/:engine/:name/schema/layout                   64K databases             A
+panel POST   /api/databases/:engine/:name/schema/tidy                     64K databases             A
+panel POST   /api/databases/:engine/:name/schema/relationship             64K databases             A
+panel POST   /api/databases/:engine/:name/schema/relationship/on-delete   64K databases             A
+panel POST   /api/databases/:engine/:name/schema/relationship/delete      64K databases             A
+panel GET    /api/databases/:engine/:name/app                             64K databases             A
+panel HEAD   /api/databases/:engine/:name/app                             64K databases             A
+panel POST   /api/databases/:engine/:name/app/:table/settings             64K databases             A
+panel POST   /api/databases/:engine/:name/app/:table/fields/:field/settings   64K databases             A
+panel POST   /api/databases/:engine/:name/app/:table/order                64K databases             A
+panel POST   /api/databases/:engine/:name/app/:table/forget               64K databases             A
+panel GET    /api/forms/:id/database                                      64K databases             A
+panel HEAD   /api/forms/:id/database                                      64K databases             A
+panel GET    /api/forms/:id/database/:engine/:name                        64K databases             A
+panel HEAD   /api/forms/:id/database/:engine/:name                        64K databases             A
+panel POST   /api/forms/:id/database                                      64K databases             A
+panel POST   /api/forms/:id/database/disconnect                           64K databases             A
+panel POST   /api/forms/:id/database/earlier                              64K databases             A
+panel POST   /api/responses/:id/save-again                                64K responses             AMKP
+panel GET    /api/databases/:engine/:name/form-links                      64K databases             A
+panel HEAD   /api/databases/:engine/:name/form-links                      64K databases             A
+panel POST   /api/databases/:engine/:name/comments                        64K databases             A
+panel POST   /api/databases/:engine/:name/app/:table/commentable          64K databases             A
+panel POST   /api/forms/:id/comments-copy                                 64K databases             A
+panel POST   /api/databases/:engine/:name/api                             64K programs              A
+panel GET    /api/databases/:engine/:name/keys                            64K programs              A
+panel HEAD   /api/databases/:engine/:name/keys                            64K programs              A
+panel POST   /api/databases/:engine/:name/keys                            64K programs              A
+panel POST   /api/databases/:engine/:name/keys/:id/revoke                 64K programs              A
+panel POST   /api/databases/:engine/:name/activate                        64K databases             A
+panel POST   /api/databases/:engine/:name/deactivate                      64K databases             A
+panel GET    /api/apps                                                    64K databases             A
+panel HEAD   /api/apps                                                    64K databases             A
+panel GET    /api/databases/examples                                      64K examples              A
+panel HEAD   /api/databases/examples                                      64K examples              A
+panel GET    /api/databases/examples/:kind                                64K examples              A
+panel HEAD   /api/databases/examples/:kind                                64K examples              A
+panel POST   /api/databases/examples/:kind/setup                          64K examples              A
+panel GET    /api/tutorial-examples                                       64K examples              A
+panel HEAD   /api/tutorial-examples                                       64K examples              A
+panel POST   /api/tutorial-examples/setup                                 64K examples              A
+panel GET    /api/tutorial-examples/who                                   64K examples              A
+panel HEAD   /api/tutorial-examples/who                                   64K examples              A
+panel GET    /tutorial-examples/:folder                                   64K examples              A
+panel HEAD   /tutorial-examples/:folder                                   64K examples              A
+panel GET    /tutorial-examples/:folder/*                                 64K examples              A
+panel HEAD   /tutorial-examples/:folder/*                                 64K examples              A
+panel GET    /_pammy/me                                                   64K examples              A
+panel HEAD   /_pammy/me                                                   64K examples              A
+panel GET    /_pammy/comments.js                                          64K examples              A
+panel HEAD   /_pammy/comments.js                                          64K examples              A
+panel GET    /_pammy/comments/example-journal-comments                    64K examples              A
+panel HEAD   /_pammy/comments/example-journal-comments                    64K examples              A
+panel GET    /_pammy/comments/example-journal-comments/form               64K examples              A
+panel HEAD   /_pammy/comments/example-journal-comments/form               64K examples              A
+panel GET    /_pammy/comments/example-journal-comments/counts             64K examples              A
+panel HEAD   /_pammy/comments/example-journal-comments/counts             64K examples              A
+panel POST   /_pammy/comments/example-journal-comments                    64K examples              A
+panel GET    /_pammy/api/data/postgres/example_journal/*                  64K examples              A
+panel HEAD   /_pammy/api/data/postgres/example_journal/*                  64K examples              A
+panel GET    /_pammy/api/data/postgres/example_todo/tasks                 64K examples              A
+panel HEAD   /_pammy/api/data/postgres/example_todo/tasks                 64K examples              A
+panel GET    /_pammy/api/data/postgres/example_todo/tasks/:id             64K examples              A
+panel HEAD   /_pammy/api/data/postgres/example_todo/tasks/:id             64K examples              A
+panel POST   /_pammy/api/data/postgres/example_todo/tasks/:id/:what       64K examples              A
+panel POST   /_pammy/api/data/postgres/example_todo/tasks/new             64K examples              A
+panel POST   /api/databases/examples/:kind/copy                           64K examples              A
+panel GET    /api/databases/home                                          64K databases             A
+panel HEAD   /api/databases/home                                          64K databases             A
+panel GET    /api/app/:engine/:name/:table                                64K databases             A
+panel HEAD   /api/app/:engine/:name/:table                                64K databases             A
+panel GET    /api/app/:engine/:name/:table/pick/:field                    64K databases             A
+panel HEAD   /api/app/:engine/:name/:table/pick/:field                    64K databases             A
+panel GET    /api/app/:engine/:name/:table/one                            64K databases             A
+panel HEAD   /api/app/:engine/:name/:table/one                            64K databases             A
+panel POST   /api/app/:engine/:name/:table/new                             2M databases             A
+panel POST   /api/app/:engine/:name/:table/save                            2M databases             A
+panel POST   /api/app/:engine/:name/:table/delete                         64K databases             A
+panel GET    /api/databases/:engine/:name/schema/review                   64K databases             A
+panel HEAD   /api/databases/:engine/:name/schema/review                   64K databases             A
+panel POST   /api/databases/:engine/:name/schema/apply                    64K databases             A
+panel GET    /api/databases/:engine/:name/app/:table/tags                 64K databases             A
+panel HEAD   /api/databases/:engine/:name/app/:table/tags                 64K databases             A
+panel POST   /api/databases/:engine/:name/app/:table/tags                 64K databases             A
+panel POST   /api/databases/:engine/:name/app/:table/tags/read            64K databases             A
+panel POST   /api/databases/:engine/:name/app/:table/tags/labels          64K databases             A
+panel POST   /api/databases/:engine/:name/app/:table/tags/labels/:type/:id   64K databases             A
+panel POST   /api/app/:engine/:name/:table/labels                         64K databases             A
+panel GET    /api/catalog/everywhere                                      64K files      whole-site AM
+panel HEAD   /api/catalog/everywhere                                      64K files      whole-site AM
+panel POST   /api/catalog/everywhere                                      64K files      whole-site AM
+panel POST   /api/catalog/everywhere/:type/:id                            64K files      whole-site AM
+panel POST   /api/media/sync                                              64K media                 AMKP
+panel POST   /api/files/sync                                              64K files                 AMKP
+panel GET    /api/media/labels                                            64K files                 AMKP
+panel HEAD   /api/media/labels                                            64K files                 AMKP
+panel GET    /api/media/scopes                                            64K files                 AMKP
+panel HEAD   /api/media/scopes                                            64K files                 AMKP
+panel POST   /api/media/scopes                                            64K files                 AMKP
+panel POST   /api/media/scopes/delete                                     64K files                 AMKP
+panel POST   /api/media/labels                                            64K files                 AMKP
+panel POST   /api/media/labels/:type/:id                                  64K files                 AMKP
+panel POST   /api/media/items/:id/details                                 64K media                 AMKP
+panel POST   /api/media/items/labels                                      64K files                 AMKP
+panel GET    /api/media/thumb/:id                                         64K signed-in             AMKP
+panel HEAD   /api/media/thumb/:id                                         64K signed-in             AMKP
+panel GET    /api/media                                                   64K media                 AMKP
+panel HEAD   /api/media                                                   64K media                 AMKP
+panel POST   /api/media/folder                                            64K media                 AMKP
+panel GET    /api/media/list                                              64K media                 AMKP
+panel HEAD   /api/media/list                                              64K media                 AMKP
+panel GET    /api/media/buckets                                           64K media                 AMKP
+panel HEAD   /api/media/buckets                                           64K media                 AMKP
+panel GET    /api/media/info                                              64K media                 AMKP
+panel HEAD   /api/media/info                                              64K media                 AMKP
+panel GET    /api/media/items                                             64K media                 AMKP
+panel HEAD   /api/media/items                                             64K media                 AMKP
+panel GET    /api/media/examples                                          64K media                 AMKP
+panel HEAD   /api/media/examples                                          64K media                 AMKP
+panel GET    /api/media/examples/:kind                                    64K media                 AMKP
+panel HEAD   /api/media/examples/:kind                                    64K media                 AMKP
+panel POST   /api/media/examples/:kind/install                            64K media                 AMKP
+panel GET    /api/media/file                                              64K media                 AMKP
+panel HEAD   /api/media/file                                              64K media                 AMKP
+panel POST   /api/media/upload                                            64K media                 AMKP
+panel POST   /api/media/mkdir                                             64K media                 AMKP
+panel POST   /api/media/copy                                              64K media                 AMKP
+panel POST   /api/media/move                                              64K media                 AMKP
+panel POST   /api/media/trash                                             64K media                 AMKP
+panel GET    /api/media/trash                                             64K media                 AMKP
+panel HEAD   /api/media/trash                                             64K media                 AMKP
+panel POST   /api/media/restore                                           64K media                 AMKP
+panel GET    /api/files                                                   64K files                 AMKP
+panel HEAD   /api/files                                                   64K files                 AMKP
+panel GET    /api/files/shown                                             64K files                 AMKP
+panel HEAD   /api/files/shown                                             64K files                 AMKP
+panel GET    /api/files/list                                              64K files                 AMKP
+panel HEAD   /api/files/list                                              64K files                 AMKP
+panel GET    /api/files/info                                              64K files                 AMKP
+panel HEAD   /api/files/info                                              64K files                 AMKP
+panel GET    /api/files/items                                             64K files                 AMKP
+panel HEAD   /api/files/items                                             64K files                 AMKP
+panel GET    /api/files/file                                              64K files                 AMKP
+panel HEAD   /api/files/file                                              64K files                 AMKP
+panel POST   /api/files/upload                                            64K files                 AMKP
+panel POST   /api/files/mkdir                                             64K files                 AMKP
+panel POST   /api/files/copy                                              64K files                 AMKP
+panel POST   /api/files/move                                              64K files                 AMKP
+panel POST   /api/files/trash                                             64K files                 AMKP
+panel GET    /api/files/trash                                             64K files                 AMKP
+panel HEAD   /api/files/trash                                             64K files                 AMKP
+panel POST   /api/files/restore                                           64K files                 AMKP
+panel GET    /api/files/text                                              64K files                 AMKP
+panel HEAD   /api/files/text                                              64K files                 AMKP
+panel POST   /api/files/save                                               8M files                 AMKP
+panel GET    /api/files/versions                                          64K files                 AMKP
+panel HEAD   /api/files/versions                                          64K files                 AMKP
+panel GET    /api/files/version                                           64K files                 AMKP
+panel HEAD   /api/files/version                                           64K files                 AMKP
+panel POST   /api/files/versions/restore                                  64K files                 AMKP
+panel POST   /api/files/preview                                           64K files                 AMKP
+panel POST   /api/files/preview/close                                     64K files                 AMKP
+panel POST   /api/files/draft                                              8M files                 AMKP
+panel GET    /api/files/view/:token/*                                     64K public                public
+panel HEAD   /api/files/view/:token/*                                     64K public                public
+panel GET    /api/help                                                    64K signed-in             AMKP
+panel HEAD   /api/help                                                    64K signed-in             AMKP
+panel GET    /api/getting-started                                         64K databases             A
+panel HEAD   /api/getting-started                                         64K databases             A
+panel POST   /api/getting-started/ask                                     64K databases             A
+panel POST   /api/getting-started/start                                   64K databases             A
+panel POST   /api/getting-started/:id/step                                64K databases             A
+panel POST   /api/getting-started/:id/not-the-one                         64K databases             A
+panel POST   /api/getting-started/:id/put-away                            64K databases             A
+panel POST   /api/getting-started/open                                    64K databases             A
+panel GET    /api/software                                                64K software              A
+panel HEAD   /api/software                                                64K software              A
+panel GET    /api/software/                                               64K software              A
+panel HEAD   /api/software/                                               64K software              A
+panel GET    /api/software/:id                                            64K software              A
+panel HEAD   /api/software/:id                                            64K software              A
+panel GET    /api/software/:id/backups                                    64K software              A
+panel HEAD   /api/software/:id/backups                                    64K software              A
+panel POST   /api/software/:id/backup                                     64K software              A
+panel POST   /api/software/:id/restore                                    64K software              A
+panel GET    /api/software/:id/backups/:stamp/download                    64K software              A
+panel HEAD   /api/software/:id/backups/:stamp/download                    64K software              A
+panel POST   /api/software/:id/offline                                    64K software              A
+panel POST   /api/software/:id/online                                     64K software              A
+panel GET    /api/software/:id/admins                                     64K software              A
+panel HEAD   /api/software/:id/admins                                     64K software              A
+panel POST   /api/software/:id/admin-password                             64K software              A
+panel POST   /api/software/:id/move                                       64K software              A
+panel POST   /api/software/install                                        64K software              A
+panel POST   /api/software/:id/delete                                     64K software              A
+panel POST   /api/software/:id/undelete                                   64K software              A
+panel POST   /api/software/:id/purge                                      64K software              A
+panel POST   /api/software/:id/login                                      64K software              A
+panel GET    /api/software/:id/logs                                       64K software              A
+panel HEAD   /api/software/:id/logs                                       64K software              A
+panel GET    /api/mail                                                    64K software              A
+panel HEAD   /api/mail                                                    64K software              A
+panel POST   /api/mail/settings                                           64K software              A
+panel POST   /api/mail/notices                                            64K software              A
+panel POST   /api/mail/test                                               64K software              A
+panel POST   /api/software/:id/mail-test                                  64K software              A
+panel GET    /api/users                                                   64K admin                 A
+panel HEAD   /api/users                                                   64K admin                 A
+panel POST   /api/users                                                   64K admin                 A
+panel POST   /api/users/:id/access                                        64K admin                 A
+panel POST   /api/users/:id/invite                                        64K admin                 A
+panel POST   /api/users/:id/invite/cancel                                 64K admin                 A
+panel POST   /api/users/:id/disable                                       64K admin                 A
+panel POST   /api/users/:id/enable                                        64K admin                 A
+panel POST   /api/users/:id/signout                                       64K admin                 A
+panel POST   /api/users/:id/passkeys/:pid/delete                          64K admin                 A
+gate GET    /check                                                        8K
+gate HEAD   /check                                                        8K
+gate GET    /check/:token                                                 8K
+gate HEAD   /check/:token                                                 8K
+gate GET    /check/:token/:audience                                       8K
+gate HEAD   /check/:token/:audience                                       8K
+gate GET    /_pammy/login.js                                              8K
+gate HEAD   /_pammy/login.js                                              8K
+gate GET    /_pammy/forms.js                                              8K
+gate HEAD   /_pammy/forms.js                                              8K
+gate GET    /_pammy/comments.js                                           8K
+gate HEAD   /_pammy/comments.js                                           8K
+gate GET    /_pammy/login                                                 8K
+gate HEAD   /_pammy/login                                                 8K
+gate GET    /_pammy/forgot                                                8K
+gate HEAD   /_pammy/forgot                                                8K
+gate GET    /_pammy/invite                                                8K
+gate HEAD   /_pammy/invite                                                8K
+gate GET    /_pammy/request                                               8K
+gate HEAD   /_pammy/request                                               8K
+gate GET    /_pammy/logout                                                8K
+gate HEAD   /_pammy/logout                                                8K
+gate GET    /_pammy/welcome                                               8K
+gate HEAD   /_pammy/welcome                                               8K
+gate GET    /_pammy/examples/*                                            8K
+gate HEAD   /_pammy/examples/*                                            8K
+gate GET    /_pammy/folder                                                8K
+gate HEAD   /_pammy/folder                                                8K
+gate GET    /_pammy/about                                                 8K
+gate HEAD   /_pammy/about                                                 8K
+gate GET    /_pammy/me                                                    8K
+gate HEAD   /_pammy/me                                                    8K
+gate POST   /_pammy/login                                                 8K
+gate POST   /_pammy/logout                                                8K
+gate POST   /_pammy/invite/check                                          8K
+gate POST   /_pammy/invite                                                8K
+gate GET    /_pammy/accounts                                              8K
+gate HEAD   /_pammy/accounts                                              8K
+gate POST   /_pammy/register                                              8K
+gate POST   /_pammy/confirm                                               8K
+gate POST   /_pammy/reset-link                                            8K
+gate POST   /_pammy/reset/check                                           8K
+gate POST   /_pammy/reset                                                 8K
+gate POST   /_pammy/account/password                                      8K
+gate POST   /_pammy/account/email                                         8K
+gate POST   /_pammy/account/signout                                       8K
+gate POST   /_pammy/account/delete                                        8K
+gate GET    /_pammy/register                                              8K
+gate HEAD   /_pammy/register                                              8K
+gate GET    /_pammy/confirm                                               8K
+gate HEAD   /_pammy/confirm                                               8K
+gate GET    /_pammy/reset                                                 8K
+gate HEAD   /_pammy/reset                                                 8K
+gate GET    /_pammy/account                                               8K
+gate HEAD   /_pammy/account                                               8K
+gate POST   /_pammy/forgot                                                8K
+gate POST   /_pammy/request                                               8K
+gate GET    /_pammy/forms/:name                                           8K
+gate HEAD   /_pammy/forms/:name                                           8K
+gate POST   /_pammy/forms/:name                                          64K
+gate GET    /_pammy/comments/:name                                        8K
+gate HEAD   /_pammy/comments/:name                                        8K
+gate GET    /_pammy/comments/:name/form                                   8K
+gate HEAD   /_pammy/comments/:name/form                                   8K
+gate POST   /_pammy/comments/:name                                       64K
+gate GET    /_pammy/comments/:name/counts                                 8K
+gate HEAD   /_pammy/comments/:name/counts                                 8K
+gate GET    /_pammy/form-preview                                          8K
+gate HEAD   /_pammy/form-preview                                          8K
+gate GET    /_pammy/api/forms/by-name/:name/:scope                        8K
+gate HEAD   /_pammy/api/forms/by-name/:name/:scope                        8K
+gate GET    /_pammy/api/forms/by-name/:name/:scope/filterby/:field/:value    8K
+gate HEAD   /_pammy/api/forms/by-name/:name/:scope/filterby/:field/:value    8K
+gate GET    /_pammy/api/forms/:id/:scope                                  8K
+gate HEAD   /_pammy/api/forms/:id/:scope                                  8K
+gate GET    /_pammy/api/forms/:id/:scope/filterby/:field/:value           8K
+gate HEAD   /_pammy/api/forms/:id/:scope/filterby/:field/:value           8K
+gate GET    /_pammy/api/media/*                                           8K
+gate HEAD   /_pammy/api/media/*                                           8K
+gate GET    /_pammy/media-thumbs/:name                                    8K
+gate HEAD   /_pammy/media-thumbs/:name                                    8K
+gate GET    /_pammy/api/data/:engine/:name/:resource                      8K
+gate HEAD   /_pammy/api/data/:engine/:name/:resource                      8K
+gate GET    /_pammy/api/data/:engine/:name/:resource/:id                  8K
+gate HEAD   /_pammy/api/data/:engine/:name/:resource/:id                  8K
+gate GET    /_pammy/api/data/:engine/:name/:resource/_labels              8K
+gate HEAD   /_pammy/api/data/:engine/:name/:resource/_labels              8K
+gate POST   /_pammy/api/data/:engine/:name/:resource/new                  2M
+gate POST   /_pammy/api/data/:engine/:name/:resource/:id/save             2M
+gate POST   /_pammy/api/data/:engine/:name/:resource/:id/delete           8K

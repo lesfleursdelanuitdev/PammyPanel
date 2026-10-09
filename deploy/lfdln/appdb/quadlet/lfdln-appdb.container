@@ -1,0 +1,38 @@
+# lfdln's Postgres for the apps' data (docs/data-move-plan.md M1): TutorStar's and the
+# Gonsalves apps' databases. Rootless Quadlet for svc-lfdlnappdb. Installed by
+# deploy/lfdln/appdb/install-appdb.sh. 127.0.0.1:5436 only: 5432 is the server's own
+# Postgres, 5433 Pamela's, 5434 pammy.org's panel, 5435 lfdln's panel. The apps'
+# containers reach it at 10.0.2.2:5436 (slirp4netns, allow_host_loopback).
+[Unit]
+Description=lesfleursdelanuit.com apps' database (127.0.0.1:5436)
+
+[Container]
+# a major version: auto-update brings 17.x patch releases only
+Image=docker.io/library/postgres:17
+ContainerName=lfdln-appdb
+PublishPort=127.0.0.1:5436:5432
+Volume=lfdln-appdb.volume:/var/lib/postgresql/data
+# who may connect to what: each app's roles to their own database, with a password;
+# the superuser only over the container's own socket. The folder, not the file: the installer
+# replaces the file (a new inode), which a single-file mount never shows the engine
+Volume=/var/lib/svc-lfdlnappdb/conf:/etc/lfdln-appdb:ro
+Environment=POSTGRES_PASSWORD_FILE=/run/secrets/lfdln-appdb-super
+Secret=lfdln-appdb-super
+Secret=lfdln-appdb-tutorstar
+Secret=lfdln-appdb-ligneous_user
+Secret=lfdln-appdb-gonsalves_readonly
+# Berlin time, as the server's own Postgres: a timestamp written without a zone means
+# what it meant there (docs/data-move-plan.md M2)
+Exec=postgres -c hba_file=/etc/lfdln-appdb/pg_hba.conf -c password_encryption=scram-sha-256 -c max_connections=100 -c shared_buffers=256MB -c timezone=Europe/Berlin -c log_timezone=Europe/Berlin -c log_min_duration_statement=1000ms -c log_connections=on
+PodmanArgs=--shm-size=256m
+HealthCmd=pg_isready -U postgres -h /var/run/postgresql
+HealthInterval=30s
+AutoUpdate=registry
+
+[Service]
+Restart=always
+TimeoutStartSec=300
+MemoryMax=1536M
+
+[Install]
+WantedBy=default.target

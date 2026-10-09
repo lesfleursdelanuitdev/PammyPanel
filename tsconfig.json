@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "es2023",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "strict": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "erasableSyntaxOnly": true,
+    "noUncheckedIndexedAccess": true,
+    "skipLibCheck": true,
+    "types": ["node"]
+  },
+  "include": ["src", "packages", "sites", "test"],
+  // the pages and the widgets are the browser's: sites/pammy/web and sites/pammy/widgets check them
+  "exclude": ["packages/*/web", "packages/*/widgets", "sites/*/web", "sites/*/widgets"]
+}

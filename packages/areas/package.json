@@ -1,0 +1,23 @@
+{
+  "name": "@panel/areas",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    "./gate/access": "./src/gate/access.ts",
+    "./gate/deletions": "./src/gate/deletions.ts",
+    "./gate/in-use": "./src/gate/in-use.ts",
+    "./gate/policy": "./src/gate/policy.ts",
+    "./gate/route-areas": "./src/gate/route-areas.ts",
+    "./gate/routes/folders": "./src/gate/routes/folders.ts",
+    "./gate/targets": "./src/gate/targets.ts",
+    "./manifest": "./src/manifest.ts",
+    "./module": "./src/module.ts",
+    "./panel/routes/access": "./src/panel/routes/access.ts",
+    "./panel/routes/protected": "./src/panel/routes/protected.ts",
+    "./panel/visitors": "./src/panel/visitors.ts"
+  },
+  "dependencies": {
+    "@panel/core": "*"
+  }
+}

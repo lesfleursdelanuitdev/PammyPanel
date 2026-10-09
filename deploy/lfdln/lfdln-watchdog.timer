@@ -1,0 +1,13 @@
+# lfdln panel: the watchdog every 10 minutes (docs/monitoring-plan.md M6, step 3)
+# Installed by ~/pamela-setup/panel/deploy/lfdln/install-lfdln.sh
+[Unit]
+Description=lfdln panel: watchdog every 10 minutes
+
+[Timer]
+# the first run 10 minutes after the timer starts (an install: after its first rounds)
+OnActiveSec=10min
+OnUnitActiveSec=10min
+AccuracySec=30s
+
+[Install]
+WantedBy=timers.target

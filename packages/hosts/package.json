@@ -1,0 +1,30 @@
+{
+  "name": "@panel/hosts",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    "./adopt": "./src/adopt.ts",
+    "./cloudflare": "./src/cloudflare.ts",
+    "./config": "./src/config.ts",
+    "./domains": "./src/domains.ts",
+    "./folder-gate": "./src/folder-gate.ts",
+    "./helper/main": "./src/helper/main.ts",
+    "./helper/ops": "./src/helper/ops.ts",
+    "./helper/service": "./src/helper/service.ts",
+    "./module": "./src/module.ts",
+    "./names": "./src/names.ts",
+    "./panel/folders-shown": "./src/panel/folders-shown.ts",
+    "./panel/route-kinds": "./src/panel/route-kinds.ts",
+    "./panel/routes/hosts": "./src/panel/routes/hosts.ts",
+    "./probe": "./src/probe.ts",
+    "./render": "./src/render.ts",
+    "./take-over": "./src/take-over.ts",
+    "./takeover": "./src/takeover.ts",
+    "./zone": "./src/zone.ts"
+  },
+  "dependencies": {
+    "@panel/core": "*",
+    "@panel/files": "*"
+  }
+}

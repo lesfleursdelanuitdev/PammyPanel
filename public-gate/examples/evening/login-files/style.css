@@ -1,0 +1,94 @@
+/* Example look: Evening (09-protected-folders.txt, PART 10).
+   Dark and elegant: a deep plum night, a card with a faint gold
+   edge, a gold button and clean modern lettering.
+   All five sign-in pages use this file. */
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+  background: #140e19 linear-gradient(160deg, #2c1e36 0%, #160f1c 55%, #0c090f 100%);
+  color: #efe6f3;
+  font: 16px/1.6 "Avenir Next", "Segoe UI", system-ui, sans-serif;
+}
+
+.card {
+  width: 100%;
+  max-width: 24rem;
+  padding: 2.75rem 2.25rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(216, 180, 106, 0.3);
+  border-radius: 6px;
+  box-shadow: 0 0 70px rgba(216, 180, 106, 0.08), 0 30px 60px rgba(0, 0, 0, 0.5);
+}
+
+.site-name {
+  margin: 0 0 1.75rem;
+  text-align: center;
+  font-size: 0.8rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #d8b46a;
+}
+
+/* The forms: their colours and corners */
+pammy-login,
+pammy-forgot,
+pammy-invite,
+pammy-request,
+pammy-signed-out {
+  --pammy-accent: #d8b46a;
+  --pammy-accent-text: #1c1422;
+  --pammy-radius: 4px;
+  --pammy-width: 100%;
+  --pammy-gap: 1.1rem;
+  --pammy-field-bg: rgba(255, 255, 255, 0.06);
+  --pammy-field-border: rgba(255, 255, 255, 0.2);
+  --pammy-error: #f08a7a;
+  --pammy-success: #9fd3a8;
+}
+
+.pammy-heading {
+  text-align: center;
+  font-size: 1.75rem;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+
+.pammy-intro,
+.pammy-note {
+  text-align: center;
+  color: #c4b5cc;
+  opacity: 1;
+}
+
+.pammy-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #cbbcd4;
+}
+
+.pammy-button {
+  margin-top: 0.5rem;
+  padding: 0.85rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.pammy-button:hover {
+  background: #e8c784;
+}
+
+.pammy-links {
+  justify-content: center;
+  margin-top: 1.25rem;
+  font-size: 0.9rem;
+}
+
+.pammy-links a {
+  color: #d8b46a;
+}

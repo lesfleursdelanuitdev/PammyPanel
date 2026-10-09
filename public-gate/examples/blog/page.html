@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>@TITLE@</title>
+  <link rel="stylesheet" href="@FILES@/style.css">
+  <script src="@FILES@/blog.js" defer></script>
+  <!-- the comments under each post (20-comments.txt) -->
+  <script src="/_pammy/comments.js" defer></script>
+</head>
+<body>
+  <main class="page">
+    <header class="top">
+      <h1><a href="#">@TITLE@</a></h1>
+      <p class="intro">News, the garden, the kitchen, and the odd trip.</p>
+    </header>
+
+    <!-- blog.js fills this in from the database at data-api: its published posts,
+         their authors and topics, which are set to "Anyone can read these" --
+         posts only where "published" is yes
+         (see 14-databases-in-the-control-panel.txt, PART 16). -->
+    <div class="blog" data-api="@API@" data-comments="@COMMENTS@">
+      <section class="all" aria-label="Posts">
+        <div class="topics" role="group" aria-label="Show only"></div>
+        <ol class="posts"><li class="note">Loading…</li></ol>
+        <p class="more" hidden><button type="button">Show older posts</button></p>
+      </section>
+
+      <!-- one post, when its title is clicked (the address ends in #post-its-address) -->
+      <article class="post" hidden>
+        <p class="back"><a href="#">&larr; All posts</a></p>
+        <h2 class="title"></h2>
+        <p class="byline"></p>
+        <div class="body"></div>
+        <p class="topics-here"></p>
+        <!-- blog.js puts <pammy-comments name="..." content-id="the post's id">
+             here when a post is opened: each post is its own conversation -->
+        <div class="comments"></div>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

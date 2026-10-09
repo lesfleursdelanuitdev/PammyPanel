@@ -1,0 +1,33 @@
+{
+  "name": "@panel/files",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    "./media-db": "./src/media-db.ts",
+    "./media-rename": "./src/media-rename.ts",
+    "./media-sync": "./src/media-sync.ts",
+    "./module": "./src/module.ts",
+    "./panel/files-ctx": "./src/panel/files-ctx.ts",
+    "./panel/pages-list": "./src/panel/pages-list.ts",
+    "./panel/routes/editor": "./src/panel/routes/editor.ts",
+    "./panel/routes/files": "./src/panel/routes/files.ts",
+    "./panel/routes/folders": "./src/panel/routes/folders.ts",
+    "./panel/routes/labels": "./src/panel/routes/labels.ts",
+    "./panel/routes/pages": "./src/panel/routes/pages.ts",
+    "./panel/site-files": "./src/panel/site-files.ts",
+    "./site-folders/store": "./src/site-folders/store.ts",
+    "./sitefs/client": "./src/sitefs/client.ts",
+    "./sitefs/edit": "./src/sitefs/edit.ts",
+    "./sitefs/home-page": "./src/sitefs/home-page.ts",
+    "./sitefs/main": "./src/sitefs/main.ts",
+    "./sitefs/media": "./src/sitefs/media.ts",
+    "./sitefs/ops": "./src/sitefs/ops.ts",
+    "./sitefs/service": "./src/sitefs/service.ts"
+  },
+  "dependencies": {
+    "@panel/catalog": "*",
+    "@panel/core": "*",
+    "@panel/thumbs": "*"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "@panel/forms",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    "./gate/form-use": "./src/gate/form-use.ts",
+    "./gate/forms/answers": "./src/gate/forms/answers.ts",
+    "./gate/forms/items": "./src/gate/forms/items.ts",
+    "./gate/forms/responses": "./src/gate/forms/responses.ts",
+    "./gate/forms/store": "./src/gate/forms/store.ts",
+    "./gate/forms/threads": "./src/gate/forms/threads.ts",
+    "./gate/notices": "./src/gate/notices.ts",
+    "./gate/routes/forms": "./src/gate/routes/forms.ts",
+    "./gate/routes/responses-api": "./src/gate/routes/responses-api.ts",
+    "./module": "./src/module.ts",
+    "./panel/api-key-cover": "./src/panel/api-key-cover.ts",
+    "./panel/routes/forms": "./src/panel/routes/forms.ts",
+    "./shared/form-types": "./src/shared/form-types.ts"
+  },
+  "dependencies": {
+    "@panel/api-keys": "*",
+    "@panel/areas": "*",
+    "@panel/core": "*",
+    "@panel/mail": "*"
+  }
+}

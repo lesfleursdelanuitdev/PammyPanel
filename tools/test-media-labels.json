@@ -1,0 +1,22 @@
+{
+  "_": "Tags and categories for the made-up media (tools/put-test-media.sh). Paths are inside the folder's media folder.",
+  "images/sunset-beach.jpg":                   { "categories": ["landscapes"], "tags": ["sunset", "summer", "water"] },
+  "images/morning-lake.jpg":                   { "categories": ["landscapes"], "tags": ["water", "morning"] },
+  "images/autumn-hills.jpg":                   { "categories": ["landscapes"], "tags": ["autumn", "mountains"] },
+  "images/night-sky.png":                      { "categories": ["landscapes"], "tags": ["night"] },
+  "images/snowy-peaks.webp":                   { "categories": ["landscapes"], "tags": ["winter", "mountains"] },
+  "images/garden-roses.jpg":                   { "categories": ["garden"], "tags": ["flowers", "summer"] },
+  "images/logo.svg":                           { "categories": [], "tags": ["logo"] },
+  "images/2026-trip/day-01.jpg":               { "categories": ["travel"], "tags": ["2026", "summer"] },
+  "images/2026-trip/day-02.jpg":               { "categories": ["travel"], "tags": ["2026", "summer", "water"] },
+  "images/2026-trip/day-03.jpg":               { "categories": ["travel"], "tags": ["2026", "mountains"] },
+  "images/2026-trip/food/lemon-cake.jpg":      { "categories": ["food", "travel"], "tags": ["cake", "2026"] },
+  "video/test-pattern.mp4":                    { "categories": ["videos"], "tags": ["test"] },
+  "video/clips/mandelbrot.webm":               { "categories": ["videos"], "tags": ["test", "night"] },
+  "audio/test-tune.mp3":                       { "categories": ["music"], "tags": ["test"] },
+  "audio/low-hum.ogg":                         { "categories": ["music"], "tags": ["night"] },
+  "files/menu.pdf":                            { "categories": ["food", "documents"], "tags": ["cake"] },
+  "files/newsletters/autumn-newsletter.pdf":   { "categories": ["documents"], "tags": ["autumn", "2026"] },
+  "files/price-list.csv":                      { "categories": ["documents"], "tags": ["cake"] },
+  "files/notes.txt":                           { "categories": ["documents"], "tags": ["test"] }
+}

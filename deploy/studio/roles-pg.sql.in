@@ -1,0 +1,42 @@
+-- The studio's login on PAMELA's Postgres (127.0.0.1:5433, svc-pammydb) -- not
+-- the panel's own database. Run as the superuser by
+-- ~/pamela-setup/no-sudo/install-studio-db.sh, and by test/pammydb-harness.ts
+-- against a throwaway container, so the tests prove these exact rights.
+-- __PASSWORD__ is replaced before this runs; it is letters and digits only.
+
+DO $do$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'pammy_studio') THEN
+    EXECUTE 'ALTER ROLE pammy_studio WITH LOGIN PASSWORD ''__PASSWORD__''';
+  ELSE
+    EXECUTE 'CREATE ROLE pammy_studio WITH LOGIN PASSWORD ''__PASSWORD__''';
+  END IF;
+END
+$do$;
+
+-- It makes databases and the logins that reach them (slice 3), and nothing
+-- above that: no superuser, no replication, no stepping around row security.
+--
+-- CREATEROLE is narrower here than it sounds, and that is a property of
+-- Postgres 17 rather than of this file. Since Postgres 16 a CREATEROLE role may
+-- only alter or drop roles it created itself, so `postgres` and `pamela` are out
+-- of its reach whatever it asks for -- it cannot reset their passwords, and it
+-- cannot grant itself membership of them. It also cannot hand out an attribute
+-- it does not hold, so nothing it creates can become a superuser.
+--
+-- The one attribute it DOES hold and could pass on is CREATEDB, which is why
+-- src/pammydb/pg.ts spells NOCREATEDB out in CREATE ROLE rather than leaving it
+-- to the default.
+--
+-- MariaDB has no equivalent: see roles-maria.sql.in.
+ALTER ROLE pammy_studio CREATEDB CREATEROLE NOSUPERUSER NOREPLICATION NOBYPASSRLS;
+
+-- Only a database's owner may drop it, and the databases she made are owned by
+-- `pamela`. So the studio is a member of her role -- which also means it could
+-- drop her own `pamela` database, and the helper's refuse-list is the only thing
+-- that stops it (docs/studio-plan.md S8, src/pammydb/ident.ts PROTECTED).
+GRANT pamela TO pammy_studio;
+
+-- application_name shows up in pg_stat_activity, so she can tell the panel's
+-- connections from her own.
+ALTER ROLE pammy_studio SET application_name = 'pammy-studio';
