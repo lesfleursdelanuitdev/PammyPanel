@@ -4,6 +4,8 @@ A self-hosted web control panel. It lets a non-technical site owner run her own 
 
 I designed and directed PammyPanel and built it with [Claude Code](https://claude.com/claude-code). It is about 100,000 lines of TypeScript, with 71 unit test files and 65 Playwright end-to-end specs. Every release runs a verify script on the live server before it counts as installed.
 
+**Short on time?** [The architecture in five minutes](docs/OVERVIEW.md) covers how it's built, why, the tradeoffs and the known debt.
+
 ## Why it exists
 
 Pamela built websites in the FTP days. She knows HTML and CSS, some JavaScript and very little SQL. She wanted interactive sites, like a blog, a guest book, an RSVP list or a recipe book, without handing a stranger root on her server or learning a hosting dashboard. PammyPanel gives her those features in plain words, with guides written for her.
@@ -84,7 +86,7 @@ npm run e2e
 
 ## How I work
 
-Each feature starts as a written plan in `docs/`, with open questions and the decisions taken, and ships in small steps. Every step ends with an install and a verify run on the live server. `docs/architecture.md` and `docs/master-plan.md` are good places to start reading.
+Each feature starts as a written plan in `docs/`, with open questions and the decisions taken, and ships in small steps. Every step ends with an install and a verify run on the live server. Start with [docs/OVERVIEW.md](docs/OVERVIEW.md), then `docs/architecture.md` and `docs/master-plan.md`.
 
 ## Notes
 
