@@ -12,16 +12,20 @@ Pamela built websites in the FTP days. She knows HTML and CSS, some JavaScript a
 
 These come from the end-to-end test server, so the people and recipes are made-up test data.
 
+<p align="center">
+  <img src="docs/screenshots/studio-canvas.png" alt="Studio canvas showing four connected tables of a recipe database" height="400">
+  <img src="docs/screenshots/phone-dashboard.png" alt="The dashboard on a phone" height="400">
+</p>
+<p align="center"><b>Studio</b>: tables and their connections, drawn and dragged &nbsp;·&nbsp; <b>On a phone</b>: the whole panel works at phone width</p>
+
 | | |
 |---|---|
-| ![Dashboard with unread responses, waiting requests and form counts](docs/screenshots/dashboard.png) | ![Studio canvas showing four connected tables of a recipe database](docs/screenshots/studio-canvas.png) |
-| **Dashboard**: what needs attention today | **Studio**: tables and their connections, drawn |
-| ![The recipes table as an app, with cooks, servings and tags](docs/screenshots/studio-app.png) | ![A public recipe book page reading the database, previewed inside the panel](docs/screenshots/recipe-book-example.png) |
-| **App view**: a database table as a friendly list | **Example site**: a public page reading the same database |
-| ![Form settings with approval and publishing switches](docs/screenshots/forms.png) | ![WordPress status, location and backups](docs/screenshots/wordpress.png) |
-| **Forms**: switches in plain words | **Installed software**: WordPress health, moves and backups |
-| ![File Explorer with a folder tree and grid view](docs/screenshots/file-explorer.png) | <img src="docs/screenshots/phone-dashboard.png" alt="The dashboard on a phone" width="270"> |
-| **File Explorer** | **On a phone** |
+| ![Dashboard with unread responses, waiting requests and form counts](docs/screenshots/dashboard.png) | ![The recipes table as an app, with cooks, servings and tags](docs/screenshots/studio-app.png) |
+| **Dashboard**: what needs attention today | **App view**: a database table as a friendly list |
+| ![A public recipe book page reading the database, previewed inside the panel](docs/screenshots/recipe-book-example.png) | ![Form settings with approval and publishing switches](docs/screenshots/forms.png) |
+| **Example site**: a public page reading the same database | **Forms**: switches in plain words |
+| ![WordPress status, location and backups](docs/screenshots/wordpress.png) | ![File Explorer with a folder tree and grid view](docs/screenshots/file-explorer.png) |
+| **Installed software**: WordPress health, moves and backups | **File Explorer** |
 
 ## What it does
 
