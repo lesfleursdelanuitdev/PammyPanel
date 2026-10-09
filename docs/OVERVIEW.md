@@ -52,6 +52,8 @@ flowchart LR
 3. An install script run by a human with sudo, then a **verify script** against the live site, covering services, permissions, nginx, schema and pages. A step only counts as installed when verify passes.
 4. Database moves and site switches get a rehearsal and a rollback before the real run.
 
+See [test-report.md](test-report.md) for a dated full test run.
+
 ## Tradeoffs we chose
 
 | Choice | What it costs | Why it's worth it |

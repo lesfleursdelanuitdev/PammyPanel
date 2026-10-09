@@ -67,6 +67,8 @@ These come from the end-to-end test server, so the people and recipes are made-u
 
 The tests run on the server, not in GitHub Actions. Each release goes through `build.sh`, which runs the type checks, the unit tests and the Playwright suites. After install, a verify script (`deploy/verify-panel.sh`, `deploy/lfdln/verify-lfdln.sh`) checks the live site: services, nginx, permissions and pages. Most tests need Postgres, so they start a throwaway Postgres container and remove it afterwards.
 
+The latest full run is written up in [docs/test-report.md](docs/test-report.md): 2,956 checks passed, 0 failed (2026-10-09).
+
 ### Running them yourself
 
 Needs Node.js 22.18 or newer.
