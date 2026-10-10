@@ -2,7 +2,7 @@
 
 A self-hosted web control panel. It lets a non-technical site owner run her own website, forms, media and databases from a phone. It runs two live sites today: **pammy.org**, for one site owner, and **lesfleursdelanuit.com**, a five-person setup that also hosts other apps.
 
-I designed and directed PammyPanel and built it with [Claude Code](https://claude.com/claude-code). It is about 100,000 lines of TypeScript, with 71 unit test files and 65 Playwright end-to-end specs. Every release runs a verify script on the live server before it counts as installed.
+I designed and directed PammyPanel. It is about 100,000 lines of TypeScript, with 71 unit test files and 65 Playwright end-to-end specs. Every release runs a verify script on the live server before it counts as installed.
 
 **Short on time?** [The architecture in five minutes](docs/OVERVIEW.md) covers how it's built, why, the tradeoffs and the known debt.
 
